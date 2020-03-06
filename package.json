@@ -1,48 +1,312 @@
 {
-	"name": "@mmstudio/base",
+	"name": "mmstudio",
 	"version": "1.0.0",
-	"description": "$desc",
+	"description": "Tools for mmstudio development",
+	"publisher": "mm",
+	"icon": "images/mmstudio.jpeg",
+	"galleryBanner": {
+		"color": "#005BAC",
+		"theme": "light"
+	},
 	"scripts": {
-		"test": "tsc && ava ./tests/*.js",
-		"watch": "tsc -w & ava --watch ./tests/*.js",
-		"lint": "eslint ./src/*.ts",
+		"test": "tsc -w",
+		"lint": "eslint ./src/**/*.ts",
+		"clean": "del-cli ./dist/",
 		"compile": "tsc",
-		"build": "npm run lint && npm run compile"
+		"build": "npm run clean && npm run lint && npm run compile",
+		"vscode:prepublish": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && npm run build"
 	},
-	"repository": {
-		"type": "git",
-		"url": "https://gitee.com/mmstudio/base"
+	"engines": {
+		"vscode": "^1.37.0"
 	},
-	"main": "dist/index.js",
+	"categories": [
+		"Other",
+		"Snippets"
+	],
+	"main": "./dist/extension.js",
+	"activationEvents": [
+		"*",
+		"onCommand:mm.page.add",
+		"onCommand:mm.action.add",
+		"onCommand:mm.presentation.add",
+		"onCommand:mm.component.add",
+		"onCommand:mm.service.add",
+		"onCommand:mm.service.router",
+		"onCommand:mm.tpl.atom",
+		"onCommand:mm.tpl.tpl",
+		"onCommand:mm.tpl.widget"
+	],
+	"contributes": {
+		"commands": [
+			{
+				"command": "mm.page.add",
+				"title": "%mm.page.add%"
+			},
+			{
+				"command": "mm.component.add",
+				"title": "%mm.component.add%"
+			},
+			{
+				"command": "mm.action.add",
+				"title": "%mm.action.add%"
+			},
+			{
+				"command": "mm.presentation.add",
+				"title": "%mm.presentation.add%"
+			},
+			{
+				"command": "mm.service.add",
+				"title": "%mm.service.add%"
+			},
+			{
+				"command": "mm.service.router",
+				"title": "%mm.service.router%"
+			},
+			{
+				"command": "mm.tpl.atom",
+				"title": "%mm.tpl.atom%"
+			},
+			{
+				"command": "mm.tpl.tpl",
+				"title": "%mm.tpl.tpl%"
+			},
+			{
+				"command": "mm.tpl.widget",
+				"title": "%mm.tpl.widget%"
+			},
+			{
+				"command": "mm.shell.create",
+				"title": "%mm.shell.create%"
+			},
+			{
+				"command": "mm.shell.debug",
+				"title": "%mm.shell.debug%"
+			},
+			{
+				"command": "mm.shell.build",
+				"title": "%mm.shell.build%"
+			}
+		],
+		"menus": {
+			"commandPalette": [
+				{
+					"command": "mm.page.add",
+					"group": "mm"
+				},
+				{
+					"command": "mm.action.add",
+					"when": "editorIsOpen",
+					"group": "mm"
+				},
+				{
+					"command": "mm.presentation.add",
+					"when": "resourceFilename == tpl.tpl || resourceFilename =~ /p\\d+\\.tpl/",
+					"group": "mm"
+				},
+				{
+					"command": "mm.service.add",
+					"when": "editorIsOpen",
+					"group": "mm"
+				},
+				{
+					"command": "mm.service.router",
+					"group": "mm"
+				},
+				{
+					"command": "mm.tpl.atom",
+					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/",
+					"group": "mm"
+				},
+				{
+					"command": "mm.tpl.tpl",
+					"group": "mm"
+				},
+				{
+					"command": "mm.tpl.widget",
+					"when": "resourceFilename == tpl.tsx || resourceFilename =~ /(tpl|p\\d+)\\.ts/ || resourceFilename =~ /(tpl|p\\d+)\\.tpl/ || resourceFilename =~ /\\w*\\.wxml/",
+					"group": "mm"
+				},
+				{
+					"command": "mm.component.add",
+					"when": "resourceFilename =~ /html\\.ts/",
+					"group": "mm"
+				},
+				{
+					"command": "mm.shell.create",
+					"group": "mm"
+				},
+				{
+					"command": "mm.shell.debug",
+					"group": "mm"
+				},
+				{
+					"command": "mm.shell.build",
+					"group": "mm"
+				}
+			],
+			"editor/context": [
+				{
+					"command": "mm.action.add",
+					"when": "resourceFilename == b.ts || resourceFilename == p.ts || resourceFilename == n.ts",
+					"group": "mm"
+				},
+				{
+					"command": "mm.service.add",
+					"when": "editorIsOpen",
+					"group": "mm"
+				},
+				{
+					"command": "mm.service.router",
+					"when": "editorIsOpen",
+					"group": "mm"
+				},
+				{
+					"command": "mm.presentation.add",
+					"when": "resourceFilename == tpl.tpl || resourceFilename =~ /p\\d+\\.tpl/",
+					"group": "mm"
+				},
+				{
+					"command": "mm.tpl.atom",
+					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/",
+					"group": "mm"
+				},
+				{
+					"command": "mm.tpl.tpl",
+					"group": "mm"
+				},
+				{
+					"command": "mm.tpl.widget",
+					"when": "resourceFilename == tpl.tsx || resourceFilename =~ /(tpl|p\\d+)\\.ts/ || resourceFilename =~ /(tpl|p\\d+)\\.tpl/ || resourceFilename =~ /\\w*\\.wxml/",
+					"group": "mm"
+				}
+			],
+			"explorer/context": [
+				{
+					"command": "mm.page.add",
+					"group": "mm"
+				}
+			]
+		},
+		"snippets": [
+			{
+				"language": "typescript",
+				"path": "./snippets/html.json"
+			},
+			{
+				"language": "html",
+				"path": "./snippets/html.json"
+			}
+		],
+		"configuration": [
+			{
+				"title": "Project type",
+				"properties": {
+					"mm.proj.type": {
+						"type": "string",
+						"enum": [
+							"web/h5",
+							"wxapp",
+							"desktop",
+							"mobile"
+						],
+						"default": "web/h5",
+						"description": "mm.type"
+					}
+				}
+			}
+		],
+		"keybindings": [
+			{
+				"command": "mm.page.add",
+				"key": "alt+p"
+			},
+			{
+				"command": "mm.component.add",
+				"when": "resourceFilename =~ /html\\.ts/",
+				"key": "alt+n"
+			},
+			{
+				"command": "mm.action.add",
+				"when": "editorIsOpen",
+				"key": "alt+a"
+			},
+			{
+				"command": "mm.service.add",
+				"when": "editorIsOpen",
+				"key": "alt+s"
+			},
+			{
+				"command": "mm.service.router",
+				"when": "editorIsOpen",
+				"key": "alt+r"
+			},
+			{
+				"command": "mm.presentation.add",
+				"when": "resourceFilename == tpl.tpl || resourceFilename =~ /p\\d+\\.tpl/",
+				"key": "alt+x"
+			},
+			{
+				"command": "mm.tpl.atom",
+				"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/",
+				"key": "alt+t a"
+			},
+			{
+				"command": "mm.tpl.tpl",
+				"key": "alt+t t"
+			},
+			{
+				"command": "mm.tpl.widget",
+				"when": "resourceFilename == tpl.tsx || resourceFilename =~ /(tpl|p\\d+)\\.ts/ || resourceFilename =~ /(tpl|p\\d+)\\.tpl/ || resourceFilename =~ /\\w*\\.wxml/",
+				"key": "alt+t w"
+			},
+			{
+				"command": "mm.shell.create",
+				"key": "alt+c"
+			},
+			{
+				"command": "mm.shell.debug",
+				"key": "alt+d"
+			},
+			{
+				"command": "mm.shell.build",
+				"key": "alt+b"
+			}
+		]
+	},
 	"keywords": [
-		"mm",
-		"mmstudio",
 		"蛮蛮",
 		"蛮蛮工作室",
-		"插件式",
-		"原子操作",
-		"控件",
-		"框架"
+		"框架",
+		"framework",
+		"web",
+		"factory",
+		"tools",
+		"mm",
+		"mmstudio"
 	],
-	"author": {
-		"name": "$user",
-		"email": "$email@xxx.com"
+	"repository": {
+		"type": "git",
+		"url": "https://gitee.com/dmm/tools"
 	},
-	"maintainers": [
-		{
-			"name": "taoqf",
-			"email": "tao_qiufeng@126.com"
-		}
-	],
+	"homepage": "http://www.01mm.com/",
+	"author": {
+		"name": "taoqf",
+		"email": "tao_qiufeng@126.com",
+		"url": "http://www.01mm.com/"
+	},
 	"license": "MIT",
-	"dependencies": {},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "latest",
-		"@typescript-eslint/parser": "latest",
-		"ava": "latest",
-		"eslint": "latest",
-		"eslint-config-prettier": "latest",
-		"eslint-plugin-import": "latest",
-		"typescript": "next"
+		"@types/node": "13.7.7",
+		"@types/node-fetch": "2.5.5",
+		"@types/vscode": "1.42.0",
+		"cp-cli": "2.0.0",
+		"del-cli": "3.0.0",
+		"typescript": "next",
+		"@typescript-eslint/eslint-plugin": "2.22.0",
+		"@typescript-eslint/parser": "2.22.0",
+		"eslint": "6.8.0",
+		"eslint-config-prettier": "6.10.0",
+		"eslint-plugin-import": "2.20.1",
+		"vscode-test": "1.3.0"
 	}
 }

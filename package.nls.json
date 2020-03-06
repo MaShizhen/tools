@@ -1,0 +1,15 @@
+{
+	"mm.type": "Type of your project.",
+	"mm.page.add": "mmstudio: Add new page",
+	"mm.presentation.add": "mmstudio: Add new presentation",
+	"mm.action.add": "mmstudio: Add action",
+	"mm.component.add": "mmstudio: Add component",
+	"mm.service.add": "mmstudio: Add service",
+	"mm.service.router": "mmstudio: Add router",
+	"mm.tpl.atom": "mmstudio: Add atom",
+	"mm.tpl.tpl": "mmstudio: Add code template",
+	"mm.tpl.widget": "mmstudio: Add widget",
+	"mm.shell.create": "mmstudio: Create Project",
+	"mm.shell.debug": "mmstudio: Debug",
+	"mm.shell.build": "mmstudio: Build"
+}

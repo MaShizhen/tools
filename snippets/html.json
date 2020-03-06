@@ -1,0 +1,39 @@
+{
+	"html actions": {
+		"prefix": "mma",
+		"description": "data-mm-actions",
+		"body": "data-mm-actions='${1|click,dblclick,input,invalid,keydown,keypress,keyup,touchend,touchmove,touchstart,touchcancel,mousedown,mousemove,mouseout,mouseover,mouseup,mousewheel,abort,activate,beforeactivate,beforedeactivate,blur,canplay,canplaythrough,change,contextmenu,deactivate,drag,dragend,dragenter,dragleave,dragover,dragstart,drop,durationchange,emptied,ended,error,focus,fullscreenchange,fullscreenerror,load,loadeddata,loadedmetadata,loadstart,MSContentZoom,MSGestureChange,MSGestureDoubleTap,MSGestureEnd,MSGestureHold,MSGestureStart,MSGestureTap,MSInertiaStart,MSManipulationStateChanged,MSPointerCancel,MSPointerDown,MSPointerEnter,MSPointerLeave,MSPointerMove,MSPointerOut,MSPointerOver,MSPointerUp,mssitemodejumplistitemremoved,msthumbnailclick,pause,play,playing,pointerlockchange,pointerlockerror,progress,ratechange,readystatechange,reset,scroll,seeked,seeking,select,selectionchange,selectstart,stalled,stop,submit,suspend,timeupdate,volumechange,waiting,webkitfullscreenchange,webkitfullscreenerror|}:${2:a}'"
+	},
+	"html props": {
+		"prefix": "mmp",
+		"description": "data-mm-props",
+		"body": "data-mm-props='${1}'"
+	},
+	"html presentation": {
+		"prefix": "mmp",
+		"description": "data-mm-presentation",
+		"body": "data-mm-presentation='${1}'"
+	},
+	"id": {
+		"prefix": "mmid",
+		"description": "data-mm-id",
+		"body": "data-mm-id='${1}'"
+	},
+	"lazyload": {
+		"prefix": "mmimg",
+		"description": "data-mm-src",
+		"body": "data-mm-src='${1}'"
+	},
+	"annotation start": {
+		"prefix": "mmas",
+		"body": "<!-- ${1} start -->"
+	},
+	"annotation end": {
+		"prefix": "mmae",
+		"body": "<!-- ${1} end -->"
+	},
+	"lazyload image": {
+		"prefix": "mmi",
+		"body": "<img data-mm-src='${1}' alt='${2}' title='${3}' src='${4}' />"
+	}
+}

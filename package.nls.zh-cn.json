@@ -1,0 +1,15 @@
+{
+	"mm.type": "项目类型",
+	"mm.page.add": "mmstudio: 添加新页面",
+	"mm.presentation.add": "mmstudio: 添加新渲染块",
+	"mm.action.add": "mmstudio:添加响应",
+	"mm.component.add": "mmstudio: 添加组件",
+	"mm.service.add": "mmstudio:添加服务",
+	"mm.service.router": "mmstudio:添加路由",
+	"mm.tpl.atom": "mmstudio:添加原子操作",
+	"mm.tpl.tpl": "mmstudio:添加代码模板",
+	"mm.tpl.widget": "mmstudio:添加控件",
+	"mm.shell.create": "mmstudio:创建项目",
+	"mm.shell.debug": "mmstudio:调试",
+	"mm.shell.build": "mmstudio:打包"
+}
