@@ -1,5 +1,7 @@
 {
-	"mm.type": "项目类型",
+	"mm.proj.type": "项目类型",
+	"mm.atom.type": "原子操作类型",
+	"mm.widget.type": "控件类型",
 	"mm.page.add": "mmstudio: 添加新页面",
 	"mm.presentation.add": "mmstudio: 添加新渲染块",
 	"mm.action.add": "mmstudio:添加响应",
@@ -13,5 +15,7 @@
 	"mm.shell.debug": "mmstudio:调试",
 	"mm.shell.build": "mmstudio:打包",
 	"mm.atom.add": "mmstudio: 新增原子操作",
-	"mm.widget.add": "mmstudio: 新增控件"
+	"mm.atom.reno": "mmstudio: 原子操作重新编号",
+	"mm.widget.add": "mmstudio: 新增控件",
+	"mm.widget.reno": "mmstudio: 控件重新编号"
 }

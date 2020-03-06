@@ -84,4 +84,3 @@ function get_types() {
 		}
 	];
 }
-

@@ -1,5 +1,7 @@
 {
-	"mm.type": "Type of your project.",
+	"mm.proj.type": "Type of your project.",
+	"mm.atom.type": "Type of atom.",
+	"mm.widget.type": "Type of widget.",
 	"mm.page.add": "mmstudio: Add new page",
 	"mm.presentation.add": "mmstudio: Add new presentation",
 	"mm.action.add": "mmstudio: Add action",
@@ -13,5 +15,7 @@
 	"mm.shell.debug": "mmstudio: Debug",
 	"mm.shell.build": "mmstudio: Build",
 	"mm.atom.add": "mmstudio: Add new atom",
-	"mm.widget.add": "mmstudio: Add a new widget"
+	"mm.atom.reno": "mmstudio: Renumber atom",
+	"mm.widget.add": "mmstudio: Add a new widget",
+	"mm.widget.reno": "mmstudio: Renumber widget"
 }

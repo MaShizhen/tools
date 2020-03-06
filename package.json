@@ -9,7 +9,6 @@
 		"theme": "light"
 	},
 	"scripts": {
-		"t": "echo ok",
 		"test": "tsc -w",
 		"lint": "eslint ./src/**/*.ts",
 		"clean": "del-cli ./dist/",
@@ -84,8 +83,16 @@
 				"title": "%mm.atom.add%"
 			},
 			{
+				"command": "mm.atom.reno",
+				"title": "%mm.atom.reno%"
+			},
+			{
 				"command": "mm.widget.add",
 				"title": "%mm.widget.add%"
+			},
+			{
+				"command": "mm.widget.reno",
+				"title": "%mm.widget.reno%"
 			}
 		],
 		"menus": {
@@ -149,7 +156,15 @@
 					"group": "mm"
 				},
 				{
+					"command": "mm.atom.reno",
+					"group": "mm"
+				},
+				{
 					"command": "mm.widget.add",
+					"group": "mm"
+				},
+				{
+					"command": "mm.widget.reno",
 					"group": "mm"
 				}
 			],
@@ -208,7 +223,7 @@
 		],
 		"configuration": [
 			{
-				"title": "Project type",
+				"title": "项目类型",
 				"properties": {
 					"mm.proj.type": {
 						"type": "string",
@@ -219,7 +234,30 @@
 							"mobile"
 						],
 						"default": "web/h5",
-						"description": "mm.type"
+						"description": "%mm.proj.type%"
+					},
+					"mm.atom.type": {
+						"type": "string",
+						"enum": [
+							"nodejs",
+							"web/h5",
+							"wxapp",
+							"desktop",
+							"mobile"
+						],
+						"default": "web/h5",
+						"description": "%mm.atom.type%"
+					},
+					"mm.widget.type": {
+						"type": "string",
+						"enum": [
+							"web/h5",
+							"wxapp",
+							"desktop",
+							"mobile"
+						],
+						"default": "web/h5",
+						"description": "%mm.widget.type%"
 					}
 				}
 			}

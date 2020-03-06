@@ -14,7 +14,9 @@ import insert_tpl from './mm/snippets/insert-tpl';
 import insert_widget from './mm/snippets/insert-widget';
 import list_services from './nodejs/list-services';
 import addatom from './mm/add-atom';
+import renoatom from './mm/reno-atom';
 import addwidget from './mm/add-widget';
+import renowidget from './mm/reno-widget';
 
 export function activate(context: ExtensionContext) {
 	context.subscriptions.push(
@@ -33,6 +35,8 @@ export function activate(context: ExtensionContext) {
 		shell_build(),
 		create_proj(),
 		addatom(),
-		addwidget()
+		renoatom(),
+		addwidget(),
+		renowidget()
 	);
 }

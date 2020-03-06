@@ -4,6 +4,7 @@ import { commands, Uri, window, workspace } from 'vscode';
 import workpath from '../../util/workpath';
 import generate from '../../util/generate';
 import exec from '../../util/exec';
+import { Package } from '../../interfaces';
 
 const { readFile, writeFile } = promises;
 
@@ -140,6 +141,7 @@ async function update_pkg(folder: string, no: string, user: string) {
 	const content = await readFile(path, 'utf-8');
 	const pkg = JSON.parse(content) as Package;
 	pkg.name = `@mmstudio/${no}`;
+	delete pkg.scripts.up;
 	const author = pkg.author || {};
 	const u = await window.showInputBox({
 		value: user,
@@ -182,39 +184,4 @@ async function update_pkg(folder: string, no: string, user: string) {
 	}
 	await writeFile(path, JSON.stringify(pkg, null, '\t'));
 	return pkg;
-}
-
-interface Dependence {
-	[key: string]: string;
-}
-
-interface User {
-	'name': string;
-	'email': string;
-}
-
-interface Package {
-	name: string;
-	version: string;
-	description: string;
-	scripts: {
-		test: string;
-		watch: string;
-		clean: string;
-		lint: string;
-		compile: string;
-		build: string;
-		up: string;
-	};
-	repository: {
-		type: string;
-		url: string;
-	};
-	main: string;
-	keywords: string[];
-	author: User,
-	maintainers: User[];
-	license: string;
-	dependencies: Dependence;
-	devDependencies: Dependence;
 }
