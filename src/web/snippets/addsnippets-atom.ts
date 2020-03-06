@@ -21,7 +21,9 @@ export default async function add(textEditor: TextEditor, all: Map<string, IAtom
 
 	const picked = await window.showQuickPick(selects, {
 		canPickMany: false,
-		placeHolder: '选择一个分类或直接输入原子操作编号并回车'
+		placeHolder: '选择一个分类或直接输入原子操作编号并回车',
+		matchOnDescription: true,
+		matchOnDetail: true
 	});
 	if (!picked) {
 		return;
@@ -40,7 +42,9 @@ export default async function add(textEditor: TextEditor, all: Map<string, IAtom
 		return item;
 	}), {
 		canPickMany: false,
-		placeHolder: '选择一个原子操作编号并回车'
+		placeHolder: '选择一个原子操作编号并回车',
+		matchOnDescription: true,
+		matchOnDetail: true
 	});
 	if (!selected_atom) {
 		return;

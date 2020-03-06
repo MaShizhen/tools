@@ -53,7 +53,9 @@ async function get_all_service(root: string) {
 	const src = join(root, 'src');
 	const ss = await get_all_s(src, src);
 	return window.showQuickPick(ss, {
-		placeHolder: '请选择服务'
+		placeHolder: '请选择服务',
+		matchOnDescription: true,
+		matchOnDetail: true
 	});
 }
 

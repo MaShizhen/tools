@@ -1,8 +1,8 @@
-import { homedir } from 'os';
-import { dirname, join } from 'path';
+import { join } from 'path';
 import { commands, FileType, Uri, window, workspace } from 'vscode';
 import exec from '../../util/exec';
 import prefix from '../../util/prefix';
+import workpath from '../../util/workpath';
 import { PrjType } from '../../util/prj-type';
 
 async function exists(uri: Uri) {
@@ -22,34 +22,34 @@ pro_types.set(PrjType.wxapp, 'tpl-wxapp');
 export default function create_project() {
 	return commands.registerCommand('mm.shell.create', async () => {
 		window.showInformationMessage('进行此操作之前,请确保git已安装并配置好权限,另外,你需要联系管理员为你分配统一的项目编号及spaceid');
-		const def = (() => {
-			const projs = workspace.workspaceFolders;
-			if (projs && projs.length > 0) {
-				return dirname(projs[0].uri.fsPath);
-			}
-			return homedir();
-
-		})();
-		const type = await window.showQuickPick([
+		const def = workpath();
+		const picked = await window.showQuickPick([
 			{
-				alwaysShow: true,
-				description: 'web/h5网站应用',
-				label: 'web/h5'
+				description: '1.web/h5网站应用',
+				label: 'web/h5',
+				type: PrjType.web
 			},
 			{
-				alwaysShow: true,
-				description: '移动端app',
-				label: 'mobile'
+				description: '2.移动端app',
+				label: 'mobile',
+				type: PrjType.mobile
 			},
 			{
-				alwaysShow: true,
-				description: '微信小程序',
-				label: 'wxapp'
+				description: '3.微信小程序',
+				label: 'wxapp',
+				type: PrjType.wxapp
+			},
+			{
+				description: '4.桌面应用程序',
+				label: 'desktop',
+				type: PrjType.desktop
 			}
 		], {
-			placeHolder: '请选择项目端点类型'
+			placeHolder: '请选择项目端点类型',
+			matchOnDescription: true,
+			matchOnDetail: true
 		});
-		if (!type) {
+		if (!picked) {
 			return;
 		}
 		const t = await window.showInputBox({
@@ -71,7 +71,7 @@ export default function create_project() {
 		// type in mmjson and package.json
 		const p = await window.showInputBox({
 			placeHolder: '请输入项目类型,通常它跟端点类型一致',
-			value: type.label,
+			value: picked.type,
 			validateInput(val) {
 				if (/\s/.test(val)) {
 					return '不能为空且不能包含空格';
@@ -129,11 +129,11 @@ export default function create_project() {
 		await workspace.fs.createDirectory(uri);
 		const cwd = uri.fsPath;
 		await exec('git init', cwd);
-		const proj_type = pro_types.get(type.label as PrjType);
+		const proj_type = pro_types.get(picked.type);
 		await exec(`git pull git@gitee.com:mmstudio/${proj_type}.git`, cwd);
 		await exec(`git remote add origin ${remote}`, cwd);
 		await replace_tpl(cwd, spaceid, p, desc);
-		if (type.label.includes('mobile')) {
+		if (picked.label.includes('mobile')) {
 			await replace_mobile(join(cwd, 'android'), spaceid);
 			await replace_mobile(join(cwd, 'ios'), spaceid);
 			await replace(join(cwd, 'app.json'), [/webtest/g], [spaceid]);

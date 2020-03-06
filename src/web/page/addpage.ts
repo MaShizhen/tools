@@ -33,13 +33,14 @@ export default async function add(rootPath: string) {
 	const page = await (async () => {
 		const pick = await window.showQuickPick(pages, {
 			canPickMany: false,
-			placeHolder: '请输入页面名称'
+			placeHolder: '请输入页面名称',
+			matchOnDescription: true,
+			matchOnDetail: true
 		});
 		if (pick === newpage) {
 			return '';
 		}
 		return pick;
-
 	})();
 	const p_path = await generate(folder, 'pg', '', 3);
 	if (!await existsSync(folder)) {

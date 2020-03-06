@@ -44,7 +44,9 @@ export default async function add(textEditor: TextEditor, all: Map<string, IAtom
 		return item;
 	}), {
 		canPickMany: false,
-		placeHolder: '选择一个控件编号并回车'
+		placeHolder: '选择一个控件编号并回车',
+		matchOnDescription: true,
+		matchOnDetail: true
 	});
 	if (!selected_atom) {
 		return;

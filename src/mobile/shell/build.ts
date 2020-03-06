@@ -17,7 +17,9 @@ export default async function build() {
 			picked: false
 		}
 	], {
-		placeHolder: '请选择打包类型'
+		placeHolder: '请选择打包类型',
+		matchOnDescription: true,
+		matchOnDetail: true
 	});
 	if (!select) {
 		return;

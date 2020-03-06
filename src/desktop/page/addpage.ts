@@ -41,7 +41,9 @@ export default async function add(rootPath: string) {
 	const name = await (async () => {
 		const pick = await window.showQuickPick(selects, {
 			canPickMany: false,
-			placeHolder: '请输入页面名称:'
+			placeHolder: '请输入页面名称:',
+			matchOnDescription: true,
+			matchOnDetail: true
 		});
 		if (pick === '➕ 新建...') {
 			await window.showInputBox({
