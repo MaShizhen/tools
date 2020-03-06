@@ -7,14 +7,15 @@ import get from '../../util/get';
 import get_text from '../../util/get-text';
 import root_path from '../../util/root';
 import exec from '../../util/exec';
+import prj_type, { PrjType } from '../../util/prj-type';
 
-const snippets = new Map<string, { remote: string; snippets?: { all: Map<string, IAtom>; catagories: Map<string, IAtom[]> } }>();
+const snippets = new Map<PrjType | 'nodejs', { remote: string; snippets?: { all: Map<string, IAtom>; catagories: Map<string, IAtom[]> } }>();
 snippets.set('nodejs', { remote: 'https://mm-edu.gitee.io/templates/nodejs.json' });
 
-snippets.set('web/h5', { remote: 'https://mm-edu.gitee.io/templates/web.json' });
-snippets.set('wxapp', { remote: 'https://mm-edu.gitee.io/templates/wxapp.json' });
-snippets.set('desktop', { remote: 'https://mm-edu.gitee.io/templates/desktop.json' });
-snippets.set('mobile', { remote: 'https://mm-edu.gitee.io/templates/mobile.json' });
+snippets.set(PrjType.web, { remote: 'https://mm-edu.gitee.io/templates/web.json' });
+snippets.set(PrjType.wxapp, { remote: 'https://mm-edu.gitee.io/templates/wxapp.json' });
+snippets.set(PrjType.desktop, { remote: 'https://mm-edu.gitee.io/templates/desktop.json' });
+snippets.set(PrjType.mobile, { remote: 'https://mm-edu.gitee.io/templates/mobile.json' });
 
 interface IAtomBase {
 	name: string;
@@ -47,7 +48,7 @@ interface IAtomCatagory {
 }
 
 export default function add() {
-	return commands.registerTextEditorCommand('mmtpl.tpl', async (textEditor, _edit) => {
+	return commands.registerTextEditorCommand('mm.tpl.tpl', async (textEditor, _edit) => {
 		const rootPath = root_path();
 		if (!await check_file(rootPath)) {
 			return;
@@ -56,11 +57,7 @@ export default function add() {
 			if (/s\d+\.ts/.test(textEditor.document.uri.path)) {
 				return 'nodejs';
 			}
-			const tp = workspace.getConfiguration().get<string>('mm.proj.type');
-			if (!tp || tp === 'web/h5') {
-				return 'web';
-			}
-			return tp;
+			return prj_type();
 		})();
 		const proj = snippets.get(type);
 		if (!proj) {

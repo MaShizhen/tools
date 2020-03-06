@@ -3,6 +3,7 @@ import { dirname, join } from 'path';
 import { commands, FileType, Uri, window, workspace } from 'vscode';
 import exec from '../../util/exec';
 import prefix from '../../util/prefix';
+import { PrjType } from '../../util/prj-type';
 
 async function exists(uri: Uri) {
 	try {
@@ -13,14 +14,13 @@ async function exists(uri: Uri) {
 	}
 }
 
-const pro_types = new Map<string, string>();
-pro_types.set('web', 'tpl-web');
-pro_types.set('h5', 'tpl-web');
-pro_types.set('mobile', 'tpl-mobile');
-pro_types.set('wxapp', 'tpl-wxapp');
+const pro_types = new Map<PrjType, string>();
+pro_types.set(PrjType.web, 'tpl-web');
+pro_types.set(PrjType.mobile, 'tpl-mobile');
+pro_types.set(PrjType.wxapp, 'tpl-wxapp');
 
 export default function create_project() {
-	return commands.registerCommand('mmshell.create', async () => {
+	return commands.registerCommand('mm.shell.create', async () => {
 		window.showInformationMessage('进行此操作之前,请确保git已安装并配置好权限,另外,你需要联系管理员为你分配统一的项目编号及spaceid');
 		const def = (() => {
 			const projs = workspace.workspaceFolders;
@@ -33,13 +33,8 @@ export default function create_project() {
 		const type = await window.showQuickPick([
 			{
 				alwaysShow: true,
-				description: 'web网站应用',
-				label: 'web'
-			},
-			{
-				alwaysShow: true,
-				description: 'h5移动端网站应用',
-				label: 'h5'
+				description: 'web/h5网站应用',
+				label: 'web/h5'
 			},
 			{
 				alwaysShow: true,
@@ -134,7 +129,7 @@ export default function create_project() {
 		await workspace.fs.createDirectory(uri);
 		const cwd = uri.fsPath;
 		await exec('git init', cwd);
-		const proj_type = pro_types.get(type.label);
+		const proj_type = pro_types.get(type.label as PrjType);
 		await exec(`git pull git@gitee.com:mmstudio/${proj_type}.git`, cwd);
 		await exec(`git remote add origin ${remote}`, cwd);
 		await replace_tpl(cwd, spaceid, p, desc);
@@ -170,7 +165,7 @@ async function replace_mobile(cwd: string, spaceid: string) {
 
 async function replace_tpl(cwd: string, spaceid: string, type: string, desc: string) {
 	await replace(join(cwd, 'package.json'), [/webtest-(web|wxapp|mobile)/, /示例项目/], [`${spaceid}-${type}`, desc]);
-	await replace(join(cwd, 'mmjson'), [/webtest/, /web|wxapp|mobile/], [spaceid, type]);
+	await replace(join(cwd, 'mm.json'), [/webtest/, /web|wxapp|mobile/], [spaceid, type]);
 }
 
 async function replace(path: string, src: Array<{ [Symbol.replace](src: string, rep: string): string; }>, rep: string[]) {

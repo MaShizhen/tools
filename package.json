@@ -9,6 +9,7 @@
 		"theme": "light"
 	},
 	"scripts": {
+		"t": "echo ok",
 		"test": "tsc -w",
 		"lint": "eslint ./src/**/*.ts",
 		"clean": "del-cli ./dist/",
@@ -24,18 +25,9 @@
 		"Other",
 		"Snippets"
 	],
-	"main": "./dist/extension.js",
+	"main": "./dist/index.js",
 	"activationEvents": [
-		"*",
-		"onCommand:mm.page.add",
-		"onCommand:mm.action.add",
-		"onCommand:mm.presentation.add",
-		"onCommand:mm.component.add",
-		"onCommand:mm.service.add",
-		"onCommand:mm.service.router",
-		"onCommand:mm.tpl.atom",
-		"onCommand:mm.tpl.tpl",
-		"onCommand:mm.tpl.widget"
+		"*"
 	],
 	"contributes": {
 		"commands": [
@@ -86,6 +78,14 @@
 			{
 				"command": "mm.shell.build",
 				"title": "%mm.shell.build%"
+			},
+			{
+				"command": "mm.atom.add",
+				"title": "%mm.atom.add%"
+			},
+			{
+				"command": "mm.widget.add",
+				"title": "%mm.widget.add%"
 			}
 		],
 		"menus": {
@@ -142,6 +142,14 @@
 				},
 				{
 					"command": "mm.shell.build",
+					"group": "mm"
+				},
+				{
+					"command": "mm.atom.add",
+					"group": "mm"
+				},
+				{
+					"command": "mm.widget.add",
 					"group": "mm"
 				}
 			],
@@ -262,15 +270,23 @@
 			},
 			{
 				"command": "mm.shell.create",
-				"key": "alt+c"
+				"key": "alt+m c"
 			},
 			{
 				"command": "mm.shell.debug",
-				"key": "alt+d"
+				"key": "alt+m d"
 			},
 			{
 				"command": "mm.shell.build",
-				"key": "alt+b"
+				"key": "alt+m b"
+			},
+			{
+				"command": "mm.atom.build",
+				"key": "alt+m a"
+			},
+			{
+				"command": "mm.widget.build",
+				"key": "alt+m w"
 			}
 		]
 	},

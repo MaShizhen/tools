@@ -1,22 +1,23 @@
-import { commands, window, workspace } from 'vscode';
+import { commands, window } from 'vscode';
 import { IAtom, IAtomCatagory } from '../../interfaces';
 import check_file from '../../util/check-file';
 import get from '../../util/get';
 import root_path from '../../util/root';
 import web from '../../web/snippets/addsnippets-atom';
+import prj_type, { PrjType } from '../../util/prj-type';
 
-const snippets = new Map<string, { key: string; remote: string; snippets?: { all: Map<string, IAtom>; catagories: Map<string, IAtom[]> } }>();
+const snippets = new Map<PrjType | 'nodejs-s' | 'nodejs-na', { remote: string; snippets?: { all: Map<string, IAtom>; catagories: Map<string, IAtom[]> } }>();
 
-snippets.set('nodejs-s', { key: 'atom-nodejs-s', remote: 'https://dmmgitee.io/atom-nodejs/index.json' });
-snippets.set('nodejs-na', { key: 'atom-nodejs-na', remote: 'https://dmmgitee.io/atom-nodejs/index-a.json' });
+snippets.set('nodejs-s', { remote: 'https://dmmgitee.io/atom-nodejs/index.json' });
+snippets.set('nodejs-na', { remote: 'https://dmmgitee.io/atom-nodejs/index-a.json' });
 
-snippets.set('web/h5', { key: 'atom-web', remote: 'https://dmmgitee.io/atom-web/index.json' });
-snippets.set('wxapp', { key: 'atom-wxapp', remote: 'https://dmmgitee.io/atom-wxapp/index.json' });
-snippets.set('desktop', { key: 'atom-desktop', remote: 'https://dmmgitee.io/atom-desktop/index.json' });
-snippets.set('mobile', { key: 'atom-mobile', remote: 'https://dmmgitee.io/atom-mobile/index.json' });
+snippets.set(PrjType.web, { remote: 'https://dmmgitee.io/atom-web/index.json' });
+snippets.set(PrjType.wxapp, { remote: 'https://dmmgitee.io/atom-wxapp/index.json' });
+snippets.set(PrjType.desktop, { remote: 'https://dmmgitee.io/atom-desktop/index.json' });
+snippets.set(PrjType.mobile, { remote: 'https://dmmgitee.io/atom-mobile/index.json' });
 
 export default function add() {
-	return commands.registerTextEditorCommand('mmtpl.atom', async (textEditor, _edit) => {
+	return commands.registerTextEditorCommand('mm.tpl.atom', async (textEditor, _edit) => {
 		const rootPath = root_path();
 		if (!await check_file(rootPath)) {
 			return;
@@ -28,7 +29,7 @@ export default function add() {
 			} else if (/na\d+\.ts$/.test(textEditor.document.uri.path)) {
 				return 'nodejs-na';
 			}
-			return workspace.getConfiguration().get<string>('mmproj.type', 'web/h5');
+			return prj_type();
 		})();
 		const proj = snippets.get(type);
 		if (!proj) {
@@ -49,6 +50,6 @@ export default function add() {
 		}
 		const { all, catagories } = proj.snippets;
 
-		web(textEditor, all, catagories, proj.key.includes('nodejs'));
+		web(textEditor, all, catagories, type.includes('nodejs'));
 	});
 }

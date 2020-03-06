@@ -5,12 +5,12 @@ import prefix from '../util/prefix';
 import root_path from '../util/root';
 
 export default function add() {
-	return commands.registerCommand('mmservice.router', async () => {
+	return commands.registerCommand('mm.service.router', async () => {
 		const rootPath = root_path();
 		if (!await check_file(rootPath)) {
 			return;
 		}
-		const file = Uri.file(join(rootPath, 'mmjson'));
+		const file = Uri.file(join(rootPath, 'mm.json'));
 		const doc = await workspace.openTextDocument(file);
 		const raw = doc.getText();
 		const conf = JSON.parse(raw);

@@ -1,12 +1,13 @@
-import { commands, window, workspace } from 'vscode';
+import { commands, window } from 'vscode';
 import check_file from '../util/check-file';
 import root_path from '../util/root';
-import web from '../web/component/addp';
+import web from '../web/component/add-tpl';
+import prj_type, { PrjType } from '../util/prj-type';
 
 export default function add() {
-	const type = workspace.getConfiguration().get('mmproj.type');
-	return commands.registerTextEditorCommand('mmpresentation.add', async (editor) => {
-		if (type === 'web/h5') {
+	const type = prj_type();
+	return commands.registerTextEditorCommand('mm.presentation.add', async (editor) => {
+		if (type === PrjType.web) {
 			const rootPath = root_path();
 			if (!await check_file(rootPath)) {
 				return;

@@ -1,28 +1,29 @@
-import { commands, window, workspace } from 'vscode';
+import { commands, window } from 'vscode';
 import desktop from '../desktop/component/addc';
 import mobile from '../mobile/page/addpage';
 import check_file from '../util/check-file';
 import root_path from '../util/root';
 import web from '../web/component/addc';
+import prj_type, { PrjType } from '../util/prj-type';
 
 export default function add() {
-	return commands.registerTextEditorCommand('mmcomponent.add', async (editor) => {
+	return commands.registerTextEditorCommand('mm.component.add', async (editor) => {
 		const rootPath = root_path();
 		if (!await check_file(rootPath)) {
 			return;
 		}
-		const type = workspace.getConfiguration().get('mmproj.type');
+		const type = prj_type();
 		switch (type) {
-			case 'web/h5':
+			case PrjType.web:
 				await web(editor);
 				break;
-			case 'wxapp':
+			case PrjType.wxapp:
 				window.showErrorMessage('不能在wxapp项目中进行该操作!');
 				break;
-			case 'desktop':
+			case PrjType.desktop:
 				await desktop(editor);
 				break;
-			case 'mobile':
+			case PrjType.mobile:
 				await mobile(rootPath);
 				break;
 		}

@@ -2,15 +2,15 @@ import { join } from 'path';
 import { TextEditor, Uri, window, workspace } from 'vscode';
 import { writeFileSync } from '../../util/fs';
 import generate from '../../util/generate';
+import reg_in_comment from '../../util/reg-in-component';
 
 export default async function add(editor: TextEditor) {
 	const path = editor.document.fileName;
 	const uri = editor.document.uri;
 	// 如果当前目录不在某个页面中，则不允许操作
-	const r = /[/\\](src[/\\]\w[\w\d-]*[/\\](zj-\d{3,6}))[/\\]?/.exec(path);
+	const r = reg_in_comment(path);
 	if (r === null) {
 		window.showErrorMessage('请在组件中进行该操作!');
-
 	} else {
 		const [, dir] = r;
 		const folder = join(workspace.getWorkspaceFolder(uri)!.uri.fsPath, dir);

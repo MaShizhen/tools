@@ -4,6 +4,7 @@ import { IAtom } from '../../interfaces';
 import install from '../../util/install';
 import replace from '../../util/replace';
 import root_path from '../../util/root';
+import reg_in_comment from '../../util/reg-in-component';
 
 export default async function add(textEditor: TextEditor, all: Map<string, IAtom>, catagories: Map<string, IAtom[]>) {
 	const selects = Array.from(catagories.keys()).map((catagory) => {
@@ -67,7 +68,7 @@ async function add_snippet(atom: IAtom, textEditor: TextEditor) {
 		window.showErrorMessage('无法自动添加脚本，请联系供应商');
 		return;
 	}
-	const [, tmp_dir] = /[/\\](src[/\\]\w[\w\d-]*[/\\](zj-\d{3,6}))[/\\]?/.exec(textEditor.document.fileName)!;
+	const [, tmp_dir] = reg_in_comment(textEditor.document.fileName)!;
 	const folder = join(workspace.getWorkspaceFolder(textEditor.document.uri)!.uri.fsPath, tmp_dir);
 	const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');
 

@@ -4,25 +4,26 @@ import check_file from '../util/check-file';
 import { writeFileSync } from '../util/fs';
 import generate from '../util/generate';
 import root_path from '../util/root';
+import prj_type, { PrjType } from '../util/prj-type';
 
 export default function add() {
-	return commands.registerTextEditorCommand('mmservice.add', async (editor) => {
+	return commands.registerTextEditorCommand('mm.service.add', async (editor) => {
 		const rootPath = root_path();
 		if (!await check_file(rootPath)) {
 			return;
 		}
-		const type = workspace.getConfiguration().get('mmproj.type');
+		const type = prj_type();
 		switch (type) {
-			case 'web/h5':
+			case PrjType.web:
 				await web(editor);
 				break;
-			case 'wxapp':
+			case PrjType.wxapp:
 				await app(editor);
 				break;
-			case 'desktop':
+			case PrjType.desktop:
 				await web(editor);
 				break;
-			case 'mobile':
+			case PrjType.mobile:
 				await app(editor);
 				break;
 		}

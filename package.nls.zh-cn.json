@@ -6,10 +6,12 @@
 	"mm.component.add": "mmstudio: 添加组件",
 	"mm.service.add": "mmstudio:添加服务",
 	"mm.service.router": "mmstudio:添加路由",
-	"mm.tpl.atom": "mmstudio:添加原子操作",
-	"mm.tpl.tpl": "mmstudio:添加代码模板",
-	"mm.tpl.widget": "mmstudio:添加控件",
+	"mm.tpl.atom": "mmstudio:插入原子操作",
+	"mm.tpl.tpl": "mmstudio:插入代码模板",
+	"mm.tpl.widget": "mmstudio:插入控件",
 	"mm.shell.create": "mmstudio:创建项目",
 	"mm.shell.debug": "mmstudio:调试",
-	"mm.shell.build": "mmstudio:打包"
+	"mm.shell.build": "mmstudio:打包",
+	"mm.atom.add": "mmstudio: 新增原子操作",
+	"mm.widget.add": "mmstudio: 新增控件"
 }

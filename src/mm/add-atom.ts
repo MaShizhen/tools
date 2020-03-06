@@ -1,14 +1,11 @@
 import { commands } from 'vscode';
-import desktop from '../desktop/page/addpage';
 import check_file from '../util/check-file';
 import root_path from '../util/root';
-import web from '../web/page/addpage';
-import wxapp from '../wxapp/page/addpage';
-import mobile from '../mobile/page/addpage';
+import web from '../web/atom/add';
 import prj_type, { PrjType } from '../util/prj-type';
 
 export default function add() {
-	return commands.registerCommand('mm.page.add', async () => {
+	return commands.registerTextEditorCommand('mm.atom.add', async () => {
 		const rootPath = root_path();
 		if (!await check_file(rootPath)) {
 			return;
@@ -16,18 +13,16 @@ export default function add() {
 		const type = prj_type();
 		switch (type) {
 			case PrjType.web:
-				await web(rootPath);
+				web();
 				break;
 			case PrjType.wxapp:
-				await wxapp(rootPath);
 				break;
 			case PrjType.desktop:
-				await desktop(rootPath);
 				break;
 			case PrjType.mobile:
-				await mobile(rootPath);
 				break;
 		}
 		commands.executeCommand('workbench.files.action.refreshFilesExplorer');
 	});
 }
+

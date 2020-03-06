@@ -6,10 +6,12 @@
 	"mm.component.add": "mmstudio: Add component",
 	"mm.service.add": "mmstudio: Add service",
 	"mm.service.router": "mmstudio: Add router",
-	"mm.tpl.atom": "mmstudio: Add atom",
-	"mm.tpl.tpl": "mmstudio: Add code template",
-	"mm.tpl.widget": "mmstudio: Add widget",
+	"mm.tpl.atom": "mmstudio: Insert atom",
+	"mm.tpl.tpl": "mmstudio: Insert code template",
+	"mm.tpl.widget": "mmstudio: Insert widget",
 	"mm.shell.create": "mmstudio: Create Project",
 	"mm.shell.debug": "mmstudio: Debug",
-	"mm.shell.build": "mmstudio: Build"
+	"mm.shell.build": "mmstudio: Build",
+	"mm.atom.add": "mmstudio: Add new atom",
+	"mm.widget.add": "mmstudio: Add a new widget"
 }

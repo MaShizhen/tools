@@ -1,24 +1,25 @@
 import { promises } from 'fs';
 import { parse } from 'path';
-import { CompletionItem, CompletionItemKind, languages, Position, TextDocument, workspace } from 'vscode';
+import { CompletionItem, CompletionItemKind, languages, Position, TextDocument } from 'vscode';
 import desktop from '../desktop/list-events';
 import mobile from '../mobile/list-events';
 import web from '../web/list-events';
 import wxapp from '../wxapp/list-events';
+import prj_type, { PrjType } from '../util/prj-type';
 
 const { readdir } = promises;
 
 export default function add() {
 	const events = (() => {
-		const type = workspace.getConfiguration().get('mmproj.type');
+		const type = prj_type();
 		switch (type) {
-			case 'web/h5':
+			case PrjType.web:
 				return web;
-			case 'wxapp':
+			case PrjType.wxapp:
 				return wxapp;
-			case 'desktop':
+			case PrjType.desktop:
 				return desktop;
-			case 'mobile':
+			case PrjType.mobile:
 				return mobile;
 			default:
 				return [];

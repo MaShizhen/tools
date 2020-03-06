@@ -1,14 +1,14 @@
 import { basename, join } from 'path';
 import { Position, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import generate from '../../util/generate';
+import reg_in_comment from '../../util/reg-in-component';
 
 export default async function add(editor: TextEditor) {
 	const path = editor.document.fileName;
 	// 如果当前目录不在某个页面中，则不允许操作
-	const r = /[/\\](src[/\\]\w[\w\d-]*[/\\](zj-\d{3,6}))[/\\]?/.exec(path);
+	const r = reg_in_comment(path);
 	if (r === null) {
 		window.showErrorMessage('请在组件中进行该操作!');
-
 	} else {
 		const [, dir] = r;
 		const doc = editor.document;
@@ -22,7 +22,7 @@ export default async function add(editor: TextEditor) {
 		const tpl = Uri.file(`${p_path}.tpl`);
 		we.createFile(tpl);
 		we.insert(tpl, new Position(0, 0), content);
-		we.replace(uri, editor.selection, `<div data-mm-presentation="${no}"></div>`);
+		we.replace(uri, editor.selection, `<div data-mm-tpl="${no}"></div>`);
 		await workspace.applyEdit(we);
 		await window.showTextDocument(tpl);
 		await workspace.saveAll();
