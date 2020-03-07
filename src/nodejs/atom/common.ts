@@ -26,7 +26,8 @@ export default async function common() {
 	const cwd = await generate(folder.fsPath, 'an', '', 6);
 	const no = basename(cwd);
 	const remote = await window.showInputBox({
-		placeHolder: `请提供一个可用的空git仓库地址,如: git@gitee.com/${user}/${no}.git`
+		value: `git@github.com:mm-atom/${no}.git`,
+		placeHolder: `请提供一个可用的空git仓库地址,如: git@github.com:${user}/${no}.git`
 	});
 	const uri = Uri.file(cwd);
 	try {
@@ -42,7 +43,7 @@ export default async function common() {
 	// 进入目录并且拉取代码
 	await exec('git init', cwd);
 	// 从码云拉取代码模板
-	await exec('git pull git@gitee.com:mm-edu/atom-nodejs.git', cwd);
+	await exec('git pull git@github.com:mm-tpl/atom-nodejs.git', cwd);
 
 	// package.json
 	const pkg = await update_pkg(cwd, no, user);
@@ -133,7 +134,7 @@ async function update_readme(folder: string, description: string) {
 		}
 	});
 	if (d) {
-		await writeFile(path, `# ${d}`);
+		await writeFile(path, `# ${d}\n`);
 	}
 }
 
