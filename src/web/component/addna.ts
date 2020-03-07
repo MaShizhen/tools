@@ -52,9 +52,9 @@ async function create_a(p_path: string) {
 	if (a === 'na001') {
 		await update_ns(p_path);
 	}
-	const tpl = `import an78 from '@mmstudio/an000078';
+	const tpl = `import an2 from '@mmstudio/an000002';
 
-export default async function ${a}(mm: an78) {
+export default async function ${a}(mm: an2) {
 	// todo
 }
 `;

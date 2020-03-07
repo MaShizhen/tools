@@ -49,9 +49,9 @@ async function update_b(path: string) {
 
 function create_a(path: string) {
 	const a = basename(path);
-	const tpl = `import an79 from '@mmstudio/an000079';
+	const tpl = `import an3 from '@mmstudio/an000003';
 
-export default async function ${a}(mm: an79) {
+export default async function ${a}(mm: an3) {
 	// todo
 }
 `;
