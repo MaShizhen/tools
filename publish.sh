@@ -1,4 +1,4 @@
 #! /bin/bash
-npm version '1.0.'$(date +%Y%m%d%H%M)
-npm run build
-npm publish --access public
+# vsce package
+# major, minor, or patch
+vsce publish patch
