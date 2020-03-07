@@ -61,6 +61,8 @@ export default async function common() {
 		await exec(`git remote add origin ${remote}`, cwd);
 		await exec('git push -u origin master', cwd);
 	}
+	window.showInformationMessage('原子操作初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
+	await exec('yarn', cwd);
 	await commands.executeCommand('vscode.openFolder', uri);
 }
 

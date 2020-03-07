@@ -12,10 +12,10 @@ import prj_type, { PrjType } from '../../util/prj-type';
 type Fun = (textEditor: TextEditor, all: Map<string, IAtom>, catagories: Map<string, IAtom[]>) => Promise<void>;
 
 const snippets = new Map<PrjType, { remote: string; fun: Fun; snippets?: { all: Map<string, IAtom>; catagories: Map<string, IAtom[]> } }>();
-snippets.set(PrjType.web, { remote: 'https://dmmgitee.io/widgets/index.json', fun: web });
-snippets.set(PrjType.wxapp, { remote: 'https://dmmgitee.io/widgets-wxapp/index.json', fun: wxapp });
-snippets.set(PrjType.desktop, { remote: 'https://dmmgitee.io/widgets-desktop/index.json', fun: desktop });
-snippets.set(PrjType.mobile, { remote: 'https://dmmgitee.io/widgets-mobile/index.json', fun: mobile });
+snippets.set(PrjType.web, { remote: 'https://mm-edu.gitee.io/widgets/index.json', fun: web });
+snippets.set(PrjType.wxapp, { remote: 'https://mm-edu.gitee.io/widgets-wxapp/index.json', fun: wxapp });
+snippets.set(PrjType.desktop, { remote: 'https://mm-edu.gitee.io/widgets-desktop/index.json', fun: desktop });
+snippets.set(PrjType.mobile, { remote: 'https://mm-edu.gitee.io/widgets-mobile/index.json', fun: mobile });
 
 export default function add() {
 	return commands.registerTextEditorCommand('mm.tpl.widget', async (textEditor, _edit) => {

@@ -8,13 +8,13 @@ import prj_type, { PrjType } from '../../util/prj-type';
 
 const snippets = new Map<PrjType | 'nodejs-s' | 'nodejs-na', { remote: string; snippets?: { all: Map<string, IAtom>; catagories: Map<string, IAtom[]> } }>();
 
-snippets.set('nodejs-s', { remote: 'https://dmmgitee.io/atom-nodejs/index.json' });
-snippets.set('nodejs-na', { remote: 'https://dmmgitee.io/atom-nodejs/index-a.json' });
+snippets.set('nodejs-s', { remote: 'https://mm-edu.gitee.io/atom-nodejs/index.json' });
+snippets.set('nodejs-na', { remote: 'https://mm-edu.gitee.io/atom-nodejs/index-a.json' });
 
-snippets.set(PrjType.web, { remote: 'https://dmmgitee.io/atom-web/index.json' });
-snippets.set(PrjType.wxapp, { remote: 'https://dmmgitee.io/atom-wxapp/index.json' });
-snippets.set(PrjType.desktop, { remote: 'https://dmmgitee.io/atom-desktop/index.json' });
-snippets.set(PrjType.mobile, { remote: 'https://dmmgitee.io/atom-mobile/index.json' });
+snippets.set(PrjType.web, { remote: 'https://mm-edu.gitee.io/atom-web/index.json' });
+snippets.set(PrjType.wxapp, { remote: 'https://mm-edu.gitee.io/atom-wxapp/index.json' });
+snippets.set(PrjType.desktop, { remote: 'https://mm-edu.gitee.io/atom-desktop/index.json' });
+snippets.set(PrjType.mobile, { remote: 'https://mm-edu.gitee.io/atom-mobile/index.json' });
 
 export default function add() {
 	return commands.registerTextEditorCommand('mm.tpl.atom', async (textEditor, _edit) => {
