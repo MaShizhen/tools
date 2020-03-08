@@ -86,7 +86,7 @@ async function update_usage(folder: string, description: string, no: string) {
 		});
 		const t1 = `\t// ${description}`;
 		const t2 = '\tconst r$CURRENT_SECONDS_UNIX = await(() => {';
-		const t3 = `\t\treturn ${no.replace(/[0]/g, '')}(${ps.join(', ')})`;
+		const t3 = `\t\treturn ${no.replace(/[0]/g, '')}(${ps.join(', ')});`;
 		const t4 = '\t})();';
 		const content = [t1, t2, ...params, t3, t4].join('\n');
 		await writeFile(path, content);

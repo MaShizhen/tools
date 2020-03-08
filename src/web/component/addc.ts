@@ -94,7 +94,7 @@ async function update_n(path: string, components: string[]) {
 }
 
 function create_b(id: string, path: string) {
-	const tpl = `import init from '@mmstudio/web/component';
+	const tpl = `import { bc } from '@mmstudio/web';
 
 import s from './s';
 
@@ -115,19 +115,16 @@ export default function main(url: string, query: {}) {
 	const actions = {};
 
 	/// MM ACTIONS END
-	return init('${id}', s, actions, url, query);
+	return bc('${id}', s, actions, url, query);
 }
 `;
 	return writeFileSync(join(path, 'b.ts'), tpl);
 }
 
 function create_n(id: string, path: string) {
-	const tpl = `import { ICommonParams, IHeaders } from '@mmstudio/nodejs/interfaces';
+	const tpl = `import { ICommonParams, IHeaders, nc } from '@mmstudio/web';
 import { HTMLElement } from 'node-html-parser';
 import s from './ns';
-
-import init from '@mmstudio/nodejs/component';
-
 import tpl from './tpl';
 
 /// MM IMPACTIONS BEGIN
@@ -145,7 +142,7 @@ export default function main(html: HTMLElement, url: string, msg: ICommonParams,
 	/// MM ACTIONS END
 
 
-	return init('${id}', tpl, s, actions, html, url, msg, headers, query);
+	return nc('${id}', tpl, s, actions, html, url, msg, headers, query);
 }
 
 `;
