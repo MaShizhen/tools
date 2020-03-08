@@ -148,7 +148,6 @@ import s from './ns';
 
 /// MM IMPACTIONS BEGIN
 /// ${NO_MODIFY}
-import na001 from './na001';
 
 /// MM IMPACTIONS END
 
@@ -157,7 +156,7 @@ export default async function main(url: string, msg: ICommonParams, headers: IHe
 	/// MM ACTIONS BEGIN
 	/// ${NO_MODIFY}
 
-	const actions = { na001 };
+	const actions = { };
 
 	/// MM ACTIONS END
 
