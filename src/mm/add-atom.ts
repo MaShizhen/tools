@@ -17,7 +17,7 @@ export default function add() {
 			{
 				description: '只在该项目可用，多个项目无法共用',
 				label: '1.项目级原子操作',
-				detail: '具体操作需要参考相关文档<https://mmstudio.gitee.com>',	// todo 地址需要替换
+				detail: '具体操作需要参考相关文档<https://mm-edu.gitee.io>',
 				prj: true
 			},
 			{

@@ -184,7 +184,7 @@ export default async function main(url: string, msg: ICommonParams, headers: IHe
 		<link inline rel="stylesheet" type="text/css" href="./css/mm.css">
 		<script src="//cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs"></script>
 		<script src="//cdn.jsdelivr.net/npm/cross-fetch"></script>
-		<script src="./dist/js/mmjs"></script>
+		<script src="./dist/js/mm.js"></script>
 		<script type="text/javascript">
 			window.addEventListener('WebComponentsReady', function () {
 				var t = document.createElement('script');

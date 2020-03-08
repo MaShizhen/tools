@@ -15,9 +15,9 @@ async function exists(uri: Uri) {
 }
 
 const pro_types = new Map<PrjType, string>();
-pro_types.set(PrjType.web, 'tpl-web');
-pro_types.set(PrjType.mobile, 'tpl-mobile');
-pro_types.set(PrjType.wxapp, 'tpl-wxapp');
+pro_types.set(PrjType.web, 'web');
+pro_types.set(PrjType.mobile, 'mobile');
+pro_types.set(PrjType.wxapp, 'wxapp');
 
 export default function create_project() {
 	return commands.registerCommand('mm.shell.create', async () => {
@@ -130,7 +130,7 @@ export default function create_project() {
 		const cwd = uri.fsPath;
 		await exec('git init', cwd);
 		const proj_type = pro_types.get(picked.type);
-		await exec(`git pull git@gitee.com:mmstudio/${proj_type}.git`, cwd);
+		await exec(`git pull git@github.com:mm-tpl/${proj_type}.git`, cwd);
 		await exec(`git remote add origin ${remote}`, cwd);
 		await replace_tpl(cwd, spaceid, p, desc);
 		if (picked.label.includes('mobile')) {
