@@ -183,6 +183,7 @@ export default async function main(url: string, msg: ICommonParams, headers: IHe
 		<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
 		<link inline rel="stylesheet" type="text/css" href="./css/mm.css">
 		<script src="//cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs"></script>
+		<script src="//cdn.jsdelivr.net/npm/cross-fetch"></script>
 		<script src="./dist/js/mmjs"></script>
 		<script type="text/javascript">
 			window.addEventListener('WebComponentsReady', function () {
