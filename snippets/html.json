@@ -12,7 +12,7 @@
 	"html tpl": {
 		"prefix": "mmt",
 		"description": "data-mm-tpl",
-		"body": "data-mm-presentation='$1'"
+		"body": "data-mm-tpl='$1'"
 	},
 	"id": {
 		"prefix": "mmid",
