@@ -30,18 +30,15 @@ export default async function add(rootPath: string) {
 		pages.splice(pages.indexOf(value), 1);
 		pages.unshift(value);
 	}
-	const page = await (async () => {
-		const pick = await window.showQuickPick(pages, {
-			canPickMany: false,
-			placeHolder: '请输入页面名称',
-			matchOnDescription: true,
-			matchOnDetail: true
-		});
-		if (pick === newpage) {
-			return '';
-		}
-		return pick;
-	})();
+	const page = await window.showQuickPick(pages, {
+		canPickMany: false,
+		placeHolder: '请输入页面名称',
+		matchOnDescription: true,
+		matchOnDetail: true
+	});
+	if (!page) {
+		return;
+	}
 	const p_path = await generate(folder, 'pg', '', 3);
 	if (!await existsSync(folder)) {
 		await mkdirSync(folder);
@@ -51,11 +48,10 @@ export default async function add(rootPath: string) {
 	// create n
 	await create_ns(p_path);
 	const html = await (async () => {
-		if (page) {
+		if (page !== newpage) {
 			return Buffer.from(await workspace.fs.readFile(Uri.file(join(rootPath, 'pages', `${page}.html`)))).toString('utf8');
 		}
 		return '';
-
 	})();
 	await create_html(p_path, html);
 	await create_n(p_path, name, html);
