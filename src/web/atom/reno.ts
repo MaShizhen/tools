@@ -13,7 +13,7 @@ export default async function reno() {
 	const pkg = await get_pkg(cwd);
 
 	// 旧编号
-	const old = pkg.name.replace(/[\w/0]/g, '');
+	const old = pkg.name.replace(/[@a-zA-Z/0]/g, '');
 	if (!old) {
 		window.showErrorMessage('不是一个合法的原子操作项目');
 		return;
@@ -46,6 +46,8 @@ export default async function reno() {
 	await update_usage(cwd, pkg.description, no);
 
 	await exec(`git commit -am "rename ${no} from ${old}"`, cwd);
+
+	window.showInformationMessage('重命名已完成');
 }
 
 async function get_pkg(folder: string) {
