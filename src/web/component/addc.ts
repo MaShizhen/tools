@@ -122,7 +122,7 @@ export default function main(url: string, query: {}) {
 }
 
 function create_n(id: string, path: string) {
-	const tpl = `import { ICommonParams, IHeaders, nc } from '@mmstudio/web';
+	const tpl = `import { nc } from '@mmstudio/web';
 import { HTMLElement } from 'node-html-parser';
 import s from './ns';
 import tpl from './tpl';
@@ -132,7 +132,7 @@ import tpl from './tpl';
 
 /// MM IMPACTIONS END
 
-export default function main(html: HTMLElement, url: string, msg: ICommonParams, headers: IHeaders, query: {}) {
+export default function main(html: HTMLElement, url: string, msg: unknown, headers: object, query: {}) {
 
 	/// MM ACTIONS BEGIN
 	/// ${NO_MODIFY}

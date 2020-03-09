@@ -132,7 +132,7 @@ function create_ns(path: string) {
 
 function create_n(path: string, page: string, html: string) {
 	const title = html.replace(/[.\s\S]*<\s*title\s*.*>[\s]*([\s\S.]*?)\s*<\/\s*title\s*.*>[.\s\S]*/i, '$1');
-	const tpl = `import { ICommonParams, IHeaders, np } from '@mmstudio/web';
+	const tpl = `import { np } from '@mmstudio/web';
 import html from './html';
 import s from './ns';
 
@@ -147,7 +147,7 @@ import s from './ns';
 
 /// MM IMPACTIONS END
 
-export default async function main(url: string, msg: ICommonParams, headers: IHeaders) {
+export default async function main(url: string, msg: unknown, headers: object) {
 
 	/// MM ACTIONS BEGIN
 	/// ${NO_MODIFY}
