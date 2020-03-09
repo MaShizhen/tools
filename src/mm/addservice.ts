@@ -76,10 +76,10 @@ interface Message {
 	// captcha: string;
 }
 
-export default async function atom(msg: Message, action_id: string): Promise<an4> {
-	an1('Service begin path:${dir},action_id:' + action_id);
+export default async function atom(msg: Message, actionid: string): Promise<an4> {
+	an1(\`Service begin path:${dir},actionid:$\{actionid}\`);
 
-	an1('Service end path:${dir},action_id:' + action_id);
+	an1(\`Service end path:${dir},actionid:$\{actionid}\`);
 	return {
 		data: '"mm"'
 	} as an4;
