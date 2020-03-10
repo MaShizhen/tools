@@ -6,7 +6,6 @@ import generate from '../../util/generate';
 import exec from '../../util/exec';
 import { Package } from '../../interfaces';
 import tplwidgetusage from './tpl-web-widget-useage';
-import { WidgetType } from '../../util/widget-type';
 import tplwidget from './tpl-web-widget';
 
 const { readFile, writeFile } = promises;
@@ -77,7 +76,7 @@ export default async function add_common_widget() {
 }
 
 async function update_html(folder: string, no: string, pagename: string) {
-	no = no.replace(/\w*/, '');
+	no = no.replace(/[a-z]*/, '');
 	const tag = `mm-${no}`;
 	const path = join(folder, 'tests', pagename);
 	const old = await readFile(path, 'utf-8');

@@ -153,7 +153,7 @@ async function add_local(atom: IAtom, textEditor: TextEditor) {
 	const dir = join(root_path(), 'src', 'widgets', atom.no);
 	const cur = dirname(doc.uri.fsPath);
 	const imp_path = relative(cur, dir);
-	const imp = `import '${imp_path}';`;	// todo should we add index here?
+	const imp = `import '${imp_path}/index';`;
 	const snippet_use = Uri.file(join(dir, 'use.snippet'));
 	const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');
 

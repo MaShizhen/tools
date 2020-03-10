@@ -1,6 +1,6 @@
 
 export default function tplwebwidget(no: string, project: boolean) {
-	no = no.replace(/\w*/, '');
+	no = no.replace(/[a-z]*/, '');
 	const prefix = project ? 'mm-p' : 'mm-';
 	const tag = `${prefix}${no}`;
 	return `import on, { emit } from '@mmstudio/on';
