@@ -1,21 +1,33 @@
-import { SnippetString, TextEditor } from 'vscode';
+import { Position, SnippetString, TextEditor, workspace, WorkspaceEdit } from 'vscode';
 
 export default async function insetSnippet(textEditor: TextEditor, use: string, imp: string) {
-	const context = textEditor.document.getText();
-	if (!context.includes(imp)) {
-		const active = textEditor.selection.active.translate(1);
-		await textEditor.insertSnippet(new SnippetString(`${imp }\n`), textEditor.document.positionAt(0), {
-			undoStopAfter: true,
-			undoStopBefore: false
-		});
-		await textEditor.insertSnippet(new SnippetString(use), active, {
-			undoStopAfter: false,
-			undoStopBefore: true
-		});
-	} else {
-		await textEditor.insertSnippet(new SnippetString(use), textEditor.selection.active, {
-			undoStopAfter: true,
-			undoStopBefore: true
-		});
+	const doc = textEditor.document;
+	const max = doc.lineCount;
+	let hasimport = false;
+	let lastimport = -1;
+	for (let i = 0; i < max; i++) {
+		const line = doc.lineAt(i);
+		const text = line.text;
+		if (/^import\s+.+/.test(text)) {
+			if (text === imp) {
+				hasimport = true;
+				break;
+			} else {
+				lastimport = i;
+			}
+		}
 	}
+	const imppos = new Position(lastimport + 1, 0);
+	const active = textEditor.selection.active;
+	if (!hasimport) {
+		const we = new WorkspaceEdit();
+		const uri = doc.uri;
+		we.insert(uri, imppos, `${imp}\n`);
+		await workspace.applyEdit(we);
+	}
+	const pos = hasimport ? active : active.translate(1);
+	await textEditor.insertSnippet(new SnippetString(use), pos, {
+		undoStopAfter: true,
+		undoStopBefore: true
+	});
 }
