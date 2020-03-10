@@ -1,7 +1,24 @@
-import { commands, window, workspace } from 'vscode';
-import nodejs from '../nodejs/atom/add';
-import web from '../web/atom/add';
+import { basename, join } from 'path';
+import { commands, Position, QuickPickItem, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import nodejs from '../nodejs/atom/add-common';
+import web from '../web/atom/add-common';
 import { PrjType } from '../util/prj-type';
+import root from '../util/root';
+import generate from '../util/generate';
+
+type AtomType = PrjType | 'nodejs';
+
+const ac = new Map<AtomType, () => Promise<unknown>>();
+ac.set('nodejs', nodejs);
+ac.set(PrjType.web, web);
+
+// prifix
+const ap = new Map<AtomType, string>();
+ap.set('nodejs', 'acn');
+ap.set(PrjType.web, 'ac');
+ap.set(PrjType.wxapp, 'ac');
+ap.set(PrjType.mobile, 'ac');
+ap.set(PrjType.desktop, 'ac');
 
 export default function add() {
 	return commands.registerCommand('mm.atom.add', async () => {
@@ -33,22 +50,107 @@ export default function add() {
 			return;
 		}
 		const isprj = p2.prj;
-		switch (p1.type) {
-			case 'nodejs':
-				await nodejs(isprj);
-				break;
-			case PrjType.web:
-				web(isprj);	// todo add await
-				break;
+		if (isprj) {
+			const s = await window.showInputBox({
+				value: '2',
+				prompt: '请设置参数个数，该操作为初始操作，后期仍需要修改use.snippet和index.ts文件',
+				validateInput(v) {
+					try {
+						const n = parseInt(v, 10);
+						if (n >= 0) {
+							return null;
+						}
+						return '参数个数不能小于0';
+					} catch (error) {
+						return '不能为空';
+					}
+				}
+			});
+			if (!s) {
+				return;
+			}
+			const d = await window.showInputBox({
+				prompt: '原子操作描述',
+				validateInput(v) {
+					if (!v) {
+						return '不能为空';
+					}
+					return null;
+				}
+			});
+			if (!d) {
+				return;
+			}
+			const n = parseInt(s, 10);
+			const rt = root();
+			const prefix = ap.get(p1.type)!;
+			const dir = join(rt, 'src', 'atom', prefix);
+			await workspace.fs.createDirectory(Uri.file(dir));
+			const atom_dir = await generate(dir, prefix, '', 3);
+			const no = basename(atom_dir);
+			const we = new WorkspaceEdit();
+			const postfix = p1.type === PrjType.mobile ? 'tsx' : 'ts';
+			const ts = Uri.file(join(atom_dir, `index.${postfix}`));
+			we.createFile(ts, { overwrite: true });
+			we.insert(ts, new Position(0, 0), generate_ts(no, n));
+			const snippet = Uri.file(join(atom_dir, 'use.snippet'));
+			we.createFile(snippet, { overwrite: true });
+			we.insert(snippet, new Position(0, 0), generate_usage(d, no, n));
+			await workspace.applyEdit(we);
+			window.showInformationMessage('原子操作模板已生成');
+			const doc = await workspace.openTextDocument(ts);
+			window.showTextDocument(doc);
+			await workspace.saveAll();
+		} else {
+			const fun = ac.get(p1.type);
+			if (fun) {
+				await fun();
+			} else {
+				window.showErrorMessage('敬请期待');
+			}
 		}
 	});
 }
 
-function get_types() {
+function generate_ts(no: string, n: number) {
+	const arr = new Array<number>(n).fill(0).map((_it, i) => {
+		return i + 1;
+	});
+	const ps = arr.map((i) => {
+		return `param${i}: string`;
+	});
+	return `
+export default async function ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')}) {
+}
+`;
+}
+
+function generate_usage(description: string, no: string, n: number) {
+	const arr = new Array<number>(n).fill(0).map((_it, i) => {
+		return i + 1;
+	});
+	const params = arr.map((i) => {
+		return `\t\tconst param${i} = $${i};	// todo add param description`;
+	});
+	const ps = arr.map((i) => {
+		return `param${i}`;
+	});
+	const t1 = `\t// ${description}`;
+	const t2 = '\tconst r$CURRENT_SECONDS_UNIX = await(() => {';
+	const t3 = `\t\treturn ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')});`;
+	const t4 = '\t})();';
+	return [t1, t2, ...params, t3, t4].join('\n');
+}
+
+interface SelectAtomTypeItem extends QuickPickItem {
+	type: AtomType;
+}
+
+function get_types(): SelectAtomTypeItem[] {
 	const conf = workspace.getConfiguration();
 	const ins = conf.inspect<string>('mm.proj.type');
 	if (ins && ins.workspaceValue) {
-		const type = ins.workspaceValue;
+		const type = ins.workspaceValue as PrjType;
 		return [
 			{
 				detail: '1.服务端原子操作',
@@ -58,7 +160,7 @@ function get_types() {
 			{
 				detail: '2.客户端原子操作',
 				label: type,
-				type: PrjType[type] as string
+				type
 			}];
 	}
 	return [

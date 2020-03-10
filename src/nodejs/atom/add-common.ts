@@ -23,7 +23,7 @@ export default async function common() {
 	const user = await exec('git config user.name');
 
 	const folder = container[0];
-	const cwd = await generate(folder.fsPath, 'aw', '', 6);
+	const cwd = await generate(folder.fsPath, 'an', '', 6);
 	const no = basename(cwd);
 	const remote = await window.showInputBox({
 		value: `git@github.com:mm-atom/${no}.git`,
@@ -43,15 +43,12 @@ export default async function common() {
 	// 进入目录并且拉取代码
 	await exec('git init', cwd);
 	// 从码云拉取代码模板
-	await exec('git pull git@github.com:mm-tpl/atom-web.git', cwd);
+	await exec('git pull git@github.com:mm-tpl/atom-nodejs.git', cwd);
 
 	// package.json
 	const pkg = await update_pkg(cwd, no, user);
 	// readme.md
 	await update_readme(cwd, pkg.description);
-
-	// amd.json
-	await update_amd(cwd, no);
 
 	// use.snippet
 	const n = await update_usage(cwd, pkg.description, no);
@@ -70,20 +67,6 @@ export default async function common() {
 	await commands.executeCommand('vscode.openFolder', uri);
 }
 
-async function update_amd(folder: string, no: string) {
-	const path = join(folder, 'amd.json');
-
-	const content = `[
-	{
-		"name": "@mmstudio/${no}",
-		"location": "@mmstudio/${no}/dist",
-		"main": "main"
-	}
-]
-`;
-	await writeFile(path, content);
-}
-
 async function update_ts(folder: string, no: string, n: number) {
 	const path = join(folder, 'src', 'index.ts');
 	const arr = new Array<number>(n).fill(0).map((_it, i) => {
@@ -93,7 +76,7 @@ async function update_ts(folder: string, no: string, n: number) {
 		return `param${i}: string`;
 	});
 	const content = `
-export default function ${no.replace(/0/g, '')}(${ps.join(', ')}) {
+export default function ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')}) {
 }
 `;
 	await writeFile(path, content);
@@ -129,7 +112,7 @@ async function update_usage(folder: string, description: string, no: string) {
 		});
 		const t1 = `\t// ${description}`;
 		const t2 = '\tconst r$CURRENT_SECONDS_UNIX = await(() => {';
-		const t3 = `\t\treturn ${no.replace(/0/g, '')}(${ps.join(', ')});`;
+		const t3 = `\t\treturn ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')});`;
 		const t4 = '\t})();';
 		const content = [t1, t2, ...params, t3, t4].join('\n');
 		await writeFile(path, content);

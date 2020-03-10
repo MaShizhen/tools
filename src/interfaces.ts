@@ -2,6 +2,7 @@ export interface IAtom {
 	name: string;
 	no: string;
 	version: string;
+	local?: true;
 }
 
 export interface IAtomCatagory {

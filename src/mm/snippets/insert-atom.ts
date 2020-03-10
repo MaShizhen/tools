@@ -37,19 +37,19 @@ export default function add() {
 			return;
 		}
 		if (!proj.snippets) {
-			const atoms = await get<IAtomCatagory[]>(proj.remote);
-			const m_all = new Map<string, IAtom>();
-			const m_catagories = new Map<string, IAtom[]>();
-			atoms.forEach((it) => {
-				m_catagories.set(it.catagory, it.atoms);
+			const c = new Map<string, IAtom[]>();
+			const a = new Map<string, IAtom>();
+			const remote_atoms = await get<IAtomCatagory[]>(proj.remote);
+			remote_atoms.forEach((it) => {
+				c.set(it.catagory, it.atoms);
 				it.atoms.forEach((atom) => {
-					m_all.set(atom.no, atom);
+					a.set(atom.no, atom);
 				});
 			});
-			proj.snippets = { all: m_all, catagories: m_catagories };
+			proj.snippets = { all: a, catagories: c };
 		}
 		const { all, catagories } = proj.snippets;
 
-		web(textEditor, all, catagories, type.includes('nodejs'));
+		web(textEditor, all, catagories, !type.includes('nodejs'));
 	});
 }
