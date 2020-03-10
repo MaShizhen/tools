@@ -5,6 +5,7 @@ import web from '../web/atom/add-common';
 import { PrjType } from '../util/prj-type';
 import root from '../util/root';
 import generate from '../util/generate';
+import tplusage from '../util/tpl-useage';
 
 type AtomType = PrjType | 'nodejs';
 
@@ -95,7 +96,7 @@ export default function add() {
 			we.insert(ts, new Position(0, 0), generate_ts(no, n));
 			const snippet = Uri.file(join(atom_dir, 'use.snippet'));
 			we.createFile(snippet, { overwrite: true });
-			we.insert(snippet, new Position(0, 0), generate_usage(d, no, n));
+			we.insert(snippet, new Position(0, 0), tplusage(d, no, n));
 			await workspace.applyEdit(we);
 			window.showInformationMessage('原子操作模板已生成');
 			const doc = await workspace.openTextDocument(ts);
@@ -123,23 +124,6 @@ function generate_ts(no: string, n: number) {
 export default async function ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')}) {
 }
 `;
-}
-
-function generate_usage(description: string, no: string, n: number) {
-	const arr = new Array<number>(n).fill(0).map((_it, i) => {
-		return i + 1;
-	});
-	const params = arr.map((i) => {
-		return `\t\tconst param${i} = $${i};	// todo add param description`;
-	});
-	const ps = arr.map((i) => {
-		return `param${i}`;
-	});
-	const t1 = `\t// ${description}`;
-	const t2 = '\tconst r$CURRENT_SECONDS_UNIX = await(() => {';
-	const t3 = `\t\treturn ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')});`;
-	const t4 = '\t})();';
-	return [t1, t2, ...params, t3, t4].join('\n');
 }
 
 interface SelectAtomTypeItem extends QuickPickItem {

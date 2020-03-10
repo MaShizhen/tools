@@ -5,6 +5,7 @@ import exec from '../../util/exec';
 import root from '../../util/root';
 import { Package } from '../../interfaces';
 import prefix from '../../util/prefix';
+import tplusage from '../../util/tpl-useage';
 
 const { readFile, writeFile } = promises;
 
@@ -73,20 +74,7 @@ async function update_usage(folder: string, description: string, no: string) {
 	});
 	if (s) {
 		const n = parseInt(s || '1', 10);
-		const arr = new Array<number>(n).fill(0).map((_it, i) => {
-			return i + 1;
-		});
-		const params = arr.map((i) => {
-			return `\t\tconst param${i} = $${i};	// todo add param description`;
-		});
-		const ps = arr.map((i) => {
-			return `param${i}`;
-		});
-		const t1 = `\t// ${description}`;
-		const t2 = '\tconst r$CURRENT_SECONDS_UNIX = await(() => {';
-		const t3 = `\t\treturn ${no.replace(/[0]/g, '')}(${ps.join(', ')});`;
-		const t4 = '\t})();';
-		const content = [t1, t2, ...params, t3, t4].join('\n');
+		const content = tplusage(description, no, n);
 		await writeFile(path, content);
 	}
 }
