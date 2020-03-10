@@ -18,13 +18,13 @@ export default async function insetSnippet(textEditor: TextEditor, use: string, 
 		}
 	}
 	const imppos = new Position(lastimport + 1, 0);
-	const active = textEditor.selection.active;
 	if (!hasimport) {
 		const we = new WorkspaceEdit();
 		const uri = doc.uri;
 		we.insert(uri, imppos, `${imp}\n`);
 		await workspace.applyEdit(we);
 	}
+	const active = textEditor.selection.active;
 	const pos = hasimport ? active : active.translate(1);
 	await textEditor.insertSnippet(new SnippetString(use), pos, {
 		undoStopAfter: true,

@@ -1,9 +1,9 @@
-export default function tplusage(description: string, no: string, n: number) {
+export default function tplatomusage(description: string, no: string, n: number) {
 	const arr = new Array<number>(n).fill(0).map((_it, i) => {
 		return i + 1;
 	});
 	const params = arr.map((i) => {
-		return `\t\tconst p${i} = $${i};	// todo 参数注释`;
+		return `\t\tconst p${i} = $${i};	// 参数注释`;
 	});
 	const ps = arr.map((i) => {
 		return `p${i}`;

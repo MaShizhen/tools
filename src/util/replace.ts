@@ -1,34 +1,34 @@
-import { Position, Range, TextEditor, window } from 'vscode';
+import { Position, Range, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { NO_MODIFY } from './blocks';
 
-export default async function replace(editor: TextEditor, flag: string, str: string) {
-	const doc = editor.document;
-	let start: Position = null as unknown as Position;
-	let stop: Position = null as unknown as Position;
+export default async function replace(path: string, flag: string, str: string) {
+	const doc = await workspace.openTextDocument(Uri.file(path));
 
-	const REGEXP_TOC_START = new RegExp(`/// MM ${flag} BEGIN`);
-	const REGEXP_TOC_STOP = new RegExp(`/// MM ${flag} END`);
-	for (let index = 0; index < doc.lineCount; index++) {
-		const lineText = doc.lineAt(index).text;
-		if ((start === null) && (REGEXP_TOC_START.exec(lineText))) {
-			start = new Position(index + 1, 0);
-		} else if (REGEXP_TOC_STOP.exec(lineText)) {
-			stop = new Position(index - 1, 0);
+	const REGEXP_TOC_START = `/// MM ${flag} BEGIN`;
+	const REGEXP_TOC_STOP = `/// MM ${flag} END`;
+
+	let begin = -1;
+	let end = -1;
+	for (let i = 0; i < doc.lineCount; i++) {
+		const textline = doc.lineAt(i);
+		const lineText = textline.text;
+		if (lineText.includes(REGEXP_TOC_START)) {
+			begin = i;
+		} else if (lineText.includes(REGEXP_TOC_STOP)) {
+			end = i;
 			break;
 		}
 	}
-	if (start === null || stop === null) {
+
+	if (begin === -1 || end === -1) {
 		window.showErrorMessage(`找不到标识:[ // MM ${flag} BEGIN ] 或 [ // MM ${flag} END ]`);
 		return;
 	}
-	if (start.line > stop.line) {
-		window.showErrorMessage('在标识之间至少需要一个空行');
-		return;
-	}
+	const start = new Position(begin + 1, 0);
+	const stop = new Position(end, 0);
 	const rang = new Range(start, stop);
-	// const eol = workspace.getConfiguration('files').get<string>('eol');
+	const we = new WorkspaceEdit();
 	const eol = '\n';
-	await editor.edit((editor_builder) => {
-		editor_builder.replace(rang, `/// ${NO_MODIFY}${eol}${str}${eol}`);
-	});
+	we.replace(doc.uri, rang, `/// ${NO_MODIFY}${eol}${str}${eol}`);
+	await workspace.applyEdit(we);
 }

@@ -55,41 +55,38 @@ async function update_b(path: string, components: string[]) {
 	// const eol = workspace.getConfiguration('files').get<string>('eol');
 	const eol = '\n';
 	const file_name = join(path, 'b.ts');
-	const editor = await window.showTextDocument(Uri.file(file_name));
 
 	const ims = components.map((c, i) => {
 		return `import c${i} from './${c}/b';`;
 	}).join(eol);
-	await replace(editor, 'IMPCOMPONENTS', ims);
+	await replace(file_name, 'IMPCOMPONENTS', ims);
 
 	const cs = components.map((_c, i) => {
 		return `c${i}`;
 	}).join(', ');
 	if (cs.length > 0) {
-		await replace(editor, 'COMPONENTS', `		,${cs}`);
+		await replace(file_name, 'COMPONENTS', `		,${cs}`);
 	} else {
-		await replace(editor, 'COMPONENTS', '');
+		await replace(file_name, 'COMPONENTS', '');
 	}
 }
 
 async function update_n(path: string, components: string[]) {
-	// const eol = workspace.getConfiguration('files').get<string>('eol');
 	const eol = '\n';
 	const file_name = join(path, 'n.ts');
-	const editor = await window.showTextDocument(Uri.file(file_name));
 
 	const ims = components.map((c, i) => {
 		return `import c${i} from './${c}/n';`;
 	}).join(eol);
-	await replace(editor, 'IMPCOMPONENTS', ims);
+	await replace(file_name, 'IMPCOMPONENTS', ims);
 
 	const cs = components.map((_c, i) => {
 		return `c${i}`;
 	}).join(', ');
 	if (cs.length > 0) {
-		await replace(editor, 'COMPONENTS', `		,${cs}`);
+		await replace(file_name, 'COMPONENTS', `		,${cs}`);
 	} else {
-		await replace(editor, 'COMPONENTS', '');
+		await replace(file_name, 'COMPONENTS', '');
 	}
 }
 
@@ -100,20 +97,16 @@ import s from './s';
 
 /// MM IMPACTIONS BEGIN
 /// ${NO_MODIFY}
-
 /// MM IMPACTIONS END
 
 /// MM IMPWIDGETS BEGIN
 /// ${NO_MODIFY}
-
 /// MM IMPWIDGETS END
 
 export default function main(url: string, query: {}) {
 	/// MM ACTIONS BEGIN
 	/// ${NO_MODIFY}
-
 	const actions = {};
-
 	/// MM ACTIONS END
 	return bc('${id}', s, actions, url, query);
 }
@@ -129,16 +122,13 @@ import tpl from './tpl';
 
 /// MM IMPACTIONS BEGIN
 /// ${NO_MODIFY}
-
 /// MM IMPACTIONS END
 
 export default function main(html: HTMLElement, url: string, msg: unknown, headers: object, query: {}) {
 
 	/// MM ACTIONS BEGIN
 	/// ${NO_MODIFY}
-
 	const actions = {};
-
 	/// MM ACTIONS END
 
 

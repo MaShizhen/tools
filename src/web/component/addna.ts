@@ -24,8 +24,6 @@ export default async function add(editor: TextEditor) {
 
 async function update_n(path: string) {
 	const file_name = join(path, 'n.ts');
-	const editor = await window.showTextDocument(Uri.file(file_name));
-	// const eol = workspace.getConfiguration('files').get<string>('eol');
 	const eol = '\n';
 	const files = await readdirSync(path);
 	const as = files.filter((f) => {
@@ -40,10 +38,10 @@ async function update_n(path: string) {
 
 	const imps = `${ims}`;
 
-	await replace(editor, 'IMPACTIONS', imps);
+	await replace(file_name, 'IMPACTIONS', imps);
 
 	const actions = `	const actions = { ${as.join(', ')} };`;
-	await replace(editor, 'ACTIONS', actions);
+	await replace(file_name, 'ACTIONS', actions);
 }
 
 async function create_a(p_path: string) {

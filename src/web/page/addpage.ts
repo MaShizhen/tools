@@ -70,31 +70,25 @@ import s from './s';
 
 /// MM IMPCOMPONENTS BEGIN
 /// ${NO_MODIFY}
-
 /// MM IMPCOMPONENTS END
 
 /// MM IMPACTIONS BEGIN
 /// ${NO_MODIFY}
-
 /// MM IMPACTIONS END
 
 /// MM IMPWIDGETS BEGIN
 /// ${NO_MODIFY}
-
 /// MM IMPWIDGETS END
 
 (() => {
 	/// MM ACTIONS BEGIN
 	/// ${NO_MODIFY}
-
 	const actions = {};
-
 	/// MM ACTIONS END
 
 	bp(s, actions
 		/// MM COMPONENTS BEGIN
 		/// ${NO_MODIFY}
-
 		/// MM COMPONENTS END
 	);
 })();
@@ -138,29 +132,24 @@ import s from './ns';
 
 /// MM IMPCOMPONENTS BEGIN
 /// ${NO_MODIFY}
-
 /// MM IMPCOMPONENTS END
 
 
 /// MM IMPACTIONS BEGIN
 /// ${NO_MODIFY}
-
 /// MM IMPACTIONS END
 
 export default async function main(url: string, msg: unknown, headers: object) {
 
 	/// MM ACTIONS BEGIN
 	/// ${NO_MODIFY}
-
 	const actions = { };
-
 	/// MM ACTIONS END
 
 
 	const res = await np(html, url, msg, headers, s, actions
 		/// MM COMPONENTS BEGIN
 		/// ${NO_MODIFY}
-
 		/// MM COMPONENTS END
 	);
 

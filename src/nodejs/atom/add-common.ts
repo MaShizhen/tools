@@ -5,7 +5,7 @@ import workpath from '../../util/workpath';
 import generate from '../../util/generate';
 import exec from '../../util/exec';
 import { Package } from '../../interfaces';
-import tplusage from '../../util/tpl-useage';
+import tplatomusage from '../../util/tpl-atom-useage';
 
 const { readFile, writeFile } = promises;
 
@@ -102,7 +102,7 @@ async function update_usage(folder: string, description: string, no: string) {
 	});
 	if (s) {
 		const n = parseInt(s || '1', 10);
-		const content = tplusage(description, no, n);
+		const content = tplatomusage(description, no, n);
 		await writeFile(path, content);
 		return n;
 	}

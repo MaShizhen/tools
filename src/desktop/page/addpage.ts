@@ -91,27 +91,22 @@ import s from './s';
 
 /// MM IMPCOMPONENTS BEGIN
 /// ${NO_MODIFY}
-
 /// MM IMPCOMPONENTS END
 
 
 /// MM IMPACTIONS BEGIN
 /// ${NO_MODIFY}
-
 /// MM IMPACTIONS END
 
 (() => {
 	/// MM ACTIONS BEGIN
 	/// ${NO_MODIFY}
-
 	const actions = {};
-
 	/// MM ACTIONS END
 
 	init(s, actions
 		/// MM COMPONENTS BEGIN
 		/// ${NO_MODIFY}
-
 		/// MM COMPONENTS END
 	);
 })();
@@ -148,7 +143,6 @@ import html from './html';
 
 /// MM IMPCOMPONENTS BEGIN
 /// ${NO_MODIFY}
-
 /// MM IMPCOMPONENTS END
 
 
@@ -156,7 +150,6 @@ export default async function main() {
 	await init(html
 		/// MM COMPONENTS BEGIN
 		/// ${NO_MODIFY}
-
 		/// MM COMPONENTS END
 	);
 

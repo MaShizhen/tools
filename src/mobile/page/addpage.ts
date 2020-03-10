@@ -70,9 +70,7 @@ import tpl from './tpl';
 
 /// MM IMPACTIONS BEGIN
 /// ${NO_MODIFY}
-
 import a001 from './a001';
-
 /// MM IMPACTIONS END
 
 export default function main(global: { [key: string]: unknown; }, global_css: { [name: string]: {}}) {
@@ -80,7 +78,6 @@ export default function main(global: { [key: string]: unknown; }, global_css: { 
 	/// ${NO_MODIFY}
 
 	const actions = { a001 };
-
 	/// MM ACTIONS END
 	return init(global, global_css, actions, s, tpl, config, css);
 }
@@ -110,19 +107,18 @@ function create_style(_path: string) {
 async function updata_component(folder: string, files: string[]) {
 	const eol = '\n';
 	const file_name = join(folder, 'app', 'app.ts');
-	const editor = await window.showTextDocument(Uri.file(file_name));
 
 	const ims = files.map((item) => {
 		return `import ${item.replace(/-/g, '_')} from '../${item}/p';`;
 	}).join(eol);
-	await replace(editor, 'IMPCOMPONENTS', ims);
+	await replace(file_name, 'IMPCOMPONENTS', ims);
 
 	const cs = files.map((item) => {
 		return `${item.replace(/-/g, '_')}`;
 	}).join(', ');
 	if (cs.length > 0) {
-		await replace(editor, 'COMPONENTS', `		${cs}`);
+		await replace(file_name, 'COMPONENTS', `		${cs}`);
 	} else {
-		await replace(editor, 'COMPONENTS', '');
+		await replace(file_name, 'COMPONENTS', '');
 	}
 }

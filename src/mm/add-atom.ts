@@ -2,26 +2,17 @@ import { basename, join } from 'path';
 import { commands, Position, QuickPickItem, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import nodejs from '../nodejs/atom/add-common';
 import web from '../web/atom/add-common';
-import { PrjType } from '../util/prj-type';
 import root from '../util/root';
 import generate from '../util/generate';
-import tplusage from '../util/tpl-useage';
+import tplatomusage from '../util/tpl-atom-useage';
+import { AtomType } from '../util/atom-type';
+import tplatom from '../util/tpl-atom';
 
-type AtomType = PrjType | 'nodejs';
+const ap = new Map<AtomType, () => Promise<unknown>>();
+ap.set(AtomType.node, nodejs);
+ap.set(AtomType.web, web);
 
-const ac = new Map<AtomType, () => Promise<unknown>>();
-ac.set('nodejs', nodejs);
-ac.set(PrjType.web, web);
-
-// prifix
-const ap = new Map<AtomType, string>();
-ap.set('nodejs', 'acn');
-ap.set(PrjType.web, 'ac');
-ap.set(PrjType.wxapp, 'ac');
-ap.set(PrjType.mobile, 'ac');
-ap.set(PrjType.desktop, 'ac');
-
-export default function add() {
+export default function add_atom() {
 	return commands.registerCommand('mm.atom.add', async () => {
 		const p1 = await window.showQuickPick(get_types(), {
 			placeHolder: '请选择项目端点类型',
@@ -70,40 +61,27 @@ export default function add() {
 			if (!s) {
 				return;
 			}
-			const d = await window.showInputBox({
-				prompt: '原子操作描述',
-				validateInput(v) {
-					if (!v) {
-						return '不能为空';
-					}
-					return null;
-				}
-			});
-			if (!d) {
-				return;
-			}
 			const n = parseInt(s, 10);
 			const rt = root();
-			const prefix = ap.get(p1.type)!;
+			const prefix = p1.prefix;
 			const dir = join(rt, 'src', 'atom', prefix);
 			await workspace.fs.createDirectory(Uri.file(dir));
 			const atom_dir = await generate(dir, prefix, '', 3);
 			const no = basename(atom_dir);
 			const we = new WorkspaceEdit();
-			const postfix = p1.type === PrjType.mobile ? 'tsx' : 'ts';
-			const ts = Uri.file(join(atom_dir, `index.${postfix}`));
+			const ts = Uri.file(join(atom_dir, 'index.ts'));
 			we.createFile(ts, { overwrite: true });
-			we.insert(ts, new Position(0, 0), generate_ts(no, n));
+			we.insert(ts, new Position(0, 0), tplatom(no, n));
 			const snippet = Uri.file(join(atom_dir, 'use.snippet'));
 			we.createFile(snippet, { overwrite: true });
-			we.insert(snippet, new Position(0, 0), tplusage(d, no, n));
+			we.insert(snippet, new Position(0, 0), tplatomusage('原子操作功能描述', no, n));
 			await workspace.applyEdit(we);
 			window.showInformationMessage('原子操作模板已生成');
 			const doc = await workspace.openTextDocument(ts);
 			window.showTextDocument(doc);
 			await workspace.saveAll();
 		} else {
-			const fun = ac.get(p1.type);
+			const fun = ap.get(p1.type);
 			if (fun) {
 				await fun();
 			} else {
@@ -113,60 +91,54 @@ export default function add() {
 	});
 }
 
-function generate_ts(no: string, n: number) {
-	const arr = new Array<number>(n).fill(0).map((_it, i) => {
-		return i + 1;
-	});
-	const ps = arr.map((i) => {
-		return `param${i}: string`;
-	});
-	return `
-export default async function ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')}) {
-}
-`;
-}
-
 interface SelectAtomTypeItem extends QuickPickItem {
 	type: AtomType;
+	prefix: 'ap' | 'anp';
 }
 
 function get_types(): SelectAtomTypeItem[] {
 	const conf = workspace.getConfiguration();
 	const ins = conf.inspect<string>('mm.proj.type');
 	if (ins && ins.workspaceValue) {
-		const type = ins.workspaceValue as PrjType;
+		const type = ins.workspaceValue as AtomType;
 		return [
 			{
 				detail: '1.服务端原子操作',
 				label: 'nodejs',
-				type: 'nodejs'
+				type: AtomType.node,
+				prefix: 'anp'
 			},
 			{
 				detail: '2.客户端原子操作',
 				label: type,
-				type
+				type,
+				prefix: 'ap'
 			}];
 	}
 	return [
 		{
 			detail: '1.服务端原子操作',
 			label: 'nodejs',
-			type: 'nodejs'
+			type: AtomType.node,
+			prefix: 'anp'
 		},
 		{
 			detail: '2.web/h5原子操作',
 			label: 'web/h5',
-			type: PrjType.web
+			type: AtomType.web,
+			prefix: 'ap'
 		},
 		{
 			detail: '3.移动端app原子操作',
 			label: 'mobile',
-			type: PrjType.mobile
+			type: AtomType.mobile,
+			prefix: 'ap'
 		},
 		{
 			detail: '4.微信小程序原子操作',
 			label: 'wxapp',
-			type: PrjType.wxapp
+			type: AtomType.wxapp,
+			prefix: 'ap'
 		}
 	];
 }

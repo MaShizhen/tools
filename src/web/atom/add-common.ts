@@ -5,11 +5,12 @@ import workpath from '../../util/workpath';
 import generate from '../../util/generate';
 import exec from '../../util/exec';
 import { Package } from '../../interfaces';
-import tplusage from '../../util/tpl-useage';
+import tplatomusage from '../../util/tpl-atom-useage';
+import tplatom from '../../util/tpl-atom';
 
 const { readFile, writeFile } = promises;
 
-export default async function common() {
+export default async function add_common_atom() {
 	const def = workpath();
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
@@ -86,17 +87,8 @@ async function update_amd(folder: string, no: string) {
 }
 
 async function update_ts(folder: string, no: string, n: number) {
+	const content = tplatom(no, n);
 	const path = join(folder, 'src', 'index.ts');
-	const arr = new Array<number>(n).fill(0).map((_it, i) => {
-		return i + 1;
-	});
-	const ps = arr.map((i) => {
-		return `param${i}: string`;
-	});
-	const content = `
-export default async function ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')}) {
-}
-`;
 	await writeFile(path, content);
 }
 
@@ -119,7 +111,7 @@ async function update_usage(folder: string, description: string, no: string) {
 	});
 	if (s) {
 		const n = parseInt(s || '1', 10);
-		const content = tplusage(description, no, n);
+		const content = tplatomusage(description, no, n);
 		await writeFile(path, content);
 		return n;
 	}
