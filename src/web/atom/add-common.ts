@@ -1,4 +1,4 @@
-import { basename, join } from 'path';
+import { basename, dirname, join } from 'path';
 import { promises } from 'fs';
 import { commands, Uri, window, workspace } from 'vscode';
 import workpath from '../../util/workpath';
@@ -11,7 +11,7 @@ import tplatom from '../../util/tpl-atom';
 const { readFile, writeFile } = promises;
 
 export default async function add_common_atom() {
-	const def = await workpath();
+	const def = dirname(await workpath());
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
 		canSelectFiles: false,
