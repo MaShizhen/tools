@@ -5,6 +5,7 @@ import check_file from '../util/check-file';
 import root_path from '../util/root';
 import web from '../web/component/addc';
 import prj_type, { PrjType } from '../util/prj-type';
+import wxapp from '../wxapp/page/addpage';
 
 export default function add() {
 	return commands.registerTextEditorCommand('mm.component.add', async (editor) => {
@@ -18,7 +19,7 @@ export default function add() {
 				await web(editor);
 				break;
 			case PrjType.wxapp:
-				window.showErrorMessage('不能在wxapp项目中进行该操作!');
+				await wxapp(rootPath);
 				break;
 			case PrjType.desktop:
 				await desktop(editor);

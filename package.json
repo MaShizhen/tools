@@ -270,7 +270,7 @@
 			{
 				"command": "mm.component.add",
 				"when": "resourceFilename =~ /html\\.ts/",
-				"key": "alt+n"
+				"key": "alt+c"
 			},
 			{
 				"command": "mm.action.add",
