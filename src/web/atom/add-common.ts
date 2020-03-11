@@ -11,7 +11,7 @@ import tplatom from '../../util/tpl-atom';
 const { readFile, writeFile } = promises;
 
 export default async function add_common_atom() {
-	const def = workpath();
+	const def = await workpath();
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
 		canSelectFiles: false,

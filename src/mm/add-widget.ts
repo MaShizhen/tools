@@ -37,7 +37,7 @@ export default function add() {
 		}
 		const isprj = p2.prj;
 		if (isprj) {
-			const rt = root();
+			const rt = await root();
 			const prefix = 'pw';	// not wc, we wish local wigets list before remote when searching. cw means client widget
 			const dir = join(rt, 'src', 'widgets');
 			await workspace.fs.createDirectory(Uri.file(dir));

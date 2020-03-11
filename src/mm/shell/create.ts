@@ -22,7 +22,7 @@ pro_types.set(PrjType.wxapp, 'wxapp');
 export default function create_project() {
 	return commands.registerCommand('mm.shell.create', async () => {
 		window.showInformationMessage('进行此操作之前,请确保git已安装并配置好权限,另外,你需要联系管理员为你分配统一的项目编号及spaceid');
-		const def = workpath();
+		const def = await workpath();
 		const picked = await window.showQuickPick([
 			{
 				description: '1.web/h5网站应用',

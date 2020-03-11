@@ -3,8 +3,6 @@ import { commands, window } from 'vscode';
 import desktop_c from '../desktop/component/addaction';
 import desktop_p from '../desktop/page/addaction';
 import mobile from '../mobile/page/addaction';
-import check_file from '../util/check-file';
-import root_path from '../util/root';
 import web_c_a from '../web/component/addaction';
 import web_c_na from '../web/component/addna';
 import web_p_a from '../web/page/addaction';
@@ -15,10 +13,6 @@ import reg_in_comment from '../util/reg-in-component';
 
 export default function add() {
 	return commands.registerTextEditorCommand('mm.action.add', async (editor) => {
-		const rootPath = root_path();
-		if (!await check_file(rootPath)) {
-			return;
-		}
 		const type = prj_type();
 		const path = editor.document.fileName;
 		const fileName = parse(path).base;

@@ -10,7 +10,7 @@ import tplatomusage from '../../util/tpl-atom-useage';
 const { readFile, writeFile } = promises;
 
 export default async function common() {
-	const def = workpath();
+	const def = await workpath();
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
 		canSelectFiles: false,

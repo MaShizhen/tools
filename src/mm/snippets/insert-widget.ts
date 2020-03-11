@@ -2,9 +2,7 @@ import { commands, TextEditor, window } from 'vscode';
 import desktop from '../../desktop/snippets/addsnippets-widget';
 import { IAtom, IAtomCatagory } from '../../interfaces';
 import mobile from '../../mobile/snippets/addsnippets-widget';
-import check_file from '../../util/check-file';
 import get from '../../util/get';
-import root_path from '../../util/root';
 import web from '../../web/snippets/addsnippets-widget';
 import wxapp from '../../wxapp/page/addsnippets-widget';
 import prj_type, { PrjType } from '../../util/prj-type';
@@ -19,10 +17,6 @@ snippets.set(PrjType.mobile, { remote: 'https://mm-edu.gitee.io/widgets-mobile/i
 
 export default function add() {
 	return commands.registerTextEditorCommand('mm.tpl.widget', async (textEditor) => {
-		const rootPath = root_path();
-		if (!await check_file(rootPath)) {
-			return;
-		}
 		const type = prj_type();
 		const proj = snippets.get(type);
 		if (!proj) {

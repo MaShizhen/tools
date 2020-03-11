@@ -1,7 +1,6 @@
 import { dirname, join, relative } from 'path';
 import { commands, FileType, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
 import { IAtom, IAtomCatagory } from '../../interfaces';
-import check_file from '../../util/check-file';
 import get from '../../util/get';
 import root_path from '../../util/root';
 import prj_type, { PrjType } from '../../util/prj-type';
@@ -19,11 +18,7 @@ snippets.set(PrjType.desktop, { remote: 'https://mm-edu.gitee.io/atom-desktop/in
 snippets.set(PrjType.mobile, { remote: 'https://mm-edu.gitee.io/atom-mobile/index.json' });
 
 export default function add() {
-	return commands.registerTextEditorCommand('mm.tpl.atom', async (textEditor, _edit) => {
-		const rootPath = root_path();
-		if (!await check_file(rootPath)) {
-			return;
-		}
+	return commands.registerTextEditorCommand('mm.tpl.atom', async (textEditor) => {
 		const type = (() => {
 			const doc = textEditor.document;
 			const uri = doc.uri;
@@ -125,11 +120,11 @@ async function add_snippet(atom: IAtom, textEditor: TextEditor, client: boolean)
 		await insert_local_atom(atom, textEditor, client);
 		return;
 	}
-	const dir = join(root_path(), 'node_modules', '@mmstudio', atom.no);
+	const dir = join(await root_path(textEditor), 'node_modules', '@mmstudio', atom.no);
 	try {
 		await workspace.fs.stat(Uri.file(dir));
 	} catch (error) {
-		await install(`${atom.no}@${atom.version}`, client);
+		await install(textEditor, `${atom.no}@${atom.version}`, client);
 	}
 
 	const name = atom.no.replace(/([a-z]+)0+(\d+)/, '$1$2');
@@ -173,7 +168,7 @@ async function load_local_atoms(root: string, client: boolean) {
 
 async function insert_local_atom(atom: IAtom, textEditor: TextEditor, prj: boolean) {
 	const p = prj ? 'ap' : 'anp';
-	const dir = join(root_path(), 'src', 'atom', p, atom.no);
+	const dir = join(await root_path(textEditor), 'src', 'atom', p, atom.no);
 	const cur = dirname(textEditor.document.uri.fsPath);
 	const imp_path = relative(cur, dir);
 	const name = atom.no.replace(/([a-z]+)0+(\d+)/, '$1$2');

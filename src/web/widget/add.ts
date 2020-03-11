@@ -11,7 +11,7 @@ import tplwidget from './tpl-web-widget';
 const { readFile, writeFile } = promises;
 
 export default async function add_common_widget() {
-	const def = workpath();
+	const def = await workpath();
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
 		canSelectFiles: false,

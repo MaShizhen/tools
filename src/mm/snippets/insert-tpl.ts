@@ -1,6 +1,5 @@
 import { join, parse } from 'path';
 import { commands, Position, QuickPickItem, Range, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import check_file from '../../util/check-file';
 import filter from '../../util/filter';
 import foreach from '../../util/foreach';
 import get from '../../util/get';
@@ -49,10 +48,6 @@ interface IAtomCatagory {
 
 export default function add() {
 	return commands.registerTextEditorCommand('mm.tpl.tpl', async (textEditor, _edit) => {
-		const rootPath = root_path();
-		if (!await check_file(rootPath)) {
-			return;
-		}
 		const type = (() => {
 			if (/s\d+\.ts/.test(textEditor.document.uri.path)) {
 				return 'nodejs';
@@ -188,7 +183,7 @@ async function add_snippet_single(type: string, atom: IAtomSingle, textEditor: T
 
 	const tmp_atoms = await filter(tmp_imps, async (item) => {
 		const match_str = /['"][\w\d]+['"]/.exec(item)![0].replace(/['"']/g, '');
-		const dir_atom = join(root_path(), 'node_modules', match_str);
+		const dir_atom = join(await root_path(textEditor), 'node_modules', match_str);
 		try {
 			await workspace.fs.stat(Uri.file(dir_atom));
 			return false;
@@ -199,7 +194,7 @@ async function add_snippet_single(type: string, atom: IAtomSingle, textEditor: T
 	});
 
 	if (tmp_atoms.toString()) {
-		install(tmp_atoms);
+		await install(tmp_atoms, textEditor);
 	}
 
 	await textEditor.insertSnippet(new SnippetString(use), textEditor.selection.active, {
@@ -214,12 +209,12 @@ async function add_snippet_single(type: string, atom: IAtomSingle, textEditor: T
 	}));
 }
 
-async function install(atoms: string[]) {
+async function install(atoms: string[], editor: TextEditor) {
 	if (!atoms || atoms.length === 0) {
 		return;
 	}
 	const command = `yarn add --dev ${atoms.join(' ')}`;
-	const p = exec(command, root_path());
+	const p = exec(command, await root_path(editor));
 	window.setStatusBarMessage('正在安装依赖', p);
 	await p;
 	window.setStatusBarMessage('成功安装依赖');

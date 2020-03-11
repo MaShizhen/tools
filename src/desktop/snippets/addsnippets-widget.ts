@@ -52,11 +52,11 @@ export default async function add(textEditor: TextEditor, all: Map<string, IAtom
 }
 
 async function add_snippet(atom: IAtom, textEditor: TextEditor) {
-	const dir = join(root_path(), 'node_modules', '@mmstudio', atom.no);
+	const dir = join(await root_path(textEditor), 'node_modules', '@mmstudio', atom.no);
 	try {
 		await workspace.fs.stat(Uri.file(dir));
 	} catch (error) {
-		await install(`${atom.no}@${atom.version}`, true);
+		await install(textEditor, `${atom.no}@${atom.version}`, true);
 	}
 
 	const imp = `import '@mmstudio/${atom.no}';`;

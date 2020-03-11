@@ -10,7 +10,7 @@ import tplatomusage from '../../util/tpl-atom-useage';
 const { readFile, writeFile } = promises;
 
 export default async function reno() {
-	const cwd = root();
+	const cwd = await root();
 	const pkg = await get_pkg(cwd);
 
 	// 旧编号

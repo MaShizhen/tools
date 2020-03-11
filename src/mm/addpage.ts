@@ -1,6 +1,5 @@
 import { commands } from 'vscode';
 import desktop from '../desktop/page/addpage';
-import check_file from '../util/check-file';
 import root_path from '../util/root';
 import web from '../web/page/addpage';
 import wxapp from '../wxapp/page/addpage';
@@ -9,10 +8,7 @@ import prj_type, { PrjType } from '../util/prj-type';
 
 export default function add() {
 	return commands.registerCommand('mm.page.add', async () => {
-		const rootPath = root_path();
-		if (!await check_file(rootPath)) {
-			return;
-		}
+		const rootPath = await root_path();
 		const type = prj_type();
 		switch (type) {
 			case PrjType.web:

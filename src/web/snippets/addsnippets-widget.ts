@@ -93,11 +93,11 @@ async function add_snippet(atom: IAtom, textEditor: TextEditor) {
 		await add_local(atom, textEditor);
 		return;
 	}
-	const dir = join(root_path(), 'node_modules', '@mmstudio', atom.no);
+	const dir = join(await root_path(textEditor), 'node_modules', '@mmstudio', atom.no);
 	try {
 		await workspace.fs.stat(Uri.file(dir));
 	} catch (error) {
-		await install(`${atom.no}@${atom.version}`, true);
+		await install(textEditor, `${atom.no}@${atom.version}`, true);
 	}
 	const imp = `import '@mmstudio/${atom.no}';`;
 	const snippet_use = Uri.file(join(dir, 'use.snippet'));
@@ -182,7 +182,7 @@ async function update_b(path: string, imp: string) {
 
 async function add_local(atom: IAtom, textEditor: TextEditor) {
 	const doc = textEditor.document;
-	const dir = join(root_path(), 'src', 'widgets', atom.no);
+	const dir = join(await root_path(textEditor), 'src', 'widgets', atom.no);
 	const cur = dirname(doc.uri.fsPath);
 	const imp_path = relative(cur, dir);
 	const imp = `import '${imp_path}/index';`;
