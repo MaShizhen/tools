@@ -1,5 +1,5 @@
-import { dirname, join } from 'path';
-import { commands, TextEditor, Uri, window, workspace } from 'vscode';
+import { dirname } from 'path';
+import { commands, Uri, window, workspace } from 'vscode';
 import { writeFileSync } from '../util/fs';
 import generate from '../util/generate';
 
