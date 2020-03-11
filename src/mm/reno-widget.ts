@@ -7,7 +7,7 @@ export default function add() {
 		const type = prj_type();
 		switch (type) {
 			case PrjType.web:
-				web();
+				await web();
 				break;
 			case PrjType.wxapp:
 				break;
@@ -16,7 +16,6 @@ export default function add() {
 			case PrjType.mobile:
 				break;
 		}
-		commands.executeCommand('workbench.files.action.refreshFilesExplorer');
 	});
 }
 
