@@ -112,11 +112,43 @@ async function add_snippet(atom: IAtom, textEditor: TextEditor) {
 	const folder = join(workspace.getWorkspaceFolder(textEditor.document.uri)!.uri.fsPath, tmp_dir);
 	const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');
 
-	await update_b(folder, imp);
+	await update_import(folder, imp);
 	await textEditor.insertSnippet(new SnippetString(use), textEditor.selection.active, {
 		undoStopAfter: true,
 		undoStopBefore: true
 	});
+}
+
+async function update_import(path: string, imp: string) {
+	if (/src[/|\\]widgets[/|\\]pw\d/.test(path)) {
+		// import widget in index.ts
+		const file_name = join(path, 'index.ts');
+		const uri = Uri.file(file_name);
+		const doc = await workspace.openTextDocument(uri);
+		const max = doc.lineCount;
+		let hasimport = false;
+		let pos = -1;
+		for (let i = 0; i < max; i++) {
+			const line = doc.lineAt(i);
+			const text = line.text;
+			if (/^import\s+.+/.test(text)) {
+				if (text === imp) {
+					hasimport = true;
+					break;
+				}
+				pos = i;
+			}
+		}
+		if (!hasimport) {
+			const we = new WorkspaceEdit();
+			const uri = doc.uri;
+			const imppos = new Position(pos + 1, 0);
+			we.insert(uri, imppos, `${imp}\n`);
+			await workspace.applyEdit(we);
+		}
+	} else {
+		await update_b(path, imp);
+	}
 }
 
 async function update_b(path: string, imp: string) {
@@ -139,10 +171,10 @@ async function update_b(path: string, imp: string) {
 			}
 		}
 	}
-	const imppos = new Position(pos + 1, 0);
 	if (!hasimport) {
 		const we = new WorkspaceEdit();
 		const uri = doc.uri;
+		const imppos = new Position(pos + 1, 0);
 		we.insert(uri, imppos, `${imp}\n`);
 		await workspace.applyEdit(we);
 	}
@@ -157,7 +189,7 @@ async function add_local(atom: IAtom, textEditor: TextEditor) {
 	const snippet_use = Uri.file(join(dir, 'use.snippet'));
 	const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');
 
-	await update_b(cur, imp);
+	await update_import(cur, imp);
 	await textEditor.insertSnippet(new SnippetString(use), textEditor.selection.active, {
 		undoStopAfter: true,
 		undoStopBefore: true

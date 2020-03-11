@@ -1,4 +1,4 @@
-import { commands, window } from 'vscode';
+import { commands } from 'vscode';
 import desktop from '../desktop/component/addc';
 import mobile from '../mobile/page/addpage';
 import check_file from '../util/check-file';

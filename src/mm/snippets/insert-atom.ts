@@ -25,10 +25,13 @@ export default function add() {
 			return;
 		}
 		const type = (() => {
-			// s001 na001
-			if (/s\d+\.ts$/.test(textEditor.document.uri.path)) {
+			const doc = textEditor.document;
+			const uri = doc.uri;
+			const path = uri.path;
+			// s001 na001 atom/anp/anp001/index.ts
+			if (/s\d+\.ts$/.test(path) || /atom[/|\\]anp[/|\\]anp\d+[/|\\]index\.ts/.test(path)) {
 				return 'nodejs-s';
-			} else if (/na\d+\.ts$/.test(textEditor.document.uri.path)) {
+			} else if (/na\d+\.ts$/.test(path)) {
 				return 'nodejs-na';
 			}
 			return prj_type();

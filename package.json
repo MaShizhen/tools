@@ -122,7 +122,7 @@
 				},
 				{
 					"command": "mm.tpl.atom",
-					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/",
+					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/ || resourceFilename == index.ts",
 					"group": "mm"
 				},
 				{
@@ -131,7 +131,7 @@
 				},
 				{
 					"command": "mm.tpl.widget",
-					"when": "resourceFilename == tpl.tsx || resourceFilename =~ /(tpl|p\\d+)\\.ts/ || resourceFilename =~ /(tpl|p\\d+)\\.tpl/ || resourceFilename =~ /\\w*\\.wxml/",
+					"when": "resourceFilename =~ /(index|tpl|p\\d+)\\.(tsx?|tpl)/ || resourceFilename =~ /\\w*\\.wxml/",
 					"group": "mm"
 				},
 				{
@@ -191,7 +191,7 @@
 				},
 				{
 					"command": "mm.tpl.atom",
-					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/",
+					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/ || resourceFilename == index.ts",
 					"group": "mm"
 				},
 				{
@@ -200,7 +200,7 @@
 				},
 				{
 					"command": "mm.tpl.widget",
-					"when": "resourceFilename == tpl.tsx || resourceFilename =~ /(tpl|p\\d+)\\.ts/ || resourceFilename =~ /(tpl|p\\d+)\\.tpl/ || resourceFilename =~ /\\w*\\.wxml/",
+					"when": "resourceFilename =~ /(index|tpl|p\\d+)\\.(tsx?|tpl)/ || resourceFilename =~ /\\w*\\.wxml/",
 					"group": "mm"
 				}
 			],
@@ -294,7 +294,7 @@
 			},
 			{
 				"command": "mm.tpl.atom",
-				"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/",
+				"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/ || resourceFilename == index.ts",
 				"key": "alt+t a"
 			},
 			{
@@ -303,7 +303,7 @@
 			},
 			{
 				"command": "mm.tpl.widget",
-				"when": "resourceFilename == tpl.tsx || resourceFilename =~ /(tpl|p\\d+)\\.ts/ || resourceFilename =~ /(tpl|p\\d+)\\.tpl/ || resourceFilename =~ /\\w*\\.wxml/",
+				"when": "resourceFilename =~ /(index|tpl|p\\d+)\\.(tsx?|tpl)/ || resourceFilename =~ /\\w*\\.wxml/",
 				"key": "alt+t w"
 			},
 			{
