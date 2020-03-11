@@ -2,12 +2,11 @@ import { dirname, join, relative } from 'path';
 import { FileType, Position, QuickPickItem, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { IAtom } from '../../interfaces';
 import install from '../../util/install';
-import root_path from '../../util/root';
-import reg_in_comment from '../../util/reg-in-component';
+import root from '../../util/root';
 
 export default async function insert_widget_snippet(textEditor: TextEditor, all_remote: Map<string, IAtom>, catagories_remote: Map<string, IAtom[]>) {
-	const root = workspace.getWorkspaceFolder(textEditor.document.uri)!.uri.fsPath;
-	const local_atoms = await load_local_atoms(root);
+	const root_path = await root(textEditor);
+	const local_atoms = await load_local_atoms(root_path);
 	const catagories = new Map<string, IAtom[]>();
 	catagories.set('本地', local_atoms);
 	catagories_remote.forEach((v, k) => {
@@ -93,7 +92,7 @@ async function add_snippet(atom: IAtom, textEditor: TextEditor) {
 		await add_local(atom, textEditor);
 		return;
 	}
-	const dir = join(await root_path(textEditor), 'node_modules', '@mmstudio', atom.no);
+	const dir = join(await root(textEditor), 'node_modules', '@mmstudio', atom.no);
 	try {
 		await workspace.fs.stat(Uri.file(dir));
 	} catch (error) {
@@ -108,8 +107,7 @@ async function add_snippet(atom: IAtom, textEditor: TextEditor) {
 		window.showErrorMessage('无法自动添加脚本，请联系供应商');
 		return;
 	}
-	const [, tmp_dir] = reg_in_comment(textEditor.document.fileName)!;
-	const folder = join(workspace.getWorkspaceFolder(textEditor.document.uri)!.uri.fsPath, tmp_dir);
+	const folder = dirname(textEditor.document.fileName);
 	const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');
 
 	await update_import(folder, imp);
@@ -182,7 +180,7 @@ async function update_b(path: string, imp: string) {
 
 async function add_local(atom: IAtom, textEditor: TextEditor) {
 	const doc = textEditor.document;
-	const dir = join(await root_path(textEditor), 'src', 'widgets', atom.no);
+	const dir = join(await root(textEditor), 'src', 'widgets', atom.no);
 	const cur = dirname(doc.uri.fsPath);
 	const imp_path = relative(cur, dir);
 	const imp = `import '${imp_path}/index';`;

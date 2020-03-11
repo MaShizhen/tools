@@ -3,6 +3,7 @@ import { commands, TextEditor, Uri, window, workspace } from 'vscode';
 import { writeFileSync } from '../util/fs';
 import generate from '../util/generate';
 import prj_type, { PrjType } from '../util/prj-type';
+import root from '../util/root';
 
 export default function add() {
 	return commands.registerTextEditorCommand('mm.service.add', async (editor) => {
@@ -35,14 +36,13 @@ function web(editor: TextEditor) {
 
 async function add_s(editor: TextEditor, checker: RegExp) {
 	const path = editor.document.fileName;
-	const uri = editor.document.uri;
 	// 如果当前目录不在某个页面中，则不允许操作
 	const r = checker.exec(path);
 	if (r === null) {
 		window.showErrorMessage('当前目录下不能进行该操作!');
 	} else {
 		const [, dir] = r;
-		const folder = join(workspace.getWorkspaceFolder(uri)!.uri.fsPath, dir);
+		const folder = join(await root(editor), dir);
 		const p_path = await generate(folder, 's', '\\.ts', 3);
 		await create_s(p_path, p_path.replace(/.*src[/|\\]/, ''));
 		await workspace.saveAll();

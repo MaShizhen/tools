@@ -1,27 +1,27 @@
-import { basename, join } from 'path';
-import { TextEditor, Uri, window, workspace } from 'vscode';
-import { readdirSync, readFileSync, writeFileSync } from '../../util/fs';
+import { basename, dirname, join } from 'path';
+import { TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { createfile, readdirSync, readFileSync } from '../../util/fs';
 import generate from '../../util/generate';
 import replace from '../../util/replace';
 
-export default async function add(editor: TextEditor) {
+export default async function addactionwxapp(editor: TextEditor) {
 	const path = editor.document.fileName;
-	const uri = editor.document.uri;
+	const dir = dirname(path);
 	// 如果当前目录不在某个页面中，则不允许操作
-	const r = /[/\\](src[/\\]\w[\w\d-]*)[/\\]?/.exec(path);
+	const r = /[/\\](src[/\\]\w[\w\d-]*)[/\\]?/.exec(dir);
 	if (r === null) {
 		window.showErrorMessage('警示');
 	} else {
-		const [, dir] = r;
-		const folder = join(workspace.getWorkspaceFolder(uri)!.uri.fsPath, dir);
-		const p_path = await create_a(folder);
-		await update_p(folder);
+		const we = new WorkspaceEdit();
+		const p_path = await create_a(we, dir);
+		await update_p(we, dir);
+		await workspace.applyEdit(we);
 		await workspace.saveAll();
 		window.showTextDocument(Uri.file(`${p_path}.ts`));
 	}
 }
 
-async function update_p(path: string) {
+async function update_p(we: WorkspaceEdit, path: string) {
 	const file_name = join(path, 'p.ts');
 	const eol = '\n';
 	const files = await readdirSync(path);
@@ -37,13 +37,13 @@ async function update_p(path: string) {
 
 	const imps = `${ims}`;
 
-	await replace(file_name, 'IMPACTIONS', imps);
+	await replace(we, file_name, 'IMPACTIONS', imps);
 
 	const actions = `	const actions = { ${as.join(', ')} };`;
-	await replace(file_name, 'ACTIONS', actions);
+	await replace(we, file_name, 'ACTIONS', actions);
 }
 
-async function update_s(path: string, a: string) {
+async function update_s(we: WorkspaceEdit, path: string, a: string) {
 	const page_s_path = join(path, 's.ts');
 	const txt = await readFileSync(page_s_path);
 	const res = txt.match(/{(.|\n)*}/g);
@@ -54,13 +54,13 @@ async function update_s(path: string, a: string) {
 			return JSON.stringify({ ...obj, [a]: a }, null, '\t');
 		}
 		return JSON.stringify({ [a]: a }, null, '\t');
-
 	})();
-	return writeFileSync(page_s_path, `export default ${str.replace(/"/g, "'")};
-`);
+	const tpl = `export default ${str.replace(/"/g, "'")};
+`;
+	createfile(we, page_s_path, tpl);
 }
 
-async function create_a(p_path: string) {
+async function create_a(we: WorkspaceEdit, p_path: string) {
 	const path = await generate(p_path, 'a', '\\.ts', 3);
 	const a = basename(path);
 	const tpl = `import awx8 from '@mmstudio/awx000008';
@@ -69,7 +69,8 @@ export default async function ${a}(mm: awx8) {
 	// todo
 }
 `;
-	await writeFileSync(`${path}.ts`, tpl);
-	await update_s(p_path, a);
-	return path;
+	const uri = Uri.file(`${path}.ts`);
+	createfile(we, `${path}.ts`, tpl);
+	await update_s(we, p_path, a);
+	return uri;
 }

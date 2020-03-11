@@ -1,8 +1,9 @@
 import { basename, dirname, join } from 'path';
-import { Position, QuickPickItem, Range, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { QuickPickItem, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { IAtom } from '../../interfaces';
 import install from '../../util/install';
 import root_path from '../../util/root';
+import { createfile } from '../../util/fs';
 
 export default async function add(textEditor: TextEditor, all: Map<string, IAtom>, catagories: Map<string, IAtom[]>) {
 	const selects = Array.from(catagories.keys()).map((catagory) => {
@@ -81,11 +82,10 @@ async function update_app_components(path: string, atom: string) {
 	const name = basename(path);
 	const file_name = join(path, `${name}.json`);
 	const uri = Uri.file(file_name);
-	const wse = new WorkspaceEdit();
-	if (wse.has(uri) === false) {
-		wse.createFile(uri);
-		wse.insert(uri, new Position(0, 0), JSON.stringify({}, null, '\t'));
-		await workspace.applyEdit(wse);
+	const we = new WorkspaceEdit();
+	if (we.has(uri) === false) {
+		createfile(we, file_name, JSON.stringify({}, null, '\t'));
+		await workspace.applyEdit(we);
 	}
 	const editor = await window.showTextDocument(uri);
 	const doc = editor.document;
@@ -93,8 +93,7 @@ async function update_app_components(path: string, atom: string) {
 	const uc = conf.usingComponents || {};
 	uc[atom] = `@mmstudio/${atom}/index`;
 	conf.usingComponents = uc;
-	await editor.edit((eb) => {
-		eb.replace(new Range(new Position(0, 0), new Position(doc.lineCount, 0)), JSON.stringify(conf, null, '\t'));
-	});
+	createfile(we, doc.fileName, JSON.stringify(conf, null, '\t'));
+	workspace.applyEdit(we);
 	await doc.save();
 }

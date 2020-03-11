@@ -1,6 +1,14 @@
-import { Uri, workspace } from 'vscode';
+import { Position, Uri, workspace, WorkspaceEdit } from 'vscode';
 
 const fs = workspace.fs;
+
+export function createfile(we: WorkspaceEdit, path: string, data: string) {
+	const uri = Uri.file(path);
+	we.createFile(uri, {
+		overwrite: true
+	});
+	we.insert(uri, new Position(0, 0), data);
+}
 
 export function writeFileSync(path: string, data: string) {
 	return workspace.fs.writeFile(Uri.file(path), Buffer.from(data, 'utf-8'));

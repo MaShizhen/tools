@@ -1,6 +1,6 @@
 import { basename, dirname, join } from 'path';
 import { TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { mkdirSync, readdirSync, writeFileSync } from '../../util/fs';
+import { createfile, readdirSync } from '../../util/fs';
 import generate from '../../util/generate';
 import replace from '../../util/replace';
 import { NO_MODIFY } from '../../util/blocks';
@@ -10,48 +10,44 @@ export default async function add(editor: TextEditor) {
 		const doc = editor.document;
 		const uri = doc.uri;
 		// 如果当前目录不在某个页面中，则不允许操作
-		const page_name = basename(dirname(uri.path));
-		console.warn(page_name);
-		const dir = workspace.getWorkspaceFolder(uri)!.uri.fsPath;
-		const folder = join(dir, 'src', page_name);
+		const folder = dirname(uri.path);
 		const content = doc.getText(editor.selection);
 
-		const c = await generate(folder, 'zj-', '', 3);
-		const no = c.replace(/.*(zj-\d*)/, '$1');
-		// create
-		await mkdirSync(c);	// zj-000001
-		await create_tpl(c, content);
-		await create_tplts(c, content);
-		await create_s(c);
-		await create_ns(c);
-		const id = basename(c);
-		await create_n(id, c);
-		await create_b(id, c);
+		const component_dir = await generate(folder, 'zj-', '', 3);
+		const no = component_dir.replace(/.*(zj-\d*)/, '$1');
+
+		const we = new WorkspaceEdit();
+		create_tpl(we, component_dir, content);
+		create_tplts(we, component_dir, content);
+		create_s(we, component_dir);
+		create_ns(we, component_dir);
+		const id = basename(component_dir);
+		create_n(we, id, component_dir);
+		create_b(we, id, component_dir);
 		// update b.ts, n.ts
 		const files = await readdirSync(folder);
 		const cs = files.filter((f) => {
 			return /zj-\d{3,6}/.test(f);
 		});
-		await update_n(folder, cs);
-		await update_b(folder, cs);
-		await update_html(editor, no);
+		update_n(we, folder, cs);
+		update_b(we, folder, cs);
+		update_html(we, editor, no);
+		await workspace.applyEdit(we);
 		await workspace.saveAll();
 		window.setStatusBarMessage('创建成功');
-		window.showTextDocument(Uri.file(join(c, 'tpl.tpl')));
+		window.showTextDocument(Uri.file(join(component_dir, 'tpl.tpl')));
 	} catch (error) {
 		console.trace(error);
 	}
 }
 
-function update_html(editor: TextEditor, no: string) {
+function update_html(we: WorkspaceEdit, editor: TextEditor, no: string) {
 	const uri = editor.document.uri;
-	const we = new WorkspaceEdit();
 	const zj = `<${no}></${no}>`;
 	we.replace(uri, editor.selection, zj);
-	return workspace.applyEdit(we);
 }
 
-async function update_b(path: string, components: string[]) {
+async function update_b(we: WorkspaceEdit, path: string, components: string[]) {
 	// const eol = workspace.getConfiguration('files').get<string>('eol');
 	const eol = '\n';
 	const file_name = join(path, 'b.ts');
@@ -59,38 +55,38 @@ async function update_b(path: string, components: string[]) {
 	const ims = components.map((c, i) => {
 		return `import c${i} from './${c}/b';`;
 	}).join(eol);
-	await replace(file_name, 'IMPCOMPONENTS', ims);
+	await replace(we, file_name, 'IMPCOMPONENTS', ims);
 
 	const cs = components.map((_c, i) => {
 		return `c${i}`;
 	}).join(', ');
 	if (cs.length > 0) {
-		await replace(file_name, 'COMPONENTS', `		,${cs}`);
+		await replace(we, file_name, 'COMPONENTS', `		,${cs}`);
 	} else {
-		await replace(file_name, 'COMPONENTS', '');
+		await replace(we, file_name, 'COMPONENTS', '');
 	}
 }
 
-async function update_n(path: string, components: string[]) {
+async function update_n(we: WorkspaceEdit, path: string, components: string[]) {
 	const eol = '\n';
 	const file_name = join(path, 'n.ts');
 
 	const ims = components.map((c, i) => {
 		return `import c${i} from './${c}/n';`;
 	}).join(eol);
-	await replace(file_name, 'IMPCOMPONENTS', ims);
+	await replace(we, file_name, 'IMPCOMPONENTS', ims);
 
 	const cs = components.map((_c, i) => {
 		return `c${i}`;
 	}).join(', ');
 	if (cs.length > 0) {
-		await replace(file_name, 'COMPONENTS', `		,${cs}`);
+		await replace(we, file_name, 'COMPONENTS', `		,${cs}`);
 	} else {
-		await replace(file_name, 'COMPONENTS', '');
+		await replace(we, file_name, 'COMPONENTS', '');
 	}
 }
 
-function create_b(id: string, path: string) {
+function create_b(we: WorkspaceEdit, id: string, path: string) {
 	const tpl = `import { bc } from '@mmstudio/web';
 
 import s from './s';
@@ -111,10 +107,10 @@ export default function main(url: string, query: {}) {
 	return bc('${id}', s, actions, url, query);
 }
 `;
-	return writeFileSync(join(path, 'b.ts'), tpl);
+	createfile(we, join(path, 'b.ts'), tpl);
 }
 
-function create_n(id: string, path: string) {
+function create_n(we: WorkspaceEdit, id: string, path: string) {
 	const tpl = `import { nc } from '@mmstudio/web';
 import { HTMLElement } from 'node-html-parser';
 import s from './ns';
@@ -136,29 +132,29 @@ export default function main(html: HTMLElement, url: string, msg: unknown, heade
 }
 
 `;
-	return writeFileSync(join(path, 'n.ts'), tpl);
+	createfile(we, join(path, 'n.ts'), tpl);
 }
 
-function create_ns(path: string) {
+function create_ns(we: WorkspaceEdit, path: string) {
 	const tpl = `export default {
 };
 `;
-	return writeFileSync(join(path, 'ns.ts'), tpl);
+	createfile(we, join(path, 'ns.ts'), tpl);
 }
 
-function create_s(path: string) {
+function create_s(we: WorkspaceEdit, path: string) {
 	const tpl = `export default {
 };
 `;
-	return writeFileSync(join(path, 's.ts'), tpl);
+	createfile(we, join(path, 's.ts'), tpl);
 }
 
-function create_tpl(path: string, content: string) {
-	return writeFileSync(join(path, 'tpl.tpl'), content);
+function create_tpl(we: WorkspaceEdit, path: string, content: string) {
+	createfile(we, join(path, 'tpl.tpl'), content);
 }
 
-function create_tplts(path: string, content: string) {
+function create_tplts(we: WorkspaceEdit, path: string, content: string) {
 	const tpl = `export default \`${content}\`;
 `;
-	return writeFileSync(join(path, 'tpl.ts'), tpl);
+	createfile(we, join(path, 'tpl.ts'), tpl);
 }

@@ -1,28 +1,28 @@
-import { basename, join } from 'path';
-import { TextEditor, Uri, window, workspace } from 'vscode';
-import { readdirSync, writeFileSync } from '../../util/fs';
+import { basename, dirname, join } from 'path';
+import { TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { createfile, readdirSync, writeFileSync } from '../../util/fs';
 import generate from '../../util/generate';
 import replace from '../../util/replace';
 import reg_in_comment from '../../util/reg-in-component';
 
 export default async function add(editor: TextEditor) {
 	const path = editor.document.fileName;
-	const uri = editor.document.uri;
+	const folder = dirname(path);
 	// 如果当前目录不在某个页面中，则不允许操作
-	const r = reg_in_comment(path);
+	const r = reg_in_comment(folder);
 	if (r === null) {
 		window.showErrorMessage('请在组件n.ts中进行该操作!');
 	} else {
-		const [, dir] = r;
-		const folder = join(workspace.getWorkspaceFolder(uri)!.uri.fsPath, dir);
-		const p_path = await create_a(folder);
-		await update_n(folder);
+		const we = new WorkspaceEdit();
+		const p_path = await create_a(we, folder);
+		await update_n(we, folder);
+		await workspace.applyEdit(we);
 		await workspace.saveAll();
-		window.showTextDocument(Uri.file(`${p_path}.ts`));
+		window.showTextDocument(p_path);
 	}
 }
 
-async function update_n(path: string) {
+async function update_n(we: WorkspaceEdit, path: string) {
 	const file_name = join(path, 'n.ts');
 	const eol = '\n';
 	const files = await readdirSync(path);
@@ -38,13 +38,13 @@ async function update_n(path: string) {
 
 	const imps = `${ims}`;
 
-	await replace(file_name, 'IMPACTIONS', imps);
+	await replace(we, file_name, 'IMPACTIONS', imps);
 
 	const actions = `	const actions = { ${as.join(', ')} };`;
-	await replace(file_name, 'ACTIONS', actions);
+	await replace(we, file_name, 'ACTIONS', actions);
 }
 
-async function create_a(p_path: string) {
+async function create_a(we: WorkspaceEdit, p_path: string) {
 	const path = await generate(p_path, 'na', '\\.ts', 3);
 	const a = basename(path);
 	if (a === 'na001') {
@@ -56,8 +56,9 @@ export default async function ${a}(mm: an2) {
 	// todo
 }
 `;
-	await writeFileSync(`${path}.ts`, tpl);
-	return path;
+	const uri = Uri.file(`${path}.ts`);
+	createfile(we, `${path}.ts`, tpl);
+	return uri;
 }
 
 

@@ -2,10 +2,10 @@ import { dirname, join, relative } from 'path';
 import { commands, FileType, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
 import { IAtom, IAtomCatagory } from '../../interfaces';
 import get from '../../util/get';
-import root_path from '../../util/root';
 import prj_type, { PrjType } from '../../util/prj-type';
 import install from '../../util/install';
 import atom_insert_snippet from '../../util/atom-insert-snippet';
+import root from '../../util/root';
 
 const snippets = new Map<PrjType | 'nodejs-s' | 'nodejs-na', { remote: string; snippets?: { all: Map<string, IAtom>; catagories: Map<string, IAtom[]> } }>();
 
@@ -55,8 +55,8 @@ export default function add() {
 }
 
 async function insert_atom_snippets(textEditor: TextEditor, all_remote: Map<string, IAtom>, catagories_remote: Map<string, IAtom[]>, client: boolean) {
-	const root = workspace.getWorkspaceFolder(textEditor.document.uri)!.uri.fsPath;
-	const local_atoms = await load_local_atoms(root, client);
+	const root_path = await root(textEditor);
+	const local_atoms = await load_local_atoms(root_path, client);
 	const catagories = new Map<string, IAtom[]>();
 	catagories.set('本地', local_atoms);
 	catagories_remote.forEach((v, k) => {
@@ -120,7 +120,7 @@ async function add_snippet(atom: IAtom, textEditor: TextEditor, client: boolean)
 		await insert_local_atom(atom, textEditor, client);
 		return;
 	}
-	const dir = join(await root_path(textEditor), 'node_modules', '@mmstudio', atom.no);
+	const dir = join(await root(textEditor), 'node_modules', '@mmstudio', atom.no);
 	try {
 		await workspace.fs.stat(Uri.file(dir));
 	} catch (error) {
@@ -168,7 +168,7 @@ async function load_local_atoms(root: string, client: boolean) {
 
 async function insert_local_atom(atom: IAtom, textEditor: TextEditor, prj: boolean) {
 	const p = prj ? 'ap' : 'anp';
-	const dir = join(await root_path(textEditor), 'src', 'atom', p, atom.no);
+	const dir = join(await root(textEditor), 'src', 'atom', p, atom.no);
 	const cur = dirname(textEditor.document.uri.fsPath);
 	const imp_path = relative(cur, dir);
 	const name = atom.no.replace(/([a-z]+)0+(\d+)/, '$1$2');

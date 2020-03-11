@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { dirname } from 'path';
 import { TextEditor, Uri, window, workspace } from 'vscode';
 import { writeFileSync } from '../../util/fs';
 import generate from '../../util/generate';
@@ -6,14 +6,12 @@ import reg_in_comment from '../../util/reg-in-component';
 
 export default async function add(editor: TextEditor) {
 	const path = editor.document.fileName;
-	const uri = editor.document.uri;
+	const folder = dirname(path);
 	// 如果当前目录不在某个页面中，则不允许操作
-	const r = reg_in_comment(path);
+	const r = reg_in_comment(folder);
 	if (r === null) {
 		window.showErrorMessage('请在组件中进行该操作!');
 	} else {
-		const [, dir] = r;
-		const folder = join(workspace.getWorkspaceFolder(uri)!.uri.fsPath, dir);
 		const p_path = await generate(folder, 's', '\\.ts', 3);
 		await create_s(p_path, p_path.replace(/.*src[/|\\]/, ''));
 		await workspace.saveAll();

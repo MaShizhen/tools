@@ -1,7 +1,7 @@
 import { Position, Range, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { NO_MODIFY } from './blocks';
 
-export default async function replace(path: string, flag: string, str: string) {
+export default async function replace(we: WorkspaceEdit, path: string, flag: string, str: string) {
 	const doc = await workspace.openTextDocument(Uri.file(path));
 
 	const REGEXP_TOC_START = `/// MM ${flag} BEGIN`;
@@ -27,8 +27,6 @@ export default async function replace(path: string, flag: string, str: string) {
 	const start = new Position(begin + 1, 0);
 	const stop = new Position(end, 0);
 	const rang = new Range(start, stop);
-	const we = new WorkspaceEdit();
 	const eol = '\n';
 	we.replace(doc.uri, rang, `/// ${NO_MODIFY}${eol}${str}${eol}`);
-	await workspace.applyEdit(we);
 }
