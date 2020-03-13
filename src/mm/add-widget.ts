@@ -49,7 +49,7 @@ export default function add() {
 			const ts = join(atom_dir, `index.${postfix}`);
 			createfile(we, ts, tplwidget(no, true));
 			createfile(we, join(atom_dir, 'use.snippet'), tplwidgetusage(no, true));
-			createfile(we, join(atom_dir, 'amd.json'), '{}');
+			createfile(we, join(atom_dir, 'amd.json'), '[]');
 			await workspace.applyEdit(we);
 			window.showInformationMessage('控件模板已生成');
 			const doc = await workspace.openTextDocument(ts);

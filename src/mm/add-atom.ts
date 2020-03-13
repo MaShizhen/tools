@@ -73,7 +73,7 @@ export default function add_atom() {
 			const ts = join(atom_dir, 'index.ts');
 			createfile(we, ts, tplatom(no, n));
 			createfile(we, join(atom_dir, 'use.snippet'), tplatomusage('原子操作功能描述', no, n));
-			createfile(we, join(atom_dir, 'amd.json'), '{}');
+			createfile(we, join(atom_dir, 'amd.json'), '[]');
 			await workspace.applyEdit(we);
 			window.showInformationMessage('原子操作模板已生成');
 			const doc = await workspace.openTextDocument(ts);
