@@ -23,15 +23,20 @@ export default async function addrouter(name: 'routers' | 'filters') {
 	if (!method) {
 		return;
 	}
-	const rs = routers.map((r) => {
-		return parseInt(r.url.replace(/[^\d]/g, ''), 10);
-	}).filter((v) => {
-		return v > 0;
-	});
-	if (rs.length === 0) {
-		rs.push(0);
-	}
-	const url = prefix('/r', Math.max(...rs) + 1, 3);
+	const url = (() => {
+		if (name === 'routers') {
+			const rs = routers.map((r) => {
+				return parseInt(r.url.replace(/[^\d]/g, ''), 10);
+			}).filter((v) => {
+				return v > 0;
+			});
+			if (rs.length === 0) {
+				rs.push(0);
+			}
+			return prefix('/r', Math.max(...rs) + 1, 3);
+		}
+		return '/*';
+	})();
 	routers.push({
 		data: {},
 		method,
@@ -42,6 +47,7 @@ export default async function addrouter(name: 'routers' | 'filters') {
 	const we = new WorkspaceEdit();
 	we.replace(file, new Range(0, 0, doc.lineCount, Infinity), JSON.stringify(conf, null, '\t'));
 	await workspace.applyEdit(we);
+	await window.showTextDocument(file);
 }
 
 async function get_all_service(root: string) {
