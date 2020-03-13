@@ -14,6 +14,7 @@ export default function add() {
 			method: 'get' | 'post' | 'all' | string;
 			service: string;
 			url: string;
+			data: {}
 		}>;
 		const service = await get_all_service(rootPath);
 		if (!service) {
@@ -33,6 +34,7 @@ export default function add() {
 		}
 		const url = prefix('/r', Math.max(...rs) + 1, 3);
 		routers.push({
+			data: {},
 			method,
 			service,
 			url
