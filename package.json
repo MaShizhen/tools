@@ -55,6 +55,10 @@
 				"title": "%mm.service.router%"
 			},
 			{
+				"command": "mm.service.filter",
+				"title": "%mm.service.filter%"
+			},
+			{
 				"command": "mm.tpl.atom",
 				"title": "%mm.tpl.atom%"
 			},
@@ -121,6 +125,10 @@
 					"group": "mm"
 				},
 				{
+					"command": "mm.service.filter",
+					"group": "mm"
+				},
+				{
 					"command": "mm.tpl.atom",
 					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/ || resourceFilename == index.ts",
 					"group": "mm"
@@ -181,7 +189,10 @@
 				},
 				{
 					"command": "mm.service.router",
-					"when": "editorIsOpen",
+					"group": "mm"
+				},
+				{
+					"command": "mm.service.filter",
 					"group": "mm"
 				},
 				{
@@ -284,7 +295,10 @@
 			},
 			{
 				"command": "mm.service.router",
-				"when": "editorIsOpen",
+				"key": "alt+r"
+			},
+			{
+				"command": "mm.service.filter",
 				"key": "alt+r"
 			},
 			{

@@ -3,7 +3,7 @@ import adda from './mm/addaction';
 import addc from './mm/addc';
 import addtpl from './mm/add-tpl';
 import addpage from './mm/addpage';
-import addr from './mm/addrouter';
+import addwebrouters from './mm/add-web-routers';
 import adds from './mm/addservice';
 import list_events from './mm/list-events';
 import shell_build from './mm/shell/build';
@@ -17,6 +17,7 @@ import addatom from './mm/add-atom';
 import renoatom from './mm/reno-atom';
 import addwidget from './mm/add-widget';
 import renowidget from './mm/reno-widget';
+import addwebfilter from './mm/add-web-filter';
 
 export function activate(context: ExtensionContext) {
 	context.subscriptions.push(
@@ -25,7 +26,7 @@ export function activate(context: ExtensionContext) {
 		adds(),
 		addpage(),
 		addtpl(),
-		addr(),
+		addwebrouters(),
 		insert_atom(),
 		insert_tpl(),
 		insert_widget(),
@@ -37,6 +38,7 @@ export function activate(context: ExtensionContext) {
 		addatom(),
 		renoatom(),
 		addwidget(),
-		renowidget()
+		renowidget(),
+		addwebfilter()
 	);
 }
