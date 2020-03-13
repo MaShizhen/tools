@@ -19,7 +19,7 @@ export default function add() {
 		if (!service) {
 			return;
 		}
-		const method = await window.showQuickPick(['get', 'post', 'all']);
+		const method = await window.showQuickPick(['get', 'post', 'put', 'delete', 'all']);
 		if (!method) {
 			return;
 		}
