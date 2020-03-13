@@ -43,7 +43,7 @@ export default async function addrouter(name: 'routers' | 'filters') {
 		service,
 		url
 	});
-	conf.routers = routers;
+	conf[name] = routers;
 	const we = new WorkspaceEdit();
 	we.replace(file, new Range(0, 0, doc.lineCount, Infinity), JSON.stringify(conf, null, '\t'));
 	await workspace.applyEdit(we);
