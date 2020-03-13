@@ -21,11 +21,11 @@ export default async function add(rootPath: string) {
 	const files = (await readdirSync(folder)).filter((item) => {
 		return item !== 'app' && item !== 'atom';
 	});
-	await updata_component(we, folder, files);
+	await updata_component(folder, files);
+	await workspace.applyEdit(we);
+	await workspace.saveAll();
 	window.setStatusBarMessage('成功添加页面文件');
 	window.showTextDocument(Uri.file(join(p_path, 'p.ts')));
-
-	workspace.saveAll();
 }
 
 function create_config(we: WorkspaceEdit, _path: string) {
@@ -100,21 +100,21 @@ function create_style(we: WorkspaceEdit, _path: string) {
 	return createfile(we, join(_path, 'styles.ts'), tpl);
 }
 
-async function updata_component(we: WorkspaceEdit, folder: string, files: string[]) {
+async function updata_component(folder: string, files: string[]) {
 	const eol = '\n';
 	const file_name = join(folder, 'app', 'app.ts');
 
 	const ims = files.map((item) => {
 		return `import ${item.replace(/-/g, '_')} from '../${item}/p';`;
 	}).join(eol);
-	await replace(we, file_name, 'IMPCOMPONENTS', ims);
+	await replace(file_name, 'IMPCOMPONENTS', ims);
 
 	const cs = files.map((item) => {
 		return `${item.replace(/-/g, '_')}`;
 	}).join(', ');
 	if (cs.length > 0) {
-		await replace(we, file_name, 'COMPONENTS', `		${cs}`);
+		await replace(file_name, 'COMPONENTS', `		${cs}`);
 	} else {
-		await replace(we, file_name, 'COMPONENTS', '');
+		await replace(file_name, 'COMPONENTS', '');
 	}
 }

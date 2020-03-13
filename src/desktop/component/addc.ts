@@ -27,10 +27,10 @@ export default async function add(editor: TextEditor) {
 			const cs = files.filter((f) => {
 				return /zj-\d{3,6}/.test(f);
 			});
-			await update_n(we, folder, cs);
-			await update_b(we, folder, cs);
 			await workspace.applyEdit(we);
 			await workspace.saveAll();
+			await update_n(folder, cs);
+			await update_b(folder, cs);
 			window.setStatusBarMessage('创建成功');
 			window.showTextDocument(Uri.file(join(c, 'b.ts')));
 		}
@@ -39,7 +39,7 @@ export default async function add(editor: TextEditor) {
 	}
 }
 
-async function update_b(we: WorkspaceEdit, path: string, components: string[]) {
+async function update_b(path: string, components: string[]) {
 	// const eol = workspace.getConfiguration('files').get<string>('eol');
 	const eol = '\n';
 	const file_name = join(path, 'b.ts');
@@ -47,19 +47,19 @@ async function update_b(we: WorkspaceEdit, path: string, components: string[]) {
 	const ims = components.map((c, i) => {
 		return `import c${i} from './${c}/b';`;
 	}).join(eol);
-	await replace(we, file_name, 'IMPCOMPONENTS', ims);
+	await replace(file_name, 'IMPCOMPONENTS', ims);
 
 	const cs = components.map((_c, i) => {
 		return `c${i}`;
 	}).join(', ');
 	if (cs.length > 0) {
-		await replace(we, file_name, 'COMPONENTS', `		,${cs}`);
+		await replace(file_name, 'COMPONENTS', `		,${cs}`);
 	} else {
-		await replace(we, file_name, 'COMPONENTS', '');
+		await replace(file_name, 'COMPONENTS', '');
 	}
 }
 
-async function update_n(we: WorkspaceEdit, path: string, components: string[]) {
+async function update_n(path: string, components: string[]) {
 	// const eol = workspace.getConfiguration('files').get<string>('eol');
 	const eol = '\n';
 	const file_name = join(path, 'n.ts');
@@ -67,15 +67,15 @@ async function update_n(we: WorkspaceEdit, path: string, components: string[]) {
 	const ims = components.map((c, i) => {
 		return `import c${i} from './${c}/n';`;
 	}).join(eol);
-	await replace(we, file_name, 'IMPCOMPONENTS', ims);
+	await replace(file_name, 'IMPCOMPONENTS', ims);
 
 	const cs = components.map((_c, i) => {
 		return `c${i}`;
 	}).join(', ');
 	if (cs.length > 0) {
-		await replace(we, file_name, 'COMPONENTS', `		,${cs}`);
+		await replace(file_name, 'COMPONENTS', `		,${cs}`);
 	} else {
-		await replace(we, file_name, 'COMPONENTS', '');
+		await replace(file_name, 'COMPONENTS', '');
 	}
 }
 

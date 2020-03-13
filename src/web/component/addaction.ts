@@ -16,14 +16,14 @@ export default async function add(editor: TextEditor) {
 		const p_path = await generate(folder, 'a', '\\.ts', 3);
 		const we = new WorkspaceEdit();
 		create_a(we, p_path);
-		await update_b(we, folder);
 		await workspace.applyEdit(we);
 		await workspace.saveAll();
+		await update_b(folder);
 		window.showTextDocument(Uri.file(`${p_path}.ts`));
 	}
 }
 
-async function update_b(we: WorkspaceEdit, path: string) {
+async function update_b(path: string) {
 	const file_name = join(path, 'b.ts');
 	const eol = '\n';
 	const files = await readdirSync(path);
@@ -39,10 +39,10 @@ async function update_b(we: WorkspaceEdit, path: string) {
 
 	const imps = `${ims}`;
 
-	await replace(we, file_name, 'IMPACTIONS', imps);
+	await replace(file_name, 'IMPACTIONS', imps);
 
 	const actions = `	const actions = { ${as.join(', ')} };`;
-	await replace(we, file_name, 'ACTIONS', actions);
+	await replace(file_name, 'ACTIONS', actions);
 }
 
 function create_a(we: WorkspaceEdit, p_path: string) {

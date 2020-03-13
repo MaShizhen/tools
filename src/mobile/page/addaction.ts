@@ -14,14 +14,14 @@ export default async function add(editor: TextEditor) {
 	} else {
 		const we = new WorkspaceEdit();
 		const p_path = await create_a(we, folder);
-		await update_p(we, folder);
 		await workspace.applyEdit(we);
 		await workspace.saveAll();
+		await update_p(folder);
 		window.showTextDocument(p_path);
 	}
 }
 
-async function update_p(we: WorkspaceEdit, path: string) {
+async function update_p(path: string) {
 	let file_name = join(path, 'p.ts');
 	if (!await existsSync(file_name)) {
 		file_name = join(path, 'app.ts');
@@ -40,10 +40,10 @@ async function update_p(we: WorkspaceEdit, path: string) {
 
 	const imps = `${ims}`;
 
-	await replace(we, file_name, 'IMPACTIONS', imps);
+	await replace(file_name, 'IMPACTIONS', imps);
 
 	const actions = `	const actions = { ${as.join(', ')} };`;
-	await replace(we, file_name, 'ACTIONS', actions);
+	await replace(file_name, 'ACTIONS', actions);
 }
 
 async function create_a(we: WorkspaceEdit, p_path: string) {

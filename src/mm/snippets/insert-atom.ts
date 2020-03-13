@@ -172,7 +172,7 @@ async function insert_local_atom(atom: IAtom, textEditor: TextEditor, prj: boole
 	const cur = dirname(textEditor.document.uri.fsPath);
 	const imp_path = relative(cur, dir);
 	const name = atom.no.replace(/([a-z]+)0+(\d+)/, '$1$2');
-	const imp = `import ${name} from '${imp_path}';`;
+	const imp = `import ${name} from '${imp_path}/index';`;
 	const snippet_use = Uri.file(join(dir, 'use.snippet'));
 
 	try {

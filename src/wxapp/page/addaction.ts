@@ -14,14 +14,14 @@ export default async function addactionwxapp(editor: TextEditor) {
 	} else {
 		const we = new WorkspaceEdit();
 		const p_path = await create_a(we, dir);
-		await update_p(we, dir);
 		await workspace.applyEdit(we);
 		await workspace.saveAll();
+		await update_p(dir);
 		window.showTextDocument(Uri.file(`${p_path}.ts`));
 	}
 }
 
-async function update_p(we: WorkspaceEdit, path: string) {
+async function update_p(path: string) {
 	const file_name = join(path, 'p.ts');
 	const eol = '\n';
 	const files = await readdirSync(path);
@@ -37,10 +37,10 @@ async function update_p(we: WorkspaceEdit, path: string) {
 
 	const imps = `${ims}`;
 
-	await replace(we, file_name, 'IMPACTIONS', imps);
+	await replace(file_name, 'IMPACTIONS', imps);
 
 	const actions = `	const actions = { ${as.join(', ')} };`;
-	await replace(we, file_name, 'ACTIONS', actions);
+	await replace(file_name, 'ACTIONS', actions);
 }
 
 async function update_s(we: WorkspaceEdit, path: string, a: string) {
