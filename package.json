@@ -299,7 +299,7 @@
 			},
 			{
 				"command": "mm.service.filter",
-				"key": "alt+r"
+				"key": "alt+m f"
 			},
 			{
 				"command": "mm.presentation.add",
