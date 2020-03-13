@@ -1,12 +1,13 @@
 import { join, parse } from 'path';
-import { commands, Position, QuickPickItem, Range, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { commands, QuickPickItem, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import filter from '../../util/filter';
 import foreach from '../../util/foreach';
 import get from '../../util/get';
 import get_text from '../../util/get-text';
-import root_path from '../../util/root';
 import exec from '../../util/exec';
 import prj_type, { PrjType } from '../../util/prj-type';
+import { createfile } from '../../util/fs';
+import root from '../../util/root';
 
 const snippets = new Map<PrjType | 'nodejs', { remote: string; snippets?: { all: Map<string, IAtom>; catagories: Map<string, IAtom[]> } }>();
 snippets.set('nodejs', { remote: 'https://mm-edu.gitee.io/templates/nodejs.json' });
@@ -124,40 +125,30 @@ async function add_snippet(type: string, atom: IAtomSingle | IAtomMultiple, text
 		return;
 	}
 	if (atom.type === 'multiple-absolute') {
-		await add_snippet_multiple(type, atom, false);
+		await add_snippet_multiple(textEditor, type, atom, false);
 	} else if (atom.type === 'multiple-relative') {
-		await add_snippet_multiple(type, atom, true);
+		await add_snippet_multiple(textEditor, type, atom, true);
 	} else {
 		await add_snippet_single(type, atom, textEditor);
 	}
 }
 
-async function add_snippet_multiple(type: string, atom: IAtomMultiple, isrelative: boolean) {
+async function add_snippet_multiple(editor: TextEditor, type: string, atom: IAtomMultiple, isrelative: boolean) {
 	const base_url = `https://mm-edu.gitee.io/templates/${type}/${atom.no}`;
 	const contexts = atom.contexts || {};
-	const dir = isrelative ? parse(window.activeTextEditor!.document.uri.fsPath).dir : workspace.workspaceFolders![0].uri.fsPath;
+	const dir = isrelative ? parse(editor.document.uri.fsPath).dir : await root();
+	const we = new WorkspaceEdit();
 	await foreach(atom.files, async (file) => {
 		const url = join(base_url, file);
 		let context = contexts.url;
 		if (context === undefined || context === null) {
 			context = contexts.url = await get_text(url);
 		}
-		const workspace_edit = new WorkspaceEdit();
-		const uri = Uri.file(join(dir, file));
-		// await workspace.applyEdit(workspace_edit);
-		// 目前vscode版本1.39.1多次操作会有异常 see https://github.com/microsoft/vscode/issues/56986
-		// workspace_edit.deleteFile(uri, {
-		// 	ignoreIfNotExists: true,
-		// 	recursive: true
-		// });
-		workspace_edit.createFile(uri, {
-			ignoreIfExists: true	// vscode1.39.1使用overwrite第二次操作时会有异常
-		});
-		workspace_edit.replace(uri, new Range(new Position(0, 0), new Position(99999999999, 99999999999)), context);
-		await workspace.applyEdit(workspace_edit);
+		createfile(we, join(dir, file), context);
 		// await workspace.openTextDocument(uri);
 		// await commands.executeCommand('workbench.files.action.refreshFilesExplorer');
 	});
+	await workspace.applyEdit(we);
 	await workspace.saveAll(false);
 	atom.contexts = contexts;
 }
@@ -183,7 +174,7 @@ async function add_snippet_single(type: string, atom: IAtomSingle, textEditor: T
 
 	const tmp_atoms = await filter(tmp_imps, async (item) => {
 		const match_str = /['"][\w\d]+['"]/.exec(item)![0].replace(/['"']/g, '');
-		const dir_atom = join(await root_path(textEditor), 'node_modules', match_str);
+		const dir_atom = join(await root(textEditor), 'node_modules', match_str);
 		try {
 			await workspace.fs.stat(Uri.file(dir_atom));
 			return false;
@@ -214,7 +205,7 @@ async function install(atoms: string[], editor: TextEditor) {
 		return;
 	}
 	const command = `yarn add --dev ${atoms.join(' ')}`;
-	const p = exec(command, await root_path(editor));
+	const p = exec(command, await root(editor));
 	window.setStatusBarMessage('正在安装依赖', p);
 	await p;
 	window.setStatusBarMessage('成功安装依赖');

@@ -1,7 +1,8 @@
 import { basename, dirname } from 'path';
-import { Position, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import generate from '../../util/generate';
 import reg_in_comment from '../../util/reg-in-component';
+import { createfile } from '../../util/fs';
 
 export default async function add(editor: TextEditor) {
 	const uri = editor.document.uri;
@@ -19,8 +20,7 @@ export default async function add(editor: TextEditor) {
 
 		const we = new WorkspaceEdit();
 		const tpl = Uri.file(`${p_path}.tpl`);
-		we.createFile(tpl);
-		we.insert(tpl, new Position(0, 0), content);
+		createfile(we, `${p_path}.tpl`, content);
 		we.replace(uri, editor.selection, `<div data-mm-tpl="${no}"></div>`);
 		await workspace.applyEdit(we);
 		await window.showTextDocument(tpl);

@@ -1,5 +1,5 @@
 import { basename, join } from 'path';
-import { commands, Position, QuickPickItem, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { commands, QuickPickItem, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import nodejs from '../nodejs/atom/add-common';
 import web from '../web/atom/add-common';
 import root from '../util/root';
@@ -7,6 +7,7 @@ import generate from '../util/generate';
 import tplatomusage from '../util/tpl-atom-useage';
 import { AtomType } from '../util/atom-type';
 import tplatom from '../util/tpl-atom';
+import { createfile } from '../util/fs';
 
 const ap = new Map<AtomType, () => Promise<unknown>>();
 ap.set(AtomType.node, nodejs);
@@ -69,12 +70,10 @@ export default function add_atom() {
 			const atom_dir = await generate(dir, prefix, '', 3);
 			const no = basename(atom_dir);
 			const we = new WorkspaceEdit();
-			const ts = Uri.file(join(atom_dir, 'index.ts'));
-			we.createFile(ts, { overwrite: true });
-			we.insert(ts, new Position(0, 0), tplatom(no, n));
-			const snippet = Uri.file(join(atom_dir, 'use.snippet'));
-			we.createFile(snippet, { overwrite: true });
-			we.insert(snippet, new Position(0, 0), tplatomusage('原子操作功能描述', no, n));
+			const ts = join(atom_dir, 'index.ts');
+			createfile(we, ts, tplatom(no, n));
+			createfile(we, join(atom_dir, 'use.snippet'), tplatomusage('原子操作功能描述', no, n));
+			createfile(we, join(atom_dir, 'amd.json'), '{}');
 			await workspace.applyEdit(we);
 			window.showInformationMessage('原子操作模板已生成');
 			const doc = await workspace.openTextDocument(ts);

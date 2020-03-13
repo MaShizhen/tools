@@ -3,7 +3,7 @@ import { commands, FileType, Range, Uri, window, workspace, WorkspaceEdit } from
 import prefix from '../util/prefix';
 import root_path from '../util/root';
 
-export default function add() {
+export default function addrouter() {
 	return commands.registerCommand('mm.service.router', async () => {
 		const rootPath = await root_path();
 		const file = Uri.file(join(rootPath, 'mm.json'));

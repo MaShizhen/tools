@@ -1,11 +1,12 @@
 import { basename, join } from 'path';
-import { commands, Position, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { commands, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import web from '../web/widget/add';
 import root from '../util/root';
 import generate from '../util/generate';
 import { WidgetType } from '../util/widget-type';
 import tplwidget from '../web/widget/tpl-web-widget';
 import tplwidgetusage from '../web/widget/tpl-web-widget-useage';
+import { createfile } from '../util/fs';
 
 const pw = new Map<WidgetType, () => Promise<unknown>>();
 pw.set(WidgetType.web, web);
@@ -45,12 +46,10 @@ export default function add() {
 			const no = basename(atom_dir);
 			const we = new WorkspaceEdit();
 			const postfix = type === WidgetType.mobile ? 'tsx' : 'ts';
-			const ts = Uri.file(join(atom_dir, `index.${postfix}`));
-			we.createFile(ts, { overwrite: true });
-			we.insert(ts, new Position(0, 0), tplwidget(no, true));
-			const snippet = Uri.file(join(atom_dir, 'use.snippet'));
-			we.createFile(snippet, { overwrite: true });
-			we.insert(snippet, new Position(0, 0), tplwidgetusage(no, true));
+			const ts = join(atom_dir, `index.${postfix}`);
+			createfile(we, ts, tplwidget(no, true));
+			createfile(we, join(atom_dir, 'use.snippet'), tplwidgetusage(no, true));
+			createfile(we, join(atom_dir, 'amd.json'), '{}');
 			await workspace.applyEdit(we);
 			window.showInformationMessage('控件模板已生成');
 			const doc = await workspace.openTextDocument(ts);
