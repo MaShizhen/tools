@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { dirname, join } from 'path';
 import { commands, FileType, Uri, window, workspace } from 'vscode';
 import exec from '../../util/exec';
 import prefix from '../../util/prefix';
@@ -21,8 +21,8 @@ pro_types.set(PrjType.wxapp, 'wxapp');
 
 export default function create_project() {
 	return commands.registerCommand('mm.shell.create', async () => {
-		window.showInformationMessage('进行此操作之前,请确保git已安装并配置好权限,另外,你需要联系管理员为你分配统一的项目编号及spaceid');
-		const def = await workpath();
+		window.showInformationMessage('进行此操作之前,请确保git已安装并配置好权限,且有一个可用的没有任何提交的git仓库');
+		const def = dirname(await workpath());
 		const picked = await window.showQuickPick([
 			{
 				description: '1.web/h5网站应用',
@@ -52,41 +52,11 @@ export default function create_project() {
 		if (!picked) {
 			return;
 		}
-		const t = await window.showInputBox({
-			placeHolder: '请输入spaceid',
-			validateInput(val) {
-				if (!val.trim()) {
-					return '不能为空';
-				}
-				return null;
-			}
-		});
-		if (!t) {
-			return;
-		}
-		const spaceid = t.trim();
-		if (!spaceid) {
-			return;
-		}
-		// type in mmjson and package.json
-		const p = await window.showInputBox({
-			placeHolder: '请输入项目类型,通常它跟端点类型一致',
-			value: picked.type,
-			validateInput(val) {
-				if (/\s/.test(val)) {
-					return '不能为空且不能包含空格';
-				}
-				return null;
-			}
-		});
-		if (!p) {
-			return;
-		}
 		const desc = await window.showInputBox({
 			placeHolder: '请用简单语言描述一下这个项目',
 			validateInput(val) {
-				if (/\s/.test(val)) {
-					return '不能为空且不能包含空格';
+				if (!val) {
+					return '不能为空';
 				}
 				return null;
 			}
@@ -132,40 +102,34 @@ export default function create_project() {
 		const proj_type = pro_types.get(picked.type);
 		await exec(`git pull git@github.com:mm-tpl/${proj_type}.git`, cwd);
 		await exec(`git remote add origin ${remote}`, cwd);
-		await replace_tpl(cwd, spaceid, p, desc);
 		if (picked.label.includes('mobile')) {
-			await replace_mobile(join(cwd, 'android'), spaceid);
-			await replace_mobile(join(cwd, 'ios'), spaceid);
-			await replace(join(cwd, 'app.json'), [/webtest/g], [spaceid]);
-			await replace(join(cwd, 'src', 'app', 'app.ts'), [/webtest/g], [spaceid]);
+			await replace_mobile(join(cwd, 'android'), no);
+			await replace_mobile(join(cwd, 'ios'), no);
+			await replace(join(cwd, 'app.json'), [/webtest/g], [no]);
+			await replace(join(cwd, 'src', 'app', 'app.ts'), [/webtest/g], [no]);
+			await exec('git add .', cwd);
+			await exec('git commit -m "init project"', cwd);
 		}
-		await exec('git add .', cwd);
-		await exec('git commit -m "init project"', cwd);
 		await exec('git push origin master:master', cwd);
 		await exec('git branch --set-upstream-to=origin/master master', cwd);
 		await commands.executeCommand('vscode.openFolder', uri);
 	});
 }
 
-async function replace_mobile(cwd: string, spaceid: string) {
+async function replace_mobile(cwd: string, no: string) {
 	const files = await workspace.fs.readDirectory(Uri.file(cwd));
 	return Promise.all(files.map(async ([path, type]) => {
 		const fullpath = join(cwd, path);
-		const newpath = join(cwd, path.replace(/webtest/, spaceid));
+		const newpath = join(cwd, path.replace(/webtest/, no));
 		if (path.includes('webtest')) {
 			await workspace.fs.rename(Uri.file(fullpath), Uri.file(newpath));
 		}
 		if (type === FileType.Directory) {
-			await replace_mobile(newpath, spaceid);
+			await replace_mobile(newpath, no);
 		} else if (type === FileType.File) {
-			await replace(newpath, [/webtest/g], [spaceid]);
+			await replace(newpath, [/webtest/g], [no]);
 		}
 	}));
-}
-
-async function replace_tpl(cwd: string, spaceid: string, type: string, desc: string) {
-	await replace(join(cwd, 'package.json'), [/webtest-(web|wxapp|mobile)/, /示例项目/], [`${spaceid}-${type}`, desc]);
-	await replace(join(cwd, 'mm.json'), [/webtest/, /web|wxapp|mobile/], [spaceid, type]);
 }
 
 async function replace(path: string, src: Array<{ [Symbol.replace](src: string, rep: string): string; }>, rep: string[]) {
