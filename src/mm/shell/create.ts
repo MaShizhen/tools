@@ -102,14 +102,15 @@ export default function create_project() {
 		const proj_type = pro_types.get(picked.type);
 		await exec(`git pull git@github.com:mm-tpl/${proj_type}.git`, cwd);
 		await exec(`git remote add origin ${remote}`, cwd);
+		await replace(join(cwd, 'package.json'), [/prj000001/g], [no]);
 		if (picked.label.includes('mobile')) {
 			await replace_mobile(join(cwd, 'android'), no);
 			await replace_mobile(join(cwd, 'ios'), no);
-			await replace(join(cwd, 'app.json'), [/webtest/g], [no]);
-			await replace(join(cwd, 'src', 'app', 'app.ts'), [/webtest/g], [no]);
-			await exec('git add .', cwd);
-			await exec('git commit -m "init project"', cwd);
+			await replace(join(cwd, 'app.json'), [/prj000001/g], [no]);
+			await replace(join(cwd, 'src', 'app', 'app.ts'), [/prj000001/g], [no]);
 		}
+		await exec('git add .', cwd);
+		await exec('git commit -m "init project"', cwd);
 		await exec('git push origin master:master', cwd);
 		await exec('git branch --set-upstream-to=origin/master master', cwd);
 		await commands.executeCommand('vscode.openFolder', uri);
