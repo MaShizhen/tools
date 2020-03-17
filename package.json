@@ -355,7 +355,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://gitee.com/dmm/tools"
+		"url": "https://gitee.com/mmstudio/tools"
 	},
 	"homepage": "http://www.01mm.com/",
 	"author": {
