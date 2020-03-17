@@ -16,7 +16,5 @@
 	"mm.shell.debug": "mmstudio:调试",
 	"mm.shell.build": "mmstudio:打包",
 	"mm.atom.add": "mmstudio: 新增原子操作",
-	"mm.atom.reno": "mmstudio: 原子操作重新编号",
-	"mm.widget.add": "mmstudio: 新增控件",
-	"mm.widget.reno": "mmstudio: 控件重新编号"
+	"mm.widget.add": "mmstudio: 新增控件"
 }

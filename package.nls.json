@@ -16,7 +16,5 @@
 	"mm.shell.debug": "mmstudio: Debug",
 	"mm.shell.build": "mmstudio: Build",
 	"mm.atom.add": "mmstudio: Add new atom",
-	"mm.atom.reno": "mmstudio: Renumber atom",
-	"mm.widget.add": "mmstudio: Add a new widget",
-	"mm.widget.reno": "mmstudio: Renumber widget"
+	"mm.widget.add": "mmstudio: Add a new widget"
 }

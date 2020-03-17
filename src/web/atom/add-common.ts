@@ -31,6 +31,9 @@ export default async function add_common_atom() {
 		value: `git@github.com:mm-atom/${no}.git`,
 		placeHolder: `请提供一个可用的空git仓库地址,如: git@github.com:${user}/${no}.git`
 	});
+	if (!remote) {
+		return;
+	}
 	const uri = Uri.file(cwd);
 	try {
 		// 如果已经存在，则覆盖
@@ -48,7 +51,7 @@ export default async function add_common_atom() {
 	await exec('git pull git@github.com:mm-tpl/atom-web.git', cwd);
 
 	// package.json
-	const pkg = await update_pkg(cwd, no, user);
+	const pkg = await update_pkg(cwd, no, user, remote);
 	// readme.md
 	await update_readme(cwd, pkg.description);
 
@@ -135,13 +138,15 @@ async function update_readme(folder: string, description: string) {
 	}
 }
 
-async function update_pkg(folder: string, no: string, user: string) {
+async function update_pkg(folder: string, no: string, user: string, remote: string) {
 	const path = join(folder, 'package.json');
 	const email = await exec('git config user.email');
 	const content = await readFile(path, 'utf-8');
 	const pkg = JSON.parse(content) as Package;
 	pkg.name = `@mmstudio/${no}`;
 	delete pkg.scripts.up;
+	const repository = remote.replace('git@', 'https://').replace(':', '/').replace('.git', '');	// git@github.com:mm-atom/no.git to https://github.com/mm-atom/no.git
+	pkg.repository.url = repository;
 	const author = pkg.author || {};
 	const u = await window.showInputBox({
 		value: user,

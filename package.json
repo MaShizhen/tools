@@ -87,16 +87,8 @@
 				"title": "%mm.atom.add%"
 			},
 			{
-				"command": "mm.atom.reno",
-				"title": "%mm.atom.reno%"
-			},
-			{
 				"command": "mm.widget.add",
 				"title": "%mm.widget.add%"
-			},
-			{
-				"command": "mm.widget.reno",
-				"title": "%mm.widget.reno%"
 			}
 		],
 		"menus": {
@@ -164,15 +156,7 @@
 					"group": "mm"
 				},
 				{
-					"command": "mm.atom.reno",
-					"group": "mm"
-				},
-				{
 					"command": "mm.widget.add",
-					"group": "mm"
-				},
-				{
-					"command": "mm.widget.reno",
 					"group": "mm"
 				}
 			],
