@@ -102,7 +102,7 @@ export default function create_project() {
 		const proj_type = pro_types.get(picked.type);
 		await exec(`git pull git@github.com:mm-tpl/${proj_type}.git`, cwd);
 		await exec(`git remote add origin ${remote}`, cwd);
-		await replace(join(cwd, 'package.json'), [/\$no/g, /\$desc/], [no, desc]);
+		await replace(join(cwd, 'package.json'), [/prjno/, /\$desc/], [no, desc]);
 		if (picked.label.includes('mobile')) {
 			await replace_mobile(join(cwd, 'android'), no);
 			await replace_mobile(join(cwd, 'ios'), no);

@@ -136,7 +136,7 @@ async function update_pkg(folder: string, no: string, user: string, remote: stri
 	const pkg = JSON.parse(content) as Package;
 	pkg.name = `@mmstudio/${no}`;
 	delete pkg.scripts.up;
-	const repository = remote.replace(':', '/').replace('git@', 'https://').replace('.git', '');	// git@github.com:mm-atom/no.git to https://github.com/mm-atom/no.git
+	const repository = remote.replace(':', '/').replace('git@', 'https://');	// git@github.com:mm-atom/no.git to https://github.com/mm-atom/no.git
 	pkg.repository.url = repository;
 	const author = pkg.author || {};
 	const u = await window.showInputBox({
