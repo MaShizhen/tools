@@ -1,11 +1,13 @@
 import { join, sep } from 'path';
-import { FileType, Range, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { FileType, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import prefix from '../../util/prefix';
 import root_path from '../../util/root';
+import { createfile } from '../../util/fs';
 
 export default async function addrouter(name: 'routers' | 'filters') {
 	const rootPath = await root_path();
-	const file = Uri.file(join(rootPath, 'mm.json'));
+	const config_path = join(rootPath, 'mm.json');
+	const file = Uri.file(config_path);
 	const doc = await workspace.openTextDocument(file);
 	const raw = doc.getText();
 	const conf = JSON.parse(raw);
@@ -45,8 +47,9 @@ export default async function addrouter(name: 'routers' | 'filters') {
 	});
 	conf[name] = routers;
 	const we = new WorkspaceEdit();
-	we.replace(file, new Range(0, 0, doc.lineCount, Infinity), JSON.stringify(conf, null, '\t'));
+	createfile(we, config_path, JSON.stringify(conf, null, '\t'));
 	await workspace.applyEdit(we);
+	await workspace.saveAll();
 	await window.showTextDocument(file);
 }
 

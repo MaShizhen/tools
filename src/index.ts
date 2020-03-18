@@ -16,6 +16,7 @@ import list_services from './nodejs/list-services';
 import addatom from './mm/add-atom';
 import addwidget from './mm/add-widget';
 import addwebfilter from './mm/add-web-filter';
+import addschedule from './mm/add-schedule';
 
 export function activate(context: ExtensionContext) {
 	context.subscriptions.push(
@@ -35,6 +36,7 @@ export function activate(context: ExtensionContext) {
 		create_proj(),
 		addatom(),
 		addwidget(),
-		addwebfilter()
+		addwebfilter(),
+		addschedule()
 	);
 }

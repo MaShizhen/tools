@@ -59,6 +59,10 @@
 				"title": "%mm.service.filter%"
 			},
 			{
+				"command": "mm.service.schedule",
+				"title": "%mm.service.schedule%"
+			},
+			{
 				"command": "mm.tpl.atom",
 				"title": "%mm.tpl.atom%"
 			},
@@ -121,6 +125,10 @@
 					"group": "mm"
 				},
 				{
+					"command": "mm.service.schedule",
+					"group": "mm"
+				},
+				{
 					"command": "mm.tpl.atom",
 					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/ || resourceFilename == index.ts",
 					"group": "mm"
@@ -177,6 +185,10 @@
 				},
 				{
 					"command": "mm.service.filter",
+					"group": "mm"
+				},
+				{
+					"command": "mm.service.schedule",
 					"group": "mm"
 				},
 				{
@@ -284,6 +296,10 @@
 			{
 				"command": "mm.service.filter",
 				"key": "alt+m f"
+			},
+			{
+				"command": "mm.service.schedule",
+				"key": "alt+m s"
 			},
 			{
 				"command": "mm.presentation.add",

@@ -9,6 +9,7 @@
 	"mm.service.add": "mmstudio:添加服务",
 	"mm.service.router": "mmstudio:添加路由",
 	"mm.service.filter": "mmstudio:添加前置路由过滤器",
+	"mm.service.schedule": "mmstudio:添加定时任务",
 	"mm.tpl.atom": "mmstudio:插入原子操作",
 	"mm.tpl.tpl": "mmstudio:插入代码模板",
 	"mm.tpl.widget": "mmstudio:插入控件",
