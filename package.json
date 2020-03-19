@@ -357,11 +357,11 @@
 		"type": "git",
 		"url": "https://gitee.com/mmstudio/tools"
 	},
-	"homepage": "http://www.01mm.com/",
+	"homepage": "https://mmstudio.gitee.io/",
 	"author": {
 		"name": "taoqf",
 		"email": "tao_qiufeng@126.com",
-		"url": "http://www.01mm.com/"
+		"url": "https://mmstudio.gitee.io/"
 	},
 	"license": "MIT",
 	"devDependencies": {
