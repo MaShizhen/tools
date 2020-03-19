@@ -10,12 +10,12 @@ import { createfile } from '../../util/fs';
 import root from '../../util/root';
 
 const snippets = new Map<PrjType | 'nodejs', { remote: string; snippets?: { all: Map<string, IAtom>; catagories: Map<string, IAtom[]> } }>();
-snippets.set('nodejs', { remote: 'https://mm-edu.gitee.io/templates/nodejs.json' });
+snippets.set('nodejs', { remote: 'https://mmstudio.gitee.io/templates/nodejs.json' });
 
-snippets.set(PrjType.web, { remote: 'https://mm-edu.gitee.io/templates/web.json' });
-snippets.set(PrjType.wxapp, { remote: 'https://mm-edu.gitee.io/templates/wxapp.json' });
-snippets.set(PrjType.desktop, { remote: 'https://mm-edu.gitee.io/templates/desktop.json' });
-snippets.set(PrjType.mobile, { remote: 'https://mm-edu.gitee.io/templates/mobile.json' });
+snippets.set(PrjType.web, { remote: 'https://mmstudio.gitee.io/templates/web.json' });
+snippets.set(PrjType.wxapp, { remote: 'https://mmstudio.gitee.io/templates/wxapp.json' });
+snippets.set(PrjType.desktop, { remote: 'https://mmstudio.gitee.io/templates/desktop.json' });
+snippets.set(PrjType.mobile, { remote: 'https://mmstudio.gitee.io/templates/mobile.json' });
 
 interface IAtomBase {
 	name: string;
@@ -134,7 +134,7 @@ async function add_snippet(type: string, atom: IAtomSingle | IAtomMultiple, text
 }
 
 async function add_snippet_multiple(editor: TextEditor, type: string, atom: IAtomMultiple, isrelative: boolean) {
-	const base_url = `https://mm-edu.gitee.io/templates/${type}/${atom.no}`;
+	const base_url = `https://mmstudio.gitee.io/templates/${type}/${atom.no}`;
 	const contexts = atom.contexts || {};
 	const dir = isrelative ? parse(editor.document.uri.fsPath).dir : await root();
 	const we = new WorkspaceEdit();
@@ -154,7 +154,7 @@ async function add_snippet_multiple(editor: TextEditor, type: string, atom: IAto
 }
 
 async function add_snippet_single(type: string, atom: IAtomSingle, textEditor: TextEditor) {
-	const url = `https://mm-edu.gitee.io/templates/${type}/${atom.no}.snippet`;
+	const url = `https://mmstudio.gitee.io/templates/${type}/${atom.no}.snippet`;
 	let snippet = atom.context;
 	if (snippet === undefined || snippet === null) {
 		snippet = atom.context = await get_text(url);

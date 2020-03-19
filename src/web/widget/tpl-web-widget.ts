@@ -28,7 +28,7 @@ const tpl = \`
 </style>
 
 <div class="$\{no}">
-	<div id="n01">Hello <a href="https://mm-edu.gitee.io/">mmstudio</a></div>
+	<div id="n01">Hello <a href="https://mmstudio.gitee.io/">mmstudio</a></div>
 </div>
 \`;
 
