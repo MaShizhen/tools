@@ -106,7 +106,7 @@ export default function create_project() {
 		if (picked.label.includes('mobile')) {
 			await replace_mobile(join(cwd, 'android'), no);
 			await replace_mobile(join(cwd, 'ios'), no);
-			await replace(join(cwd, 'app.json'), [/\$no/g], [no]);
+			await replace(join(cwd, 'app.json'), [/\$no/g, /\$desc/], [no, desc]);
 			await replace(join(cwd, 'src', 'app', 'app.ts'), [/\$no/g], [no]);
 		}
 		await exec('git add .', cwd);
@@ -121,14 +121,14 @@ async function replace_mobile(cwd: string, no: string) {
 	const files = await workspace.fs.readDirectory(Uri.file(cwd));
 	return Promise.all(files.map(async ([path, type]) => {
 		const fullpath = join(cwd, path);
-		const newpath = join(cwd, path.replace(/webtest/, no));
+		const newpath = join(cwd, path.replace(/mmstudio/, no));
 		if (path.includes('webtest')) {
 			await workspace.fs.rename(Uri.file(fullpath), Uri.file(newpath));
 		}
 		if (type === FileType.Directory) {
 			await replace_mobile(newpath, no);
 		} else if (type === FileType.File) {
-			await replace(newpath, [/webtest/g], [no]);
+			await replace(newpath, [/mmstudio/g], [no]);
 		}
 	}));
 }

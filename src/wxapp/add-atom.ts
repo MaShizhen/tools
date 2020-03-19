@@ -9,7 +9,7 @@ import tplatomusage from '../util/tpl-atom-useage';
 
 const { readFile, writeFile } = promises;
 
-export default async function common() {
+export default async function addatomwx() {
 	const def = dirname(await workpath());
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
@@ -42,6 +42,7 @@ export default async function common() {
 		// 目录不存在
 		console.error(e);
 	}
+	window.showInformationMessage('正在初始化项目，请耐心等待');
 	// 创建目录
 	await workspace.fs.createDirectory(uri);
 	// 进入目录并且拉取代码

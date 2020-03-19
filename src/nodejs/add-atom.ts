@@ -1,16 +1,15 @@
 import { basename, dirname, join } from 'path';
 import { promises } from 'fs';
 import { commands, Uri, window, workspace } from 'vscode';
-import workpath from '../../util/workpath';
-import generate from '../../util/generate';
-import exec from '../../util/exec';
-import { Package } from '../../interfaces';
-import tplatomusage from '../../util/tpl-atom-useage';
-import tplatom from '../../util/tpl-atom';
+import workpath from '../util/workpath';
+import generate from '../util/generate';
+import exec from '../util/exec';
+import { Package } from '../interfaces';
+import tplatomusage from '../util/tpl-atom-useage';
 
 const { readFile, writeFile } = promises;
 
-export default async function addatomweb() {
+export default async function addatomnodejs() {
 	const def = dirname(await workpath());
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
@@ -25,7 +24,7 @@ export default async function addatomweb() {
 	const user = await exec('git config user.name');
 
 	const folder = container[0];
-	const cwd = await generate(folder.fsPath, 'aw', '', 6);
+	const cwd = await generate(folder.fsPath, 'an', '', 6);
 	const no = basename(cwd);
 	const remote = await window.showInputBox({
 		value: `git@github.com:mm-atom/${no}.git`,
@@ -49,15 +48,12 @@ export default async function addatomweb() {
 	// 进入目录并且拉取代码
 	await exec('git init', cwd);
 	// 从码云拉取代码模板
-	await exec('git pull git@github.com:mm-tpl/atom-web.git', cwd);
+	await exec('git pull git@github.com:mm-tpl/atom-nodejs.git', cwd);
 
 	// package.json
 	const pkg = await update_pkg(cwd, no, user, remote);
 	// readme.md
 	await update_readme(cwd, pkg.description);
-
-	// amd.json
-	await update_amd(cwd, no);
 
 	// use.snippet
 	const n = await update_usage(cwd, pkg.description, no);
@@ -76,23 +72,18 @@ export default async function addatomweb() {
 	await commands.executeCommand('vscode.openFolder', uri);
 }
 
-async function update_amd(folder: string, no: string) {
-	const path = join(folder, 'amd.json');
-
-	const content = `[
-	{
-		"name": "@mmstudio/${no}",
-		"location": "@mmstudio/${no}/dist",
-		"main": "main"
-	}
-]
-`;
-	await writeFile(path, content);
-}
-
 async function update_ts(folder: string, no: string, n: number) {
-	const content = tplatom(no, n);
 	const path = join(folder, 'src', 'index.ts');
+	const arr = new Array<number>(n).fill(0).map((_it, i) => {
+		return i + 1;
+	});
+	const ps = arr.map((i) => {
+		return `param${i}: string`;
+	});
+	const content = `
+export default function ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')}) {
+}
+`;
 	await writeFile(path, content);
 }
 

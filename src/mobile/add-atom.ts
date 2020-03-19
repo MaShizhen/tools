@@ -1,15 +1,15 @@
 import { basename, dirname, join } from 'path';
 import { promises } from 'fs';
 import { commands, Uri, window, workspace } from 'vscode';
-import workpath from '../../util/workpath';
-import generate from '../../util/generate';
-import exec from '../../util/exec';
-import { Package } from '../../interfaces';
-import tplatomusage from '../../util/tpl-atom-useage';
+import workpath from '../util/workpath';
+import generate from '../util/generate';
+import exec from '../util/exec';
+import { Package } from '../interfaces';
+import tplatomusage from '../util/tpl-atom-useage';
 
 const { readFile, writeFile } = promises;
 
-export default async function common() {
+export default async function addatomwx() {
 	const def = dirname(await workpath());
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
@@ -24,7 +24,7 @@ export default async function common() {
 	const user = await exec('git config user.name');
 
 	const folder = container[0];
-	const cwd = await generate(folder.fsPath, 'an', '', 6);
+	const cwd = await generate(folder.fsPath, 'am', '', 6);
 	const no = basename(cwd);
 	const remote = await window.showInputBox({
 		value: `git@github.com:mm-atom/${no}.git`,
@@ -42,12 +42,13 @@ export default async function common() {
 		// 目录不存在
 		console.error(e);
 	}
+	window.showInformationMessage('正在初始化项目，请耐心等待');
 	// 创建目录
 	await workspace.fs.createDirectory(uri);
 	// 进入目录并且拉取代码
 	await exec('git init', cwd);
 	// 从码云拉取代码模板
-	await exec('git pull git@github.com:mm-tpl/atom-nodejs.git', cwd);
+	await exec('git pull git@github.com:mm-tpl/atom-mobile.git', cwd);
 
 	// package.json
 	const pkg = await update_pkg(cwd, no, user, remote);

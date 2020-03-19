@@ -1,8 +1,9 @@
 import { basename, join } from 'path';
 import { commands, QuickPickItem, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import nodejs from '../nodejs/atom/add-common';
+import nodejs from '../nodejs/add-atom';
 import web from '../web/atom/add-common';
-import wxapp from '../wxapp/add-common';
+import wxapp from '../wxapp/add-atom';
+import mobile from '../mobile/add-atom';
 import root from '../util/root';
 import generate from '../util/generate';
 import tplatomusage from '../util/tpl-atom-useage';
@@ -14,6 +15,7 @@ const ap = new Map<AtomType, () => Promise<unknown>>();
 ap.set(AtomType.node, nodejs);
 ap.set(AtomType.web, web);
 ap.set(AtomType.wxapp, wxapp);
+ap.set(AtomType.mobile, mobile);
 
 export default function add_atom() {
 	return commands.registerCommand('mm.atom.add', async () => {

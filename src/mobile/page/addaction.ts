@@ -49,9 +49,9 @@ async function update_p(path: string) {
 async function create_a(we: WorkspaceEdit, p_path: string) {
 	const path = await generate(p_path, 'a', '\\.ts', 3);
 	const a = basename(path);
-	const tpl = `import am0 from '@mmstudio/am000000';
+	const tpl = `import am1 from '@mmstudio/am000001';
 
-export default function ${a}(mm: am0) {
+export default function ${a}(mm: am1) {
 }
 `;
 	const uri = Uri.file(`${path}.ts`);
