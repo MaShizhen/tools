@@ -2,6 +2,7 @@ import { join, sep } from 'path';
 import { commands, FileType, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import root from '../util/root';
 import { createfile } from '../util/fs';
+import pickoption from '../util/pickoption';
 
 export default function addschedule() {
 	return commands.registerCommand('mm.service.schedule', async () => {
@@ -50,9 +51,8 @@ async function get_all_service(root: string) {
 	const src = join(root, 'src');
 	const ss = await get_all_s(src, src);
 	return window.showQuickPick(ss, {
-		placeHolder: '请选择服务',
-		matchOnDescription: true,
-		matchOnDetail: true
+		...pickoption,
+		placeHolder: '请选择服务'
 	});
 }
 

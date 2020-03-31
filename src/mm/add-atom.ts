@@ -10,6 +10,7 @@ import tplatomusage from '../util/tpl-atom-useage';
 import { AtomType } from '../util/atom-type';
 import tplatom from '../util/tpl-atom';
 import { createfile } from '../util/fs';
+import pickoption from '../util/pickoption';
 
 const ap = new Map<AtomType, () => Promise<unknown>>();
 ap.set(AtomType.node, nodejs);
@@ -20,9 +21,8 @@ ap.set(AtomType.mobile, mobile);
 export default function add_atom() {
 	return commands.registerCommand('mm.atom.add', async () => {
 		const p1 = await window.showQuickPick(get_types(), {
-			placeHolder: '请选择项目端点类型',
-			matchOnDescription: true,
-			matchOnDetail: true
+			...pickoption,
+			placeHolder: '请选择项目端点类型'
 		});
 		if (!p1) {
 			return;
@@ -39,9 +39,8 @@ export default function add_atom() {
 				label: '2.通用原子操作',
 				prj: false
 			}], {
-			placeHolder: '请选择原子操作类型',
-			matchOnDescription: true,
-			matchOnDetail: true
+			...pickoption,
+			placeHolder: '请选择原子操作类型'
 		});
 		if (!p2) {
 			return;

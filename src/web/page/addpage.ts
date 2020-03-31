@@ -3,6 +3,7 @@ import { FileType, Uri, window, workspace } from 'vscode';
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from '../../util/fs';
 import generate from '../../util/generate';
 import { NO_MODIFY } from '../../util/blocks';
+import pickoption from '../../util/pickoption';
 
 export default async function add(rootPath: string) {
 	if (!await existsSync(join(rootPath, 'pages'))) {
@@ -31,10 +32,8 @@ export default async function add(rootPath: string) {
 		pages.unshift(value);
 	}
 	const page = await window.showQuickPick(pages, {
-		canPickMany: false,
-		placeHolder: '请输入页面名称',
-		matchOnDescription: true,
-		matchOnDetail: true
+		...pickoption,
+		placeHolder: '请输入页面名称'
 	});
 	if (!page) {
 		return;

@@ -1,8 +1,8 @@
 import { basename, dirname, join } from 'path';
 import { TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { createfile, existsSync, readdirSync } from '../../util/fs';
-import generate from '../../util/generate';
-import replace from '../../util/replace';
+import { createfile, existsSync, readdirSync } from '../util/fs';
+import generate from '../util/generate';
+import replace from '../util/replace';
 
 export default async function add(editor: TextEditor) {
 	const path = editor.document.fileName;

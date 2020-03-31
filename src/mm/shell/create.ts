@@ -4,6 +4,7 @@ import exec from '../../util/exec';
 import prefix from '../../util/prefix';
 import workpath from '../../util/workpath';
 import { PrjType } from '../../util/prj-type';
+import pickoption from '../../util/pickoption';
 
 async function exists(uri: Uri) {
 	try {
@@ -45,9 +46,8 @@ export default function create_project() {
 				type: PrjType.desktop
 			}
 		], {
-			placeHolder: '请选择项目端点类型',
-			matchOnDescription: true,
-			matchOnDetail: true
+			...pickoption,
+			placeHolder: '请选择项目端点类型'
 		});
 		if (!picked) {
 			return;
@@ -106,8 +106,8 @@ export default function create_project() {
 		if (picked.label.includes('mobile')) {
 			await replace_mobile(join(cwd, 'android'), no);
 			await replace_mobile(join(cwd, 'ios'), no);
-			await replace(join(cwd, 'app.json'), [/\$no/g, /\$desc/], [no, desc]);
-			await replace(join(cwd, 'src', 'app', 'app.ts'), [/\$no/g], [no]);
+			await replace(join(cwd, 'app.json'), [/mmstudio/, /\$desc/], [no, desc]);
+			await replace(join(cwd, 'index.js'), [/mmstudio/, /\$desc/], [no, desc]);
 		}
 		await exec('git add .', cwd);
 		await exec('git commit -m "init project"', cwd);

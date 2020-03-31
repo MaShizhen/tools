@@ -7,6 +7,7 @@ import { WidgetType } from '../util/widget-type';
 import tplwidget from '../web/widget/tpl-web-widget';
 import tplwidgetusage from '../web/widget/tpl-web-widget-useage';
 import { createfile } from '../util/fs';
+import pickoption from '../util/pickoption';
 
 const pw = new Map<WidgetType, () => Promise<unknown>>();
 pw.set(WidgetType.web, web);
@@ -29,9 +30,8 @@ export default function add() {
 				label: '2.通用控件',
 				prj: false
 			}], {
-			placeHolder: '请选择原子操作类型',
-			matchOnDescription: true,
-			matchOnDetail: true
+			...pickoption,
+			placeHolder: '请选择原子操作类型'
 		});
 		if (!p2) {
 			return;
@@ -91,9 +91,8 @@ async function get_type() {
 		}
 	];
 	const picked = await window.showQuickPick(items, {
-		placeHolder: '请选择项目端点类型',
-		matchOnDescription: true,
-		matchOnDetail: true
+		...pickoption,
+		placeHolder: '请选择项目端点类型'
 	});
 	return picked && picked.type;
 }

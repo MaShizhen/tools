@@ -6,6 +6,7 @@ import prj_type, { PrjType } from '../../util/prj-type';
 import install from '../../util/install';
 import atom_insert_snippet from '../../util/atom-insert-snippet';
 import root from '../../util/root';
+import pickoption from '../../util/pickoption';
 
 const snippets = new Map<PrjType | 'nodejs-s' | 'nodejs-na', { remote: string; snippets?: { all: Map<string, IAtom>; catagories: Map<string, IAtom[]> } }>();
 
@@ -83,10 +84,8 @@ async function insert_atom_snippets(textEditor: TextEditor, all_remote: Map<stri
 	}));
 
 	const picked = await window.showQuickPick(selects, {
-		canPickMany: false,
-		placeHolder: '选择一个分类或直接输入原子操作编号并回车',
-		matchOnDescription: true,
-		matchOnDetail: true
+		...pickoption,
+		placeHolder: '选择一个分类或直接输入原子操作编号并回车'
 	});
 	if (!picked) {
 		return;
@@ -104,10 +103,8 @@ async function insert_atom_snippets(textEditor: TextEditor, all_remote: Map<stri
 		};
 		return item;
 	}), {
-		canPickMany: false,
-		placeHolder: '选择一个原子操作编号并回车',
-		matchOnDescription: true,
-		matchOnDetail: true
+		...pickoption,
+		placeHolder: '选择一个原子操作编号并回车'
 	});
 	if (!selected_atom) {
 		return;

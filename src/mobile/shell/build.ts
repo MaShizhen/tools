@@ -3,6 +3,7 @@ import { join } from 'path';
 import { window, workspace } from 'vscode';
 import run from '../../util/terminal';
 import isios from '../util/isios';
+import pickoption from '../../util/pickoption';
 
 export default async function build() {
 	const select = await window.showQuickPick([
@@ -17,9 +18,8 @@ export default async function build() {
 			picked: false
 		}
 	], {
-		placeHolder: '请选择打包类型',
-		matchOnDescription: true,
-		matchOnDetail: true
+		...pickoption,
+		placeHolder: '请选择打包类型'
 	});
 	if (!select) {
 		return;

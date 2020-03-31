@@ -1,14 +1,14 @@
 import { commands } from 'vscode';
 import desktop from '../desktop/component/addc';
-import mobile from '../mobile/page/addpage';
+import mobile from '../mobile/page/add';
 import root_path from '../util/root';
 import web from '../web/component/addc';
 import prj_type, { PrjType } from '../util/prj-type';
 import wxapp from '../wxapp/page/addpage';
 
-export default function add() {
+export default function addcomponent() {
 	return commands.registerTextEditorCommand('mm.component.add', async (editor) => {
-		const rootPath = await root_path();
+		const rootPath = await root_path(editor);
 		const type = prj_type();
 		switch (type) {
 			case PrjType.web:

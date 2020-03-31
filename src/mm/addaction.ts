@@ -2,7 +2,7 @@ import { parse } from 'path';
 import { commands, window } from 'vscode';
 import desktop_c from '../desktop/component/addaction';
 import desktop_p from '../desktop/page/addaction';
-import mobile from '../mobile/page/addaction';
+import mobile from '../mobile/addaction';
 import web_c_a from '../web/component/addaction';
 import web_c_na from '../web/component/addna';
 import web_p_a from '../web/page/addaction';
@@ -11,7 +11,7 @@ import wxapp from '../wxapp/page/addaction';
 import prj_type, { PrjType } from '../util/prj-type';
 import reg_in_comment from '../util/reg-in-component';
 
-export default function add() {
+export default function addaction() {
 	return commands.registerTextEditorCommand('mm.action.add', async (editor) => {
 		const type = prj_type();
 		const path = editor.document.fileName;

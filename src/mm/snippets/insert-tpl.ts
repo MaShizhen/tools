@@ -8,6 +8,7 @@ import exec from '../../util/exec';
 import prj_type, { PrjType } from '../../util/prj-type';
 import { createfile } from '../../util/fs';
 import root from '../../util/root';
+import pickoption from '../../util/pickoption';
 
 const snippets = new Map<PrjType | 'nodejs', { remote: string; snippets?: { all: Map<string, IAtom>; catagories: Map<string, IAtom[]> } }>();
 snippets.set('nodejs', { remote: 'https://mmstudio.gitee.io/templates/nodejs.json' });
@@ -88,9 +89,7 @@ export default function add() {
 			return item;
 		}));
 		const picked = await window.showQuickPick(selects, {
-			canPickMany: false,
-			matchOnDescription: true,
-			matchOnDetail: true,
+			...pickoption,
 			placeHolder: '选择模板'
 		});
 		if (!picked) {
@@ -107,11 +106,7 @@ export default function add() {
 				label: it.no
 			};
 			return item;
-		}), {
-			canPickMany: false,
-			matchOnDescription: true,
-			matchOnDetail: true
-		});
+		}), pickoption);
 		if (!selected_atom) {
 			return;
 		}

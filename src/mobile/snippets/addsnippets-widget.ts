@@ -3,6 +3,7 @@ import { QuickPickItem, SnippetString, TextEditor, Uri, window, workspace } from
 import { IAtom } from '../../interfaces';
 import install from '../../util/install';
 import root_path from '../../util/root';
+import pickoption from '../../util/pickoption';
 
 export default async function add(textEditor: TextEditor, all: Map<string, IAtom>, catagories: Map<string, IAtom[]>) {
 	const selects = Array.from(catagories.keys()).map((catagory) => {
@@ -19,9 +20,7 @@ export default async function add(textEditor: TextEditor, all: Map<string, IAtom
 	}));
 
 	const picked = await window.showQuickPick(selects, {
-		canPickMany: false,
-		matchOnDescription: true,
-		matchOnDetail: true,
+		...pickoption,
 		placeHolder: '选择一个分类或直接输入控件编号并回车'
 	});
 	if (!picked) {
@@ -41,9 +40,7 @@ export default async function add(textEditor: TextEditor, all: Map<string, IAtom
 		};
 		return item;
 	}), {
-		canPickMany: false,
-		matchOnDescription: true,
-		matchOnDetail: true,
+		...pickoption,
 		placeHolder: '选择一个控件编号并回车'
 	});
 	if (!selected_atom) {

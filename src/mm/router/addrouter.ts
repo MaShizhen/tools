@@ -3,6 +3,7 @@ import { FileType, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import prefix from '../../util/prefix';
 import root_path from '../../util/root';
 import { createfile } from '../../util/fs';
+import pickoption from '../../util/pickoption';
 
 export default async function addrouter(name: 'routers' | 'filters') {
 	const rootPath = await root_path();
@@ -57,9 +58,8 @@ async function get_all_service(root: string) {
 	const src = join(root, 'src');
 	const ss = await get_all_s(src, src);
 	return window.showQuickPick(ss, {
-		placeHolder: '请选择服务',
-		matchOnDescription: true,
-		matchOnDetail: true
+		...pickoption,
+		placeHolder: '请选择服务'
 	});
 }
 

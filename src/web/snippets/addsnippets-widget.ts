@@ -3,6 +3,7 @@ import { FileType, Position, QuickPickItem, SnippetString, TextEditor, Uri, wind
 import { IAtom } from '../../interfaces';
 import install from '../../util/install';
 import root from '../../util/root';
+import pickoption from '../../util/pickoption';
 
 export default async function insert_widget_snippet(textEditor: TextEditor, all_remote: Map<string, IAtom>, catagories_remote: Map<string, IAtom[]>) {
 	const root_path = await root(textEditor);
@@ -33,9 +34,7 @@ export default async function insert_widget_snippet(textEditor: TextEditor, all_
 	}));
 
 	const picked = await window.showQuickPick(selects, {
-		canPickMany: false,
-		matchOnDescription: true,
-		matchOnDetail: true,
+		...pickoption,
 		placeHolder: '选择一个分类或直接输入控件编号并回车'
 	});
 	if (!picked) {
@@ -55,10 +54,8 @@ export default async function insert_widget_snippet(textEditor: TextEditor, all_
 		};
 		return item;
 	}), {
-		canPickMany: false,
-		placeHolder: '选择一个控件编号并回车',
-		matchOnDescription: true,
-		matchOnDetail: true
+		...pickoption,
+		placeHolder: '选择一个控件编号并回车'
 	});
 	if (!selected_atom) {
 		return;

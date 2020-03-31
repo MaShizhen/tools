@@ -144,7 +144,7 @@
 				},
 				{
 					"command": "mm.component.add",
-					"when": "resourceFilename =~ /html\\.ts/",
+					"when": "(config.mm.proj.type == web/h5 && resourceFilename =~ /html\\.ts/ && editorTextFocus) || config.mm.proj.type != web/h5",
 					"group": "mm"
 				},
 				{
@@ -276,7 +276,7 @@
 			},
 			{
 				"command": "mm.component.add",
-				"when": "resourceFilename =~ /html\\.ts/",
+				"when": "(config.mm.proj.type == web/h5 && resourceFilename =~ /html\\.ts/ && editorTextFocus) || config.mm.proj.type != web/h5",
 				"key": "alt+c"
 			},
 			{

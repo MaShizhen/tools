@@ -3,7 +3,7 @@ import desktop from '../desktop/page/addpage';
 import root_path from '../util/root';
 import web from '../web/page/addpage';
 import wxapp from '../wxapp/page/addpage';
-import mobile from '../mobile/page/addpage';
+import mobile from '../mobile/page/add';
 import prj_type, { PrjType } from '../util/prj-type';
 
 export default function add() {
