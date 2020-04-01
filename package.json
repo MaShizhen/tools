@@ -355,7 +355,7 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "https://gitee.com/mmstudio/tools"
+		"url": "https://github.com/mm-core/tools"
 	},
 	"homepage": "https://mmstudio.gitee.io/",
 	"author": {

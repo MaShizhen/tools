@@ -1,29 +1,28 @@
 import { basename, join } from 'path';
-import { Uri, window, workspace } from 'vscode';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from '../../util/fs';
+import { Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { createfile, readFileSync, writeFileSync } from '../../util/fs';
 import generate from '../../util/generate';
 
-export default async function add(rootPath: string) {
+export default async function addwxapppage(rootPath: string) {
 	const folder = join(rootPath, 'src');
 
-	if (!await existsSync(folder)) {
-		await mkdirSync(folder);
-	}
-
 	const p_path = await generate(folder, 'pg', '', 3);
+	const we = new WorkspaceEdit();
 	// 创建页面逻辑层目录
-	await mkdirSync(p_path);
-	await create_a(p_path);		// 创建事件
-	await create_s(p_path);		// 创建响应
-	await create_p(p_path);		// 创建page
+	create_a(we, p_path);		// 创建事件
+	create_s(we, p_path);		// 创建响应
+	create_p(we, p_path);		// 创建page
 
 	// 创建页面原生目录
 
 	const name = p_path.replace(/.*[/\\]/, '');
 
-	await create_json(p_path, name);	// 创建page.json
-	await create_wxml(p_path, name);	// 创建page.wxml
-	await create_wxss(p_path, name);	// 创建page.wxss
+	create_json(we, p_path, name);	// 创建page.json
+	create_wxml(we, p_path, name);	// 创建page.wxml
+	create_wxss(we, p_path, name);	// 创建page.wxss
+
+	await workspace.applyEdit(we);
+	await workspace.saveAll();
 
 	// 修改app.json和app-debug.json
 	await updata_app_json(folder, name);
@@ -31,32 +30,30 @@ export default async function add(rootPath: string) {
 
 	window.setStatusBarMessage('成功添加页面文件');
 	window.showTextDocument(Uri.file(join(p_path, 'p.ts')));
-
-	workspace.saveAll();
 }
 
-async function create_a(_path: string) {
-	const path = await generate(_path, 'a', '\\.ts', 3);
-	const a = basename(path);
-	const tpl = `import awx8 from '@mmstudio/awx000008';
+function create_a(we: WorkspaceEdit, dir: string) {
+	const path = join(dir, 'a001.ts');
+	const a = basename(path, '.ts');
+	const tpl = `import awx2 from '@mmstudio/awx000002';
 
-export default function ${a}(mm: awx8) {
+export default function ${a}(mm: awx2) {
 	// todo
 }
 `;
-	return writeFileSync(`${path}.ts`, tpl);
+	return createfile(we, path, tpl);
 }
 
-function create_s(_path: string) {
+function create_s(we: WorkspaceEdit, dir: string) {
 	const tpl = `export default {
 	'mm-events-init': 'a001'
 };
 `;
-	return writeFileSync(join(_path, 's.ts'), tpl);
+	return createfile(we, join(dir, 's.ts'), tpl);
 }
 
-function create_p(_path: string) {
-	const tpl = `import init from '@mmstudio/wxapp/page';
+function create_p(we: WorkspaceEdit, dir: string) {
+	const tpl = `import { page } from '@mmstudio/wxapp';
 
 import s from './s';
 
@@ -71,31 +68,31 @@ import a001 from './a001';
 	const actions = { a001 };
 	/// MM ACTIONS END
 
-	init(s, actions);
+	page(s, actions);
 })();
 `;
-	return writeFileSync(join(_path, 'p.ts'), tpl);
+	return createfile(we, join(dir, 'p.ts'), tpl);
 }
 
-function create_json(_path: string, name: string) {
+function create_json(we: WorkspaceEdit, dir: string, name: string) {
 	const tpl = '{}';
-	return writeFileSync(join(_path, `${name}.json`), tpl);
+	return createfile(we, join(dir, `${name}.json`), tpl);
 }
 
-function create_wxml(_path: string, name: string) {
+function create_wxml(we: WorkspaceEdit, dir: string, name: string) {
 	const tpl = `<!--pages/${name}.wxml-->
 <text>pages/${name}.wxml</text>
 `;
-	return writeFileSync(join(_path, `${name}.wxml`), tpl);
+	return createfile(we, join(dir, `${name}.wxml`), tpl);
 }
 
-function create_wxss(_path: string, name: string) {
+function create_wxss(we: WorkspaceEdit, dir: string, name: string) {
 	const tpl = `/* pages/${name}.wxss */`;
-	return writeFileSync(join(_path, `${name}.wxss`), tpl);
+	return createfile(we, join(dir, `${name}.wxss`), tpl);
 }
 
-async function updata_app_json(_folder: string, name: string) {
-	const app_json_path = join(_folder, 'app.json');
+async function updata_app_json(dir: string, name: string) {
+	const app_json_path = join(dir, 'app.json');
 	const txt = await readFileSync(app_json_path);
 	const obj = JSON.parse(txt) as {
 		pages: string[]
