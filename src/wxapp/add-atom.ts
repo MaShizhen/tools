@@ -24,14 +24,19 @@ export default async function addatomwx() {
 	const user = await exec('git config user.name');
 
 	const folder = container[0];
-	const cwd = await generate(folder.fsPath, 'awx', '', 6);
-	const no = basename(cwd);
+	let cwd = await generate(folder.fsPath, 'awx', '', 6);
+	let no = basename(cwd);
 	const remote = await window.showInputBox({
 		value: `git@github.com:mm-atom/${no}.git`,
 		placeHolder: `请提供一个可用的空git仓库地址,如: git@github.com:${user}/${no}.git`
 	});
 	if (!remote) {
 		return;
+	}
+	const m = /\/(\w+\d+)(\.git)?$/.exec(remote);
+	if (m) {
+		no = m[1];
+		cwd = join(folder.fsPath, no);
 	}
 	const uri = Uri.file(cwd);
 	try {
@@ -63,10 +68,8 @@ export default async function addatomwx() {
 	}
 	await exec(`git commit -am "init atom ${no}"`, cwd);
 	// 推送代码到远程仓库
-	if (remote) {
-		await exec(`git remote add origin ${remote}`, cwd);
-		await exec('git push -u origin master', cwd);
-	}
+	await exec(`git remote add origin ${remote}`, cwd);
+	await exec('git push -u origin master', cwd);
 	window.showInformationMessage('原子操作初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
 	await exec('yarn', cwd);
 	await commands.executeCommand('vscode.openFolder', uri);
@@ -167,7 +170,6 @@ async function update_pkg(folder: string, no: string, user: string, remote: stri
 		author.email = e;
 	}
 	const d = await window.showInputBox({
-		value: pkg.description,
 		prompt: '原子操作简要描述,请尽量控制在8个字以内',
 		validateInput(v) {
 			if (!v) {
