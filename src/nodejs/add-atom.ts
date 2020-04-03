@@ -118,19 +118,7 @@ async function update_usage(folder: string, description: string, no: string) {
 
 async function update_readme(folder: string, description: string) {
 	const path = join(folder, 'readme.md');
-	const d = await window.showInputBox({
-		value: description,
-		prompt: '原子操作描述，可以详细一些，后期请修改readme.md文件',
-		validateInput(v) {
-			if (!v) {
-				return '不能为空';
-			}
-			return null;
-		}
-	});
-	if (d) {
-		await writeFile(path, `# ${d}\n`);
-	}
+	await writeFile(path, `# ${description}\n`);
 }
 
 async function update_pkg(folder: string, no: string, user: string, remote: string) {

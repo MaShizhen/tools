@@ -1,4 +1,4 @@
-import { basename, join } from 'path';
+import { basename, dirname, join } from 'path';
 import { promises } from 'fs';
 import { commands, Uri, window, workspace } from 'vscode';
 import workpath from '../../util/workpath';
@@ -11,7 +11,7 @@ import tplwidget from './tpl-web-widget';
 const { readFile, writeFile } = promises;
 
 export default async function add_common_widget() {
-	const def = await workpath();
+	const def = dirname(await workpath());
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
 		canSelectFiles: false,
@@ -63,9 +63,9 @@ export default async function add_common_widget() {
 	// src/index.ts
 	await update_ts(cwd, no);
 	// tests/amd.html
-	await update_html(cwd, no, 'amd.html');
+	await update_html(cwd, no, pkg.description, 'amd.html');
 	// tests/ie.html
-	await update_html(cwd, no, 'ie.html');
+	await update_html(cwd, no, pkg.description, 'ie.html');
 
 	await exec(`git commit -am "init widget ${no}"`, cwd);
 	// 推送代码到远程仓库
@@ -78,12 +78,12 @@ export default async function add_common_widget() {
 	await commands.executeCommand('vscode.openFolder', uri);
 }
 
-async function update_html(folder: string, no: string, pagename: string) {
+async function update_html(folder: string, no: string, desc: string, pagename: string) {
 	no = no.replace(/[a-z]*/, '');
 	const tag = `mm-${no}`;
 	const path = join(folder, 'tests', pagename);
 	const old = await readFile(path, 'utf-8');
-	const content = old.replace(/(<title>).*(<\/title>)/, `$1${tag}$2`).replace(/<mm-\d+(.*)<\/mm-\d+>/g, `<${tag}$1</${tag}>`);;
+	const content = old.replace(/(<title>).*(<\/title>)/, `$1${desc}$2`).replace(/<mm-\d+(.*)<\/mm-\d+>/g, `<${tag}$1</${tag}>`);;
 	await writeFile(path, content);
 }
 
@@ -115,19 +115,7 @@ async function update_usage(folder: string, no: string) {
 
 async function update_readme(folder: string, description: string) {
 	const path = join(folder, 'readme.md');
-	const d = await window.showInputBox({
-		value: description,
-		prompt: '控件的描述，可以详细一些，后期请修改readme.md文件',
-		validateInput(v) {
-			if (!v) {
-				return '不能为空';
-			}
-			return null;
-		}
-	});
-	if (d) {
-		await writeFile(path, `# ${d}\n`);
-	}
+	await writeFile(path, `# ${description}\n`);
 }
 
 async function update_pkg(folder: string, no: string, user: string, remote: string) {
