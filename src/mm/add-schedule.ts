@@ -25,6 +25,7 @@ export default function addschedule() {
 			return;
 		}
 		const description = await window.showInputBox({
+			ignoreFocusOut: true,
 			prompt: '定时任务描述'
 		});
 		if (!description) {

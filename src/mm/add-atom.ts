@@ -50,6 +50,7 @@ export default function add_atom() {
 			const s = await window.showInputBox({
 				value: '2',
 				prompt: '请设置参数个数，该操作为初始操作，后期仍需要修改use.snippet和index.ts文件',
+				ignoreFocusOut: true,
 				validateInput(v) {
 					try {
 						const n = parseInt(v, 10);

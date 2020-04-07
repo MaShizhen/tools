@@ -1,6 +1,7 @@
 import { basename, join } from 'path';
 import { commands, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import web from '../web/widget/add';
+import mobile from '../mobile/widget/add-widgets';
 import root from '../util/root';
 import generate from '../util/generate';
 import { WidgetType } from '../util/widget-type';
@@ -11,6 +12,7 @@ import pickoption from '../util/pickoption';
 
 const pw = new Map<WidgetType, () => Promise<unknown>>();
 pw.set(WidgetType.web, web);
+pw.set(WidgetType.mobile, mobile);
 
 export default function add() {
 	return commands.registerCommand('mm.widget.add', async () => {

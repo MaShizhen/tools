@@ -28,6 +28,7 @@ export default async function addatomnodejs() {
 	let no = basename(cwd);
 	const remote = await window.showInputBox({
 		value: `git@github.com:mm-atom/${no}.git`,
+		ignoreFocusOut: true,
 		placeHolder: `请提供一个可用的空git仓库地址,如: git@github.com:${user}/${no}.git`
 	});
 	if (!remote) {
@@ -45,7 +46,6 @@ export default async function addatomnodejs() {
 		await workspace.fs.delete(uri);
 	} catch (e) {
 		// 目录不存在
-		console.error(e);
 	}
 	window.showInformationMessage('正在初始化项目，请耐心等待');
 	// 创建目录
@@ -95,6 +95,7 @@ async function update_usage(folder: string, description: string, no: string) {
 	const s = await window.showInputBox({
 		value: '2',
 		prompt: '请设置参数个数，该操作为初始操作，后期仍需要修改use.snippet和src/index.ts文件',
+		ignoreFocusOut: true,
 		validateInput(v) {
 			try {
 				const n = parseInt(v, 10);
@@ -131,34 +132,11 @@ async function update_pkg(folder: string, no: string, user: string, remote: stri
 	const repository = remote.replace(':', '/').replace('git@', 'https://');	// git@github.com:mm-atom/no.git to https://github.com/mm-atom/no.git
 	pkg.repository.url = repository;
 	const author = pkg.author || {};
-	const u = await window.showInputBox({
-		value: user,
-		prompt: '用户名',
-		validateInput(v) {
-			if (!v) {
-				return '不能为空';
-			}
-			return null;
-		}
-	});
-	if (u) {
-		author.name = u;
-	}
-	const e = await window.showInputBox({
-		value: email,
-		prompt: '用户邮箱',
-		validateInput(v) {
-			if (!v) {
-				return '不能为空';
-			}
-			return null;
-		}
-	});
-	if (e) {
-		author.email = e;
-	}
+	author.name = user;
+	author.email = email;
 	const d = await window.showInputBox({
 		prompt: '原子操作简要描述,请尽量控制在8个字以内',
+		ignoreFocusOut: true,
 		validateInput(v) {
 			if (!v) {
 				return '不能为空';

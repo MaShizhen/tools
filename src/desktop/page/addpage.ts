@@ -48,6 +48,7 @@ export default async function add(rootPath: string) {
 			await window.showInputBox({
 				placeHolder: '请输入页面名称:',
 				value: '',
+				ignoreFocusOut: true,
 				async validateInput(val) {
 					const p_path = join(folder, val);
 					if (await existsSync(p_path)) {

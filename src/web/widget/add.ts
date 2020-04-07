@@ -10,7 +10,7 @@ import tplwidget from './tpl-web-widget';
 
 const { readFile, writeFile } = promises;
 
-export default async function add_common_widget() {
+export default async function add_common_widget_web() {
 	const def = dirname(await workpath());
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
@@ -25,14 +25,20 @@ export default async function add_common_widget() {
 	const user = await exec('git config user.name');
 
 	const folder = container[0];
-	const cwd = await generate(folder.fsPath, 'ww', '', 6);
-	const no = basename(cwd);
+	let cwd = await generate(folder.fsPath, 'ww', '', 6);
+	let no = basename(cwd);
 	const remote = await window.showInputBox({
 		value: `git@github.com:mm-widgets/${no}.git`,
+		ignoreFocusOut: true,
 		placeHolder: `请提供一个可用的空git仓库地址,如: git@github.com:${user}/${no}.git`
 	});
 	if (!remote) {
 		return;
+	}
+	const m = /\/(\w+\d+)(\.git)?$/.exec(remote);
+	if (m) {
+		no = m[1];
+		cwd = join(folder.fsPath, no);
 	}
 	const uri = Uri.file(cwd);
 	try {
@@ -41,7 +47,6 @@ export default async function add_common_widget() {
 		await workspace.fs.delete(uri);
 	} catch (e) {
 		// 目录不存在
-		console.error(e);
 	}
 	// 创建目录
 	await workspace.fs.createDirectory(uri);
@@ -69,10 +74,8 @@ export default async function add_common_widget() {
 
 	await exec(`git commit -am "init widget ${no}"`, cwd);
 	// 推送代码到远程仓库
-	if (remote) {
-		await exec(`git remote add origin ${remote}`, cwd);
-		await exec('git push -u origin master', cwd);
-	}
+	await exec(`git remote add origin ${remote}`, cwd);
+	await exec('git push -u origin master', cwd);
 	window.showInformationMessage('控件初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
 	await exec('yarn', cwd);
 	await commands.executeCommand('vscode.openFolder', uri);
@@ -128,35 +131,12 @@ async function update_pkg(folder: string, no: string, user: string, remote: stri
 	const repository = remote.replace(':', '/').replace('git@', 'https://');	// git@github.com:mm-atom/no.git to https://github.com/mm-atom/no.git
 	pkg.repository.url = repository;
 	const author = pkg.author || {};
-	const u = await window.showInputBox({
-		value: user,
-		prompt: '用户名',
-		validateInput(v) {
-			if (!v) {
-				return '不能为空';
-			}
-			return null;
-		}
-	});
-	if (u) {
-		author.name = u;
-	}
-	const e = await window.showInputBox({
-		value: email,
-		prompt: '用户邮箱',
-		validateInput(v) {
-			if (!v) {
-				return '不能为空';
-			}
-			return null;
-		}
-	});
-	if (e) {
-		author.email = e;
-	}
+	author.name = user;
+	author.email = email;
 	const d = await window.showInputBox({
 		value: pkg.description,
 		prompt: '控件简要描述,请尽量控制在8个字以内',
+		ignoreFocusOut: true,
 		validateInput(v) {
 			if (!v) {
 				return '不能为空';

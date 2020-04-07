@@ -54,6 +54,7 @@ export default function create_project() {
 		}
 		const desc = await window.showInputBox({
 			placeHolder: '请用简单语言描述一下这个项目',
+			ignoreFocusOut: true,
 			validateInput(val) {
 				if (!val) {
 					return '不能为空';
@@ -66,6 +67,7 @@ export default function create_project() {
 		}
 		const num = await window.showInputBox({
 			placeHolder: '请输入项目编号',
+			ignoreFocusOut: true,
 			validateInput(val) {
 				if (!/^\d{1,6}$/.test(val)) {
 					return '项目编号必须为一个小于六位数的数字';
@@ -89,6 +91,7 @@ export default function create_project() {
 		}
 		const remote = await window.showInputBox({
 			placeHolder: `git@gitee.com:mm-works/${no}.git`,
+			ignoreFocusOut: true,
 			validateInput(val) {
 				if (!val) {
 					return '请输入Git远程仓库地址';
