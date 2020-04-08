@@ -5,8 +5,10 @@ import mobile from '../mobile/widget/add-widgets';
 import root from '../util/root';
 import generate from '../util/generate';
 import { WidgetType } from '../util/widget-type';
-import tplwidget from '../web/widget/tpl-web-widget';
-import tplwidgetusage from '../web/widget/tpl-web-widget-useage';
+import tplwidgetweb from '../web/widget/tpl-web-widget';
+import tplwidgetmobile from '../mobile/widget/tpl-widget';
+import tplwidgetusageweb from '../web/widget/tpl-web-widget-useage';
+import tplwidgetusagemobile from '../mobile/widget/tpl-widget-useage';
 import { createfile } from '../util/fs';
 import pickoption from '../util/pickoption';
 
@@ -49,9 +51,31 @@ export default function add() {
 			const we = new WorkspaceEdit();
 			const postfix = type === WidgetType.mobile ? 'tsx' : 'ts';
 			const ts = join(atom_dir, `index.${postfix}`);
-			createfile(we, ts, tplwidget(no, true));
-			createfile(we, join(atom_dir, 'use.snippet'), tplwidgetusage(no, true));
-			createfile(we, join(atom_dir, 'amd.json'), '[]');
+			const tscontent = (() => {
+				switch (type) {
+					case WidgetType.web:
+						return tplwidgetweb(no, true);
+					case WidgetType.mobile:
+						return tplwidgetmobile(no);
+					default:
+						return '';
+				}
+			})();
+			createfile(we, ts, tscontent);
+			const usecontent = (() => {
+				switch (type) {
+					case WidgetType.web:
+						return tplwidgetusageweb(no, true);
+					case WidgetType.mobile:
+						return tplwidgetusagemobile(no);
+					default:
+						return '';
+				}
+			})();
+			createfile(we, join(atom_dir, 'use.snippet'), usecontent);
+			if (type === WidgetType.web) {
+				createfile(we, join(atom_dir, 'amd.json'), '[]');
+			}
 			await workspace.applyEdit(we);
 			window.showInformationMessage('控件模板已生成');
 			const doc = await workspace.openTextDocument(ts);

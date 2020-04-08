@@ -5,7 +5,7 @@ import workpath from '../../util/workpath';
 import generate from '../../util/generate';
 import exec from '../../util/exec';
 import { Package } from '../../interfaces';
-import tplwidgetusage from './tpl-web-widget-useage';
+import tplwidgetusage from './tpl-widget-useage';
 
 const { readFile, writeFile } = promises;
 
@@ -73,7 +73,7 @@ export default async function add_common_widget_mobile() {
 
 async function update_usage(folder: string, no: string) {
 	const path = join(folder, 'use.snippet');
-	const content = tplwidgetusage(no, false);
+	const content = tplwidgetusage(no);
 	await writeFile(path, content);
 }
 

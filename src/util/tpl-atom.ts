@@ -6,7 +6,7 @@ export default function tplatom(no: string, n: number) {
 		return `param${i}: string`;
 	});
 	return `
-export default async function ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')}) {
+export default async function ${no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3')}(${ps.join(', ')}) {
 }
 `;
 }

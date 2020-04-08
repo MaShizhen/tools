@@ -16,7 +16,7 @@ export default function tplatomusage(description: string, no: string, n: number)
 		'\t */',
 		'\tconst r$CURRENT_SECONDS_UNIX = await(() => {',
 		...params,
-		`\t\treturn ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')});`,
+		`\t\treturn ${no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3')}(${ps.join(', ')});`,
 		'\t})();'
 	];
 	return content.join('\n');

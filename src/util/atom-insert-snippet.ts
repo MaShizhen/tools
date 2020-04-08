@@ -25,8 +25,8 @@ export default async function insetSnippet(textEditor: TextEditor, use: string, 
 		await workspace.applyEdit(we);
 	}
 	const active = textEditor.selection.active;
-	const pos = hasimport ? active : active.translate(1);
-	await textEditor.insertSnippet(new SnippetString(use), pos, {
+	// const pos = hasimport ? active : active.translate(1); we do not need translate here, active will auto tranlate after insert importing
+	await textEditor.insertSnippet(new SnippetString(use), active, {
 		undoStopAfter: true,
 		undoStopBefore: true
 	});

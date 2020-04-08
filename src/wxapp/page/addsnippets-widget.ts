@@ -51,12 +51,8 @@ export default async function add(textEditor: TextEditor, all: Map<string, IAtom
 }
 
 async function add_snippet(atom: IAtom, textEditor: TextEditor) {
-	const dir = join(await root_path(textEditor), 'node_modules', '@mmstudio', atom.no);
-	try {
-		await workspace.fs.stat(Uri.file(dir));
-	} catch (error) {
-		await install(textEditor, `${atom.no}@${atom.version}`, true);
-	}
+	await install(textEditor, atom.no, atom.version, true);
+	const dir = join(await root_path(textEditor), 'node_modules', atom.no);
 	const folder = dirname(textEditor.document.uri.fsPath);
 	await update_app_components(folder, atom.no);
 	textEditor = await window.showTextDocument(textEditor.document);
@@ -88,7 +84,7 @@ async function update_app_components(path: string, atom: string) {
 	const doc = editor.document;
 	const conf = JSON.parse(doc.getText());
 	const uc = conf.usingComponents || {};
-	uc[atom] = `@mmstudio/${atom}/index`;
+	uc[atom.replace(/(.+\/)?/, '')] = `${atom}/index`;
 	conf.usingComponents = uc;
 	createfile(we, doc.fileName, JSON.stringify(conf, null, '\t'));
 	workspace.applyEdit(we);

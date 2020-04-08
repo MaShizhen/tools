@@ -84,7 +84,7 @@ async function update_ts(folder: string, no: string, n: number) {
 		return `param${i}: string`;
 	});
 	const content = `
-export default function ${no.replace(/([a-z]+)0+(\d+)/, '$1$2')}(${ps.join(', ')}) {
+export default function ${no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3')}(${ps.join(', ')}) {
 }
 `;
 	await writeFile(path, content);

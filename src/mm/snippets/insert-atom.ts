@@ -117,15 +117,11 @@ async function add_snippet(atom: IAtom, textEditor: TextEditor, client: boolean)
 		await insert_local_atom(atom, textEditor, client);
 		return;
 	}
-	const dir = join(await root(textEditor), 'node_modules', '@mmstudio', atom.no);
-	try {
-		await workspace.fs.stat(Uri.file(dir));
-	} catch (error) {
-		await install(textEditor, `${atom.no}@${atom.version}`, client);
-	}
+	await install(textEditor, atom.no, atom.version, client);
 
-	const name = atom.no.replace(/([a-z]+)0+(\d+)/, '$1$2');
-	const imp = `import ${name} from '@mmstudio/${atom.no}';`;
+	const name = atom.no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3');
+	const imp = `import ${name} from '${atom.no}';`;
+	const dir = join(await root(textEditor), 'node_modules', atom.no);
 	const snippet_use = Uri.file(join(dir, 'use.snippet'));
 
 	try {
@@ -163,12 +159,12 @@ async function load_local_atoms(root: string, client: boolean) {
 	}
 }
 
-async function insert_local_atom(atom: IAtom, textEditor: TextEditor, prj: boolean) {
+async function insert_local_atom(atom: IAtom, editor: TextEditor, prj: boolean) {
 	const p = prj ? 'ap' : 'anp';
-	const dir = join(await root(textEditor), 'src', 'atom', p, atom.no);
-	const cur = dirname(textEditor.document.uri.fsPath);
+	const dir = join(await root(editor), 'src', 'atom', p, atom.no);
+	const cur = dirname(editor.document.uri.fsPath);
 	const imp_path = relative(cur, dir);
-	const name = atom.no.replace(/([a-z]+)0+(\d+)/, '$1$2');
+	const name = atom.no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3');
 	const imp = `import ${name} from '${imp_path}/index';`;
 	const snippet_use = Uri.file(join(dir, 'use.snippet'));
 
@@ -180,5 +176,5 @@ async function insert_local_atom(atom: IAtom, textEditor: TextEditor, prj: boole
 	}
 	const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');
 
-	await atom_insert_snippet(textEditor, use, imp);
+	await atom_insert_snippet(editor, use, imp);
 }

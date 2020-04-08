@@ -84,18 +84,14 @@ async function load_local_atoms(root: string) {
 	}
 }
 
-async function add_snippet(atom: IAtom, textEditor: TextEditor) {
+async function add_snippet(atom: IAtom, editor: TextEditor) {
 	if (atom.local) {
-		await add_local(atom, textEditor);
+		await add_local(atom, editor);
 		return;
 	}
-	const dir = join(await root(textEditor), 'node_modules', '@mmstudio', atom.no);
-	try {
-		await workspace.fs.stat(Uri.file(dir));
-	} catch (error) {
-		await install(textEditor, `${atom.no}@${atom.version}`, true);
-	}
-	const imp = `import '@mmstudio/${atom.no}';`;
+	await install(editor, atom.no, atom.version, true);
+	const dir = join(await root(editor), 'node_modules', atom.no);
+	const imp = `import '${atom.no}';`;
 	const snippet_use = Uri.file(join(dir, 'use.snippet'));
 
 	try {
@@ -104,22 +100,20 @@ async function add_snippet(atom: IAtom, textEditor: TextEditor) {
 		window.showErrorMessage('无法自动添加脚本，请联系供应商');
 		return;
 	}
-	const folder = dirname(textEditor.document.fileName);
+	const folder = dirname(editor.document.fileName);
 	const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');
 
-	await update_import(folder, imp);
-	await textEditor.insertSnippet(new SnippetString(use), textEditor.selection.active, {
+	await update_import(folder, imp, editor);
+	await editor.insertSnippet(new SnippetString(use), editor.selection.active, {
 		undoStopAfter: true,
 		undoStopBefore: true
 	});
 }
 
-async function update_import(path: string, imp: string) {
+async function update_import(path: string, imp: string, editor: TextEditor) {
 	if (/src[/|\\]widgets[/|\\]pw\d/.test(path)) {
 		// import widget in index.ts
-		const file_name = join(path, 'index.ts');
-		const uri = Uri.file(file_name);
-		const doc = await workspace.openTextDocument(uri);
+		const doc = editor.document;
 		const max = doc.lineCount;
 		let hasimport = false;
 		let pos = -1;
@@ -175,17 +169,17 @@ async function update_b(path: string, imp: string) {
 	}
 }
 
-async function add_local(atom: IAtom, textEditor: TextEditor) {
-	const doc = textEditor.document;
-	const dir = join(await root(textEditor), 'src', 'widgets', atom.no);
+async function add_local(atom: IAtom, editor: TextEditor) {
+	const doc = editor.document;
+	const dir = join(await root(editor), 'src', 'widgets', atom.no);
 	const cur = dirname(doc.uri.fsPath);
 	const imp_path = relative(cur, dir);
 	const imp = `import '${imp_path}/index';`;
 	const snippet_use = Uri.file(join(dir, 'use.snippet'));
 	const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');
 
-	await update_import(cur, imp);
-	await textEditor.insertSnippet(new SnippetString(use), textEditor.selection.active, {
+	await update_import(cur, imp, editor);
+	await editor.insertSnippet(new SnippetString(use), editor.selection.active, {
 		undoStopAfter: true,
 		undoStopBefore: true
 	});
