@@ -1,6 +1,6 @@
 import { basename, dirname, join } from 'path';
-import { TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { createfile, readdirSync } from '../../util/fs';
+import { TextEditor, Uri, window } from 'vscode';
+import { readdirasync, writefileasync } from '../../util/fs';
 import generate from '../../util/generate';
 import replace from '../../util/replace';
 import { NO_MODIFY } from '../../util/blocks';
@@ -16,24 +16,19 @@ export default async function add(editor: TextEditor) {
 		const component_dir = await generate(folder, 'zj-', '', 3);
 		const no = component_dir.replace(/.*(zj-\d*)/, '$1');
 
-		const we = new WorkspaceEdit();
-		create_tpl(we, component_dir, content);
-		create_tplts(we, component_dir, content);
-		create_s(we, component_dir);
-		create_ns(we, component_dir);
+		await create_tpl(component_dir, content);
+		await create_tplts(component_dir, content);
+		await create_s(component_dir);
+		await create_ns(component_dir);
 		const id = basename(component_dir);
-		create_n(we, id, component_dir);
-		create_b(we, id, component_dir);
-		update_html(we, editor, no);
+		await create_n(id, component_dir);
+		await create_b(id, component_dir);
+		await update_html(editor, no);
 		// update b.ts, n.ts
-		await workspace.applyEdit(we);
-		await workspace.saveAll();
-		const files = await readdirSync(folder);
+		const files = await readdirasync(folder);
 		const cs = files.filter((f) => {
 			return /zj-\d{3,6}/.test(f);
 		});
-		await workspace.applyEdit(we);
-		await workspace.saveAll();
 
 		await update_n(folder, cs);
 		await update_b(folder, cs);
@@ -44,10 +39,11 @@ export default async function add(editor: TextEditor) {
 	}
 }
 
-function update_html(we: WorkspaceEdit, editor: TextEditor, no: string) {
-	const uri = editor.document.uri;
+function update_html(editor: TextEditor, no: string) {
 	const zj = `<${no}></${no}>`;
-	we.replace(uri, editor.selection, zj);
+	return editor.edit((eb) => {
+		eb.replace(editor.selection, zj);
+	});
 }
 
 async function update_b(path: string, components: string[]) {
@@ -89,7 +85,7 @@ async function update_n(path: string, components: string[]) {
 	}
 }
 
-function create_b(we: WorkspaceEdit, id: string, path: string) {
+function create_b(id: string, path: string) {
 	const tpl = `import { bc } from '@mmstudio/web';
 
 import s from './s';
@@ -110,10 +106,10 @@ export default function main(url: string, query: {}) {
 	return bc('${id}', s, actions, url, query);
 }
 `;
-	createfile(we, join(path, 'b.ts'), tpl);
+	return writefileasync(join(path, 'b.ts'), tpl);
 }
 
-function create_n(we: WorkspaceEdit, id: string, path: string) {
+function create_n(id: string, path: string) {
 	const tpl = `import { nc } from '@mmstudio/web';
 import { HTMLElement } from 'node-html-parser';
 import s from './ns';
@@ -135,29 +131,29 @@ export default function main(html: HTMLElement, url: string, msg: unknown, heade
 }
 
 `;
-	createfile(we, join(path, 'n.ts'), tpl);
+	return writefileasync(join(path, 'n.ts'), tpl);
 }
 
-function create_ns(we: WorkspaceEdit, path: string) {
+function create_ns(path: string) {
 	const tpl = `export default {
 };
 `;
-	createfile(we, join(path, 'ns.ts'), tpl);
+	return writefileasync(join(path, 'ns.ts'), tpl);
 }
 
-function create_s(we: WorkspaceEdit, path: string) {
+function create_s(path: string) {
 	const tpl = `export default {
 };
 `;
-	createfile(we, join(path, 's.ts'), tpl);
+	return writefileasync(join(path, 's.ts'), tpl);
 }
 
-function create_tpl(we: WorkspaceEdit, path: string, content: string) {
-	createfile(we, join(path, 'tpl.tpl'), content);
+function create_tpl(path: string, content: string) {
+	return writefileasync(join(path, 'tpl.tpl'), content);
 }
 
-function create_tplts(we: WorkspaceEdit, path: string, content: string) {
+function create_tplts(path: string, content: string) {
 	const tpl = `export default \`${content}\`;
 `;
-	createfile(we, join(path, 'tpl.ts'), tpl);
+	return writefileasync(join(path, 'tpl.ts'), tpl);
 }

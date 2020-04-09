@@ -1,5 +1,5 @@
 import { basename, join } from 'path';
-import { commands, QuickPickItem, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { commands, QuickPickItem, Uri, window, workspace } from 'vscode';
 import nodejs from '../nodejs/add-atom';
 import web from '../web/atom/add-common';
 import wxapp from '../wxapp/add-atom';
@@ -9,7 +9,7 @@ import generate from '../util/generate';
 import tplatomusage from '../util/tpl-atom-useage';
 import { AtomType } from '../util/atom-type';
 import tplatom from '../util/tpl-atom';
-import { createfile } from '../util/fs';
+import { writefileasync } from '../util/fs';
 import pickoption from '../util/pickoption';
 
 const ap = new Map<AtomType, () => Promise<unknown>>();
@@ -73,18 +73,15 @@ export default function add_atom() {
 			await workspace.fs.createDirectory(Uri.file(dir));
 			const atom_dir = await generate(dir, prefix, '', 3);
 			const no = basename(atom_dir);
-			const we = new WorkspaceEdit();
 			const ts = join(atom_dir, 'index.ts');
-			createfile(we, ts, tplatom(no, n));
-			createfile(we, join(atom_dir, 'use.snippet'), tplatomusage('原子操作功能描述', no, n));
+			await writefileasync(ts, tplatom(no, n));
+			await writefileasync(join(atom_dir, 'use.snippet'), tplatomusage('原子操作功能描述', no, n));
 			if (p1.type === 'web/h5') {
-				createfile(we, join(atom_dir, 'amd.json'), '[]');
+				await writefileasync(join(atom_dir, 'amd.json'), '[]');
 			}
-			await workspace.applyEdit(we);
 			window.showInformationMessage('原子操作模板已生成');
 			const doc = await workspace.openTextDocument(ts);
 			window.showTextDocument(doc);
-			await workspace.saveAll();
 		} else {
 			const fun = ap.get(p1.type);
 			if (fun) {

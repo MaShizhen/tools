@@ -1,15 +1,15 @@
 import { basename, extname, join } from 'path';
 import { FileType, Uri, window, workspace } from 'vscode';
-import { existsSync, writeFileSync } from '../../util/fs';
+import { existsasync, writefileasync } from '../../util/fs';
 import { NO_MODIFY } from '../../util/blocks';
 import pickoption from '../../util/pickoption';
 
 export default async function add(rootPath: string) {
-	if (!await existsSync(join(rootPath, 'pages'))) {
+	if (!await existsasync(join(rootPath, 'pages'))) {
 		window.showErrorMessage('缺少pages文件夹');
 		return;
 	}
-	if (!await existsSync(join(rootPath, 'src'))) {
+	if (!await existsasync(join(rootPath, 'src'))) {
 		window.showErrorMessage('缺少src文件夹');
 		return;
 	}
@@ -51,7 +51,7 @@ export default async function add(rootPath: string) {
 				ignoreFocusOut: true,
 				async validateInput(val) {
 					const p_path = join(folder, val);
-					if (await existsSync(p_path)) {
+					if (await existsasync(p_path)) {
 						return '页面文件已存在';
 					}
 					return null;
@@ -66,7 +66,7 @@ export default async function add(rootPath: string) {
 			window.showErrorMessage('页面文件已存在');
 			return;
 		}
-		if (!await existsSync(folder)) {
+		if (!await existsasync(folder)) {
 			await workspace.fs.createDirectory(Uri.file(folder));
 		}
 		const p_path = join(folder, name);
@@ -111,7 +111,7 @@ import s from './s';
 })();
 
 `;
-	return writeFileSync(join(path, 'b.ts'), tpl);
+	return writefileasync(join(path, 'b.ts'), tpl);
 }
 
 function create_s(path: string) {
@@ -119,7 +119,7 @@ function create_s(path: string) {
 };
 
 `;
-	return writeFileSync(join(path, 's.ts'), tpl);
+	return writefileasync(join(path, 's.ts'), tpl);
 }
 
 function create_html(path: string) {
@@ -131,7 +131,7 @@ const html = \`
 export default parse(html);
 
 `;
-	return writeFileSync(join(path, 'html.ts'), tpl);
+	return writefileasync(join(path, 'html.ts'), tpl);
 }
 
 function create_n(path: string, page: string) {
@@ -172,5 +172,5 @@ export default async function main() {
 	return html_str;
 }
 `;
-	return writeFileSync(join(path, 'n.ts'), tpl);
+	return writefileasync(join(path, 'n.ts'), tpl);
 }

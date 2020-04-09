@@ -6,10 +6,11 @@ import generate from '../../util/generate';
 import exec from '../../util/exec';
 import { Package } from '../../interfaces';
 import tplwidgetusage from './tpl-widget-useage';
+import tplwidget from './tpl-widget';
 
 const { readFile, writeFile } = promises;
 
-export default async function add_common_widget_mobile() {
+export default async function add_common_widget_wxapp() {
 	const def = dirname(await workpath());
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
@@ -24,7 +25,7 @@ export default async function add_common_widget_mobile() {
 	const user = await exec('git config user.name');
 
 	const folder = container[0];
-	let cwd = await generate(folder.fsPath, 'wm', '', 6);
+	let cwd = await generate(folder.fsPath, 'wwx', '', 6);
 	let no = basename(cwd);
 	const remote = await window.showInputBox({
 		value: `git@github.com:mm-widgets/${no}.git`,
@@ -52,7 +53,7 @@ export default async function add_common_widget_mobile() {
 	// 进入目录并且拉取代码
 	await exec('git init', cwd);
 	// 从码云拉取代码模板
-	await exec('git pull git@github.com:mm-tpl/widgets-mobile.git', cwd);
+	await exec('git pull git@github.com:mm-tpl/widgets-wxapp.git', cwd);
 
 	// package.json
 	const pkg = await update_pkg(cwd, no, user, remote);
@@ -61,6 +62,8 @@ export default async function add_common_widget_mobile() {
 
 	// use.snippet
 	await update_usage(cwd, no);
+	// src/index.ts
+	await update_ts(cwd, pkg.description);
 
 	await exec(`git commit -am "init widget ${no}"`, cwd);
 	// 推送代码到远程仓库
@@ -71,9 +74,15 @@ export default async function add_common_widget_mobile() {
 	await commands.executeCommand('vscode.openFolder', uri);
 }
 
+async function update_ts(folder: string, desc: string) {
+	const content = tplwidget(desc);
+	const path = join(folder, 'src', 'index.ts');
+	await writeFile(path, content);
+}
+
 async function update_usage(folder: string, no: string) {
 	const path = join(folder, 'use.snippet');
-	const content = tplwidgetusage(no);
+	const content = tplwidgetusage(no, false);
 	await writeFile(path, content);
 }
 

@@ -1,7 +1,7 @@
 import { dirname, join } from 'path';
 import { window } from 'vscode';
 import addapp from './addapp';
-import { existsSync } from '../../util/fs';
+import { existsasync } from '../../util/fs';
 import getpagetype from './pagetype';
 import addcontainerinapp from './add-container-in-app';
 import addcontainer from './add-container';
@@ -22,7 +22,7 @@ export default async function add(rootPath: string) {
 		}
 		const dir = dirname(editor.document.fileName);
 		const app = join(dir, 'app.ts');	// is app
-		if (await existsSync(app)) {
+		if (await existsasync(app)) {
 			const type = await getpagetype();
 			if (!type) {
 				return;	// 取消操作
@@ -34,7 +34,7 @@ export default async function add(rootPath: string) {
 			}
 		} else {
 			const p = join(dir, 'p.ts');
-			if (await existsSync(p)) {
+			if (await existsasync(p)) {
 				// 3. 查看当前组件是否为容器页面
 				if (await iscontainer(dir)) {
 					// 3.1 是容器页面，在当前容器页面下添加页面（容器页面或普通页面）

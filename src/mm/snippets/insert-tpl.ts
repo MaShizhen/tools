@@ -1,12 +1,12 @@
 import { join, parse } from 'path';
-import { commands, QuickPickItem, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { commands, QuickPickItem, SnippetString, TextEditor, Uri, window, workspace } from 'vscode';
 import filter from '../../util/filter';
 import foreach from '../../util/foreach';
 import get from '../../util/get';
 import get_text from '../../util/get-text';
 import exec from '../../util/exec';
 import prj_type, { PrjType } from '../../util/prj-type';
-import { createfile } from '../../util/fs';
+import { writefileasync } from '../../util/fs';
 import root from '../../util/root';
 import pickoption from '../../util/pickoption';
 
@@ -132,19 +132,16 @@ async function add_snippet_multiple(editor: TextEditor, type: string, atom: IAto
 	const base_url = `https://mmstudio.gitee.io/templates/${type}/${atom.no}`;
 	const contexts = atom.contexts || {};
 	const dir = isrelative ? parse(editor.document.uri.fsPath).dir : await root();
-	const we = new WorkspaceEdit();
 	await foreach(atom.files, async (file) => {
 		const url = join(base_url, file);
 		let context = contexts.url;
 		if (context === undefined || context === null) {
 			context = contexts.url = await get_text(url);
 		}
-		createfile(we, join(dir, file), context);
+		return writefileasync(join(dir, file), context);
 		// await workspace.openTextDocument(uri);
 		// await commands.executeCommand('workbench.files.action.refreshFilesExplorer');
 	});
-	await workspace.applyEdit(we);
-	await workspace.saveAll(false);
 	atom.contexts = contexts;
 }
 

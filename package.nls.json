@@ -17,5 +17,5 @@
 	"mm.shell.debug": "mmstudio: Debug",
 	"mm.shell.build": "mmstudio: Build",
 	"mm.atom.add": "mmstudio: Add new atom",
-	"mm.widget.add": "mmstudio: Add a new widget"
+	"mm.widget.add": "mmstudio: Add new widget"
 }

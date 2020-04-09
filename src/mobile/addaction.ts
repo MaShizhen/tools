@@ -1,6 +1,6 @@
 import { basename, dirname, join } from 'path';
-import { TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { createfile, existsSync, readdirSync } from '../util/fs';
+import { TextEditor, Uri, window } from 'vscode';
+import { existsasync, readdirasync, writefileasync } from '../util/fs';
 import generate from '../util/generate';
 import replace from '../util/replace';
 
@@ -12,10 +12,7 @@ export default async function add(editor: TextEditor) {
 	if (r === null) {
 		window.showErrorMessage('警示');
 	} else {
-		const we = new WorkspaceEdit();
-		const p_path = await create_a(we, folder);
-		await workspace.applyEdit(we);
-		await workspace.saveAll();
+		const p_path = await create_a(folder);
 		await update_p(folder);
 		window.showTextDocument(p_path);
 	}
@@ -23,11 +20,11 @@ export default async function add(editor: TextEditor) {
 
 async function update_p(path: string) {
 	let file_name = join(path, 'p.ts');
-	if (!await existsSync(file_name)) {
+	if (!await existsasync(file_name)) {
 		file_name = join(path, 'app.ts');
 	}
 	const eol = '\n';
-	const files = await readdirSync(path);
+	const files = await readdirasync(path);
 	const as = files.filter((f) => {
 		return /^a\d{3}\.ts$/.test(f);
 	}).map((f) => {
@@ -46,7 +43,7 @@ async function update_p(path: string) {
 	await replace(file_name, 'ACTIONS', actions);
 }
 
-async function create_a(we: WorkspaceEdit, p_path: string) {
+async function create_a(p_path: string) {
 	const path = await generate(p_path, 'a', '\\.ts', 3);
 	const a = basename(path);
 	const tpl = `import am1 from '@mmstudio/am000001';
@@ -55,6 +52,6 @@ export default function ${a}(mm: am1) {
 }
 `;
 	const uri = Uri.file(`${path}.ts`);
-	createfile(we, `${path}.ts`, tpl);
+	await writefileasync(`${path}.ts`, tpl);
 	return uri;
 }

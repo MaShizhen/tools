@@ -1,13 +1,13 @@
 import { join } from 'path';
 import replace from '../../util/replace';
-import { readdirSync } from '../../util/fs';
+import { readdirasync } from '../../util/fs';
 import { isapp } from './isapp';
 
 export default async function updatechildren(path: string) {
 	const isapppage = await isapp(path);
 	const file_name = isapppage ? join(path, 'app', 'app.ts') : join(path, 'p.ts');
 	const eol = '\n';
-	const files = await readdirSync(path);
+	const files = await readdirasync(path);
 	const ps = files.filter((f) => {
 		return /^(c|pg)\d{3}$/.test(f);
 	});

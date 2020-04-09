@@ -1,20 +1,24 @@
 import { basename, join } from 'path';
-import { commands, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { commands, window, workspace } from 'vscode';
 import web from '../web/widget/add';
 import mobile from '../mobile/widget/add-widgets';
+import wxapp from '../wxapp/widget/add-widgets';
 import root from '../util/root';
 import generate from '../util/generate';
 import { WidgetType } from '../util/widget-type';
 import tplwidgetweb from '../web/widget/tpl-web-widget';
 import tplwidgetmobile from '../mobile/widget/tpl-widget';
+import tplwidgetwxapp from '../wxapp/widget/tpl-widget';
 import tplwidgetusageweb from '../web/widget/tpl-web-widget-useage';
 import tplwidgetusagemobile from '../mobile/widget/tpl-widget-useage';
-import { createfile } from '../util/fs';
+import tplwidgetusagewxapp from '../wxapp/widget/tpl-widget-useage';
+import { mkdirasync, writefileasync } from '../util/fs';
 import pickoption from '../util/pickoption';
 
 const pw = new Map<WidgetType, () => Promise<unknown>>();
 pw.set(WidgetType.web, web);
 pw.set(WidgetType.mobile, mobile);
+pw.set(WidgetType.wxapp, wxapp);
 
 export default function add() {
 	return commands.registerCommand('mm.widget.add', async () => {
@@ -45,10 +49,9 @@ export default function add() {
 			const rt = await root();
 			const prefix = 'pw';	// not wc, we wish local wigets list before remote when searching. cw means client widget
 			const dir = join(rt, 'src', 'widgets');
-			await workspace.fs.createDirectory(Uri.file(dir));
+			await mkdirasync(dir);
 			const atom_dir = await generate(dir, prefix, '', 3);
 			const no = basename(atom_dir);
-			const we = new WorkspaceEdit();
 			const postfix = type === WidgetType.mobile ? 'tsx' : 'ts';
 			const ts = join(atom_dir, `index.${postfix}`);
 			const tscontent = (() => {
@@ -57,30 +60,36 @@ export default function add() {
 						return tplwidgetweb(no, true);
 					case WidgetType.mobile:
 						return tplwidgetmobile(no);
+					case WidgetType.wxapp:
+						return tplwidgetwxapp('');
 					default:
 						return '';
 				}
 			})();
-			createfile(we, ts, tscontent);
+			await writefileasync(ts, tscontent);
 			const usecontent = (() => {
 				switch (type) {
 					case WidgetType.web:
 						return tplwidgetusageweb(no, true);
 					case WidgetType.mobile:
 						return tplwidgetusagemobile(no);
+					case WidgetType.wxapp:
+						return tplwidgetusagewxapp(no, true);
 					default:
 						return '';
 				}
 			})();
-			createfile(we, join(atom_dir, 'use.snippet'), usecontent);
+			await writefileasync(join(atom_dir, 'use.snippet'), usecontent);
 			if (type === WidgetType.web) {
-				createfile(we, join(atom_dir, 'amd.json'), '[]');
+				await writefileasync(join(atom_dir, 'amd.json'), '[]');
+			} else if (type === WidgetType.wxapp) {
+				await writefileasync(join(atom_dir, 'index.json'), '{}');
+				await writefileasync(join(atom_dir, 'index.wxml'), '');
+				await writefileasync(join(atom_dir, 'index.wxss'), '');
 			}
-			await workspace.applyEdit(we);
 			window.showInformationMessage('控件模板已生成');
 			const doc = await workspace.openTextDocument(ts);
 			window.showTextDocument(doc);
-			await workspace.saveAll();
 		} else {
 			const fun = pw.get(type);
 			if (fun) {

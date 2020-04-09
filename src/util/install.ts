@@ -2,7 +2,7 @@ import { join } from 'path';
 import { TextEditor, Uri, window, workspace } from 'vscode';
 import exec from './exec';
 import root from './root';
-import { existsSync } from './fs';
+import { existsasync } from './fs';
 
 export default async function install(editor: TextEditor, atom: string, version: string, isdev: boolean) {
 	if (!atom) {
@@ -13,7 +13,7 @@ export default async function install(editor: TextEditor, atom: string, version:
 	}
 	const cwd = await root(editor);
 	const dir = join(cwd, 'node_modules', atom);
-	if (await existsSync(dir)) {
+	if (await existsasync(dir)) {
 		return;
 	}
 	const yarn = isdev ? 'yarn add --dev' : 'yarn add';

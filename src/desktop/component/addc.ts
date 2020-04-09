@@ -1,6 +1,6 @@
 import { basename, dirname, join } from 'path';
-import { TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { createfile, readdirSync } from '../../util/fs';
+import { TextEditor, Uri, window } from 'vscode';
+import { readdirasync, writefileasync } from '../../util/fs';
 import generate from '../../util/generate';
 import replace from '../../util/replace';
 import { NO_MODIFY } from '../../util/blocks';
@@ -15,20 +15,17 @@ export default async function add(editor: TextEditor) {
 			window.showErrorMessage('您必须在某个页面文件夹下进行该操作！');
 		} else {
 			const c = await generate(folder, 'zj-', '', 3);
-			const we = new WorkspaceEdit();
 			// create
-			create_tpl(we, c);
-			create_s(we, c);
+			await create_tpl(c);
+			await create_s(c);
 			const id = basename(c);
-			create_n(we, id, c);
-			create_b(we, id, c);
+			await create_n(id, c);
+			await create_b(id, c);
 			// update b.ts, n.ts
-			const files = await readdirSync(folder);
+			const files = await readdirasync(folder);
 			const cs = files.filter((f) => {
 				return /zj-\d{3,6}/.test(f);
 			});
-			await workspace.applyEdit(we);
-			await workspace.saveAll();
 			await update_n(folder, cs);
 			await update_b(folder, cs);
 			window.setStatusBarMessage('创建成功');
@@ -79,7 +76,7 @@ async function update_n(path: string, components: string[]) {
 	}
 }
 
-function create_b(we: WorkspaceEdit, id: string, path: string) {
+function create_b(id: string, path: string) {
 	const tpl = `import init from '@mmstudio/desktop/component';
 
 import s from './s';
@@ -96,10 +93,10 @@ export default function main(url: string, query: {}) {
 	return init('${id}', s, actions, url, query);
 }
 `;
-	return createfile(we, join(path, 'b.ts'), tpl);
+	return writefileasync(join(path, 'b.ts'), tpl);
 }
 
-function create_n(we: WorkspaceEdit, id: string, path: string) {
+function create_n(id: string, path: string) {
 	const tpl = `
 import init from '@mmstudio/desktop/init-component';
 import { HTMLElement } from 'node-html-parser';
@@ -111,19 +108,19 @@ export default function main(html: HTMLElement) {
 }
 
 `;
-	return createfile(we, join(path, 'n.ts'), tpl);
+	return writefileasync(join(path, 'n.ts'), tpl);
 }
 
-function create_s(we: WorkspaceEdit, path: string) {
+function create_s(path: string) {
 	const tpl = `export default {
 };
 `;
-	return createfile(we, join(path, 's.ts'), tpl);
+	return writefileasync(join(path, 's.ts'), tpl);
 }
 
-function create_tpl(we: WorkspaceEdit, path: string) {
+function create_tpl(path: string) {
 	const tpl = `export default \`
 \`;
 `;
-	return createfile(we, join(path, 'tpl.ts'), tpl);
+	return writefileasync(join(path, 'tpl.ts'), tpl);
 }

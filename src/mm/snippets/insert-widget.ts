@@ -3,8 +3,8 @@ import desktop from '../../desktop/snippets/addsnippets-widget';
 import { IAtom, IAtomCatagory } from '../../interfaces';
 import mobile from '../../mobile/snippets/addsnippets-widget';
 import get from '../../util/get';
-import web from '../../web/snippets/addsnippets-widget';
-import wxapp from '../../wxapp/page/addsnippets-widget';
+import web from '../../web/snippets/add-widget';
+import wxapp from '../../wxapp/snippets/add-widget';
 import prj_type, { PrjType } from '../../util/prj-type';
 
 type Fun = (textEditor: TextEditor, all: Map<string, IAtom>, catagories: Map<string, IAtom[]>) => Promise<void>;

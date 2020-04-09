@@ -1,8 +1,8 @@
 import { join } from 'path';
-import { readdirSync } from './fs';
+import { readdirasync } from './fs';
 
 export default async function generate(path: string, prefix: string, postfix: string, len: number) {
-	const files = await readdirSync(path);
+	const files = await readdirasync(path);
 	const reg = new RegExp(`^${prefix}\\d{${len}}${postfix}$`);
 	const l = prefix.length;
 	const as = files.filter((f) => {

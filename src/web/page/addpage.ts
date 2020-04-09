@@ -1,16 +1,16 @@
 import { basename, extname, join } from 'path';
 import { FileType, Uri, window, workspace } from 'vscode';
-import { existsSync, mkdirSync, readdirSync, writeFileSync } from '../../util/fs';
+import { existsasync, mkdirasync, readdirasync, writefileasync } from '../../util/fs';
 import generate from '../../util/generate';
 import { NO_MODIFY } from '../../util/blocks';
 import pickoption from '../../util/pickoption';
 
 export default async function add(rootPath: string) {
-	if (!await existsSync(join(rootPath, 'pages'))) {
+	if (!await existsasync(join(rootPath, 'pages'))) {
 		window.showErrorMessage('缺少pages文件夹');
 		return;
 	}
-	if (!await existsSync(join(rootPath, 'src'))) {
+	if (!await existsasync(join(rootPath, 'src'))) {
 		window.showErrorMessage('缺少src文件夹');
 		return;
 	}
@@ -22,7 +22,7 @@ export default async function add(rootPath: string) {
 		}
 		return null;
 	})();
-	const pages = (await readdirSync(join(rootPath, 'pages'))).map((_p) => {
+	const pages = (await readdirasync(join(rootPath, 'pages'))).map((_p) => {
 		return _p.substring(0, _p.lastIndexOf('.'));
 	});
 	const newpage = '以下都不是';
@@ -39,11 +39,11 @@ export default async function add(rootPath: string) {
 		return;
 	}
 	const p_path = await generate(folder, 'pg', '', 3);
-	if (!await existsSync(folder)) {
-		await mkdirSync(folder);
+	if (!await existsasync(folder)) {
+		await mkdirasync(folder);
 	}
 	const name = basename(p_path);
-	await mkdirSync(p_path);
+	await mkdirasync(p_path);
 	// create n
 	await create_ns(p_path);
 	const html = await (async () => {
@@ -93,7 +93,7 @@ import s from './s';
 })();
 
 `;
-	return writeFileSync(join(path, 'b.ts'), tpl);
+	return writefileasync(join(path, 'b.ts'), tpl);
 }
 
 function create_s(path: string) {
@@ -101,7 +101,7 @@ function create_s(path: string) {
 };
 
 `;
-	return writeFileSync(join(path, 's.ts'), tpl);
+	return writefileasync(join(path, 's.ts'), tpl);
 }
 
 function create_html(path: string, html: string) {
@@ -113,14 +113,14 @@ const html = \`${body}\`;
 export default parse(html) as HTMLElement;
 
 `;
-	return writeFileSync(join(path, 'html.ts'), tpl);
+	return writefileasync(join(path, 'html.ts'), tpl);
 }
 
 function create_ns(path: string) {
 	const tpl = `export default {
 };
 `;
-	return writeFileSync(join(path, 'ns.ts'), tpl);
+	return writefileasync(join(path, 'ns.ts'), tpl);
 }
 
 function create_n(path: string, page: string, html: string) {
@@ -183,5 +183,5 @@ export default async function main(url: string, msg: unknown, headers: object) {
 	\`;
 }
 `;
-	return writeFileSync(join(path, 'n.ts'), tpl);
+	return writefileasync(join(path, 'n.ts'), tpl);
 }

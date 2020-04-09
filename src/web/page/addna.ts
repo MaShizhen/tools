@@ -1,6 +1,6 @@
 import { basename, dirname, join } from 'path';
-import { TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { createfile, readdirSync } from '../../util/fs';
+import { TextEditor, Uri, window } from 'vscode';
+import { readdirasync, writefileasync } from '../../util/fs';
 import generate from '../../util/generate';
 import replace from '../../util/replace';
 
@@ -13,10 +13,7 @@ export default async function add(editor: TextEditor) {
 		window.showErrorMessage('请在页面b.ts中进行该操作!');
 	} else {
 		const p_path = await generate(folder, 'na', '\\.ts', 3);
-		const we = new WorkspaceEdit();
-		create_a(we, p_path);
-		await workspace.applyEdit(we);
-		await workspace.saveAll();
+		await create_a(p_path);
 		await update_b(folder);
 		window.setStatusBarMessage('成功');
 		window.showTextDocument(Uri.file(`${p_path}.ts`));
@@ -26,7 +23,7 @@ export default async function add(editor: TextEditor) {
 async function update_b(path: string) {
 	const file_name = join(path, 'n.ts');
 	const eol = '\n';
-	const files = await readdirSync(path);
+	const files = await readdirasync(path);
 	const as = files.filter((f) => {
 		return /^na\d{3}\.ts$/.test(f);
 	}).map((f) => {
@@ -45,7 +42,7 @@ async function update_b(path: string) {
 	await replace(file_name, 'ACTIONS', actions);
 }
 
-function create_a(we: WorkspaceEdit, path: string) {
+function create_a(path: string) {
 	const a = basename(path);
 	const tpl = `import an3 from '@mmstudio/an000003';
 
@@ -53,5 +50,5 @@ export default async function ${a}(mm: an3) {
 	// todo
 }
 `;
-	createfile(we, `${path}.ts`, tpl);
+	return writefileasync(`${path}.ts`, tpl);
 }

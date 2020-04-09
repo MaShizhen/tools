@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { TextEditor, window, workspace } from 'vscode';
-import { existsSync } from './fs';
+import { existsasync } from './fs';
 
 export default async function root(editor?: TextEditor) {
 	editor = editor || window.activeTextEditor;
@@ -19,7 +19,7 @@ export default async function root(editor?: TextEditor) {
 		throw new Error('请打开工程进行操作');
 	}
 	const dir = wf.uri.fsPath;
-	if (!await existsSync(join(dir, 'package.json'))) {
+	if (!await existsasync(join(dir, 'package.json'))) {
 		window.showErrorMessage('错误的目录');
 		throw new Error('错误的目录');
 	}

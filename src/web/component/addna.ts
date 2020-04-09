@@ -1,6 +1,6 @@
 import { basename, dirname, join } from 'path';
-import { TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
-import { createfile, readdirSync, writeFileSync } from '../../util/fs';
+import { TextEditor, Uri, window } from 'vscode';
+import { readdirasync, writefileasync } from '../../util/fs';
 import generate from '../../util/generate';
 import replace from '../../util/replace';
 import reg_in_comment from '../../util/reg-in-component';
@@ -13,10 +13,7 @@ export default async function add(editor: TextEditor) {
 	if (r === null) {
 		window.showErrorMessage('请在组件n.ts中进行该操作!');
 	} else {
-		const we = new WorkspaceEdit();
-		const p_path = await create_a(we, folder);
-		await workspace.applyEdit(we);
-		await workspace.saveAll();
+		const p_path = await create_a(folder);
 		await update_n(folder);
 		window.showTextDocument(p_path);
 	}
@@ -25,7 +22,7 @@ export default async function add(editor: TextEditor) {
 async function update_n(path: string) {
 	const file_name = join(path, 'n.ts');
 	const eol = '\n';
-	const files = await readdirSync(path);
+	const files = await readdirasync(path);
 	const as = files.filter((f) => {
 		return /^na\d{3}\.ts$/.test(f);
 	}).map((f) => {
@@ -44,7 +41,7 @@ async function update_n(path: string) {
 	await replace(file_name, 'ACTIONS', actions);
 }
 
-async function create_a(we: WorkspaceEdit, p_path: string) {
+async function create_a(p_path: string) {
 	const path = await generate(p_path, 'na', '\\.ts', 3);
 	const a = basename(path);
 	if (a === 'na001') {
@@ -57,7 +54,7 @@ export default async function ${a}(mm: an2) {
 }
 `;
 	const uri = Uri.file(`${path}.ts`);
-	createfile(we, `${path}.ts`, tpl);
+	await writefileasync(`${path}.ts`, tpl);
 	return uri;
 }
 
@@ -67,5 +64,5 @@ function update_ns(path: string) {
 	'mm-events-init': 'na001'
 };
 `;
-	return writeFileSync(join(path, 'ns.ts'), tpl);
+	return writefileasync(join(path, 'ns.ts'), tpl);
 }

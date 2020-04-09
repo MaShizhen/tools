@@ -134,7 +134,6 @@ async function update_pkg(folder: string, no: string, user: string, remote: stri
 	author.name = user;
 	author.email = email;
 	const d = await window.showInputBox({
-		value: pkg.description,
 		prompt: '控件简要描述,请尽量控制在8个字以内',
 		ignoreFocusOut: true,
 		validateInput(v) {

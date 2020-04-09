@@ -7,7 +7,7 @@ import pickoption from '../../util/pickoption';
 
 export default async function insert_widget_snippet(textEditor: TextEditor, all_remote: Map<string, IAtom>, catagories_remote: Map<string, IAtom[]>) {
 	const root_path = await root(textEditor);
-	const local_atoms = await load_local_atoms(root_path);
+	const local_atoms = await load_local(root_path);
 	const catagories = new Map<string, IAtom[]>();
 	catagories.set('本地', local_atoms);
 	catagories_remote.forEach((v, k) => {
@@ -63,7 +63,7 @@ export default async function insert_widget_snippet(textEditor: TextEditor, all_
 	await add_snippet(all.get(selected_atom.label)!, textEditor);
 }
 
-async function load_local_atoms(root: string) {
+async function load_local(root: string) {
 	try {
 		const atom_dir = join(root, 'src', 'widgets');
 		const atoms_dirs = await workspace.fs.readDirectory(Uri.file(atom_dir));

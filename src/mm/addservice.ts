@@ -1,6 +1,6 @@
 import { dirname } from 'path';
 import { commands, Uri, window, workspace } from 'vscode';
-import { writeFileSync } from '../util/fs';
+import { writefileasync } from '../util/fs';
 import generate from '../util/generate';
 
 export default function add() {
@@ -44,5 +44,5 @@ export default async function atom(msg: Message, actionid: string): Promise<an4>
 	} as an4;
 }
 `;
-	return writeFileSync(`${path}.ts`, tpl);
+	return writefileasync(`${path}.ts`, tpl);
 }
