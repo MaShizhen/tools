@@ -5,14 +5,18 @@ import { existsasync } from './fs';
 export default async function root(editor?: TextEditor) {
 	editor = editor || window.activeTextEditor;
 	const wf = (() => {
-		if (!editor) {
-			const wfs = workspace.workspaceFolders;
-			if (!wfs || wfs.length === 0) {
-				return null;
+		if (editor) {
+			const w = workspace.getWorkspaceFolder(editor.document.uri);
+			if (w) {
+				return w;
 			}
-			return wfs[0];
 		}
-		return workspace.getWorkspaceFolder(editor.document.uri);
+
+		const wfs = workspace.workspaceFolders;
+		if (!wfs || wfs.length === 0) {
+			return null;
+		}
+		return wfs[0];
 	})();
 	if (!wf) {
 		window.showErrorMessage('请打开工程进行操作');
