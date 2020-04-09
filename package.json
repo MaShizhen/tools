@@ -1,6 +1,6 @@
 {
 	"name": "mmstudio",
-	"version": "1.0.38",
+	"version": "1.0.39",
 	"description": "Tools for mmstudio development",
 	"publisher": "mm",
 	"icon": "images/mmstudio.jpeg",
