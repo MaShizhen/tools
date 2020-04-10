@@ -80,7 +80,7 @@ function create_tpl(folder: string) {
 import React from 'react';
 import { } from 'react-native';
 
-export default function tpl(a: <T>(action: string, ...args: unknown[]) => ((...args: unknown[]) => void), s: (...class_names: string[]) => {}, d: <T>(d: string) => T, mm: am1) {
+export default function tpl(a: <T>(action: string, ...args: unknown[]) => ((...args: unknown[]) => void), s: (...class_names: string[]) => {}, d: <T>(d: string, v: T) => T, mm: am1) {
 	return (<></>);
 }
 `;
