@@ -17,9 +17,11 @@ import addatom from './mm/add-atom';
 import addwidget from './mm/add-widget';
 import addwebfilter from './mm/add-web-filter';
 import addschedule from './mm/add-schedule';
+import showsitemap from './mm/sitemap/show';
+import refreshsitemap from './mm/sitemap/refresh';
 
-export function activate(context: ExtensionContext) {
-	context.subscriptions.push(
+export function activate({ subscriptions }: ExtensionContext) {
+	subscriptions.push(
 		adda(),
 		addc(),
 		adds(),
@@ -37,6 +39,8 @@ export function activate(context: ExtensionContext) {
 		addatom(),
 		addwidget(),
 		addwebfilter(),
-		addschedule()
+		addschedule(),
+		showsitemap(),
+		refreshsitemap()
 	);
 }

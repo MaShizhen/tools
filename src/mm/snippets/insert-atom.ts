@@ -24,8 +24,8 @@ export default function add() {
 			const doc = textEditor.document;
 			const uri = doc.uri;
 			const path = uri.path;
-			// s001 na001 atom/anp/anp001/index.ts
-			if (/s\d+\.ts$/.test(path) || /atom[/|\\]anp[/|\\]anp\d+[/|\\]index\.ts/.test(path)) {
+			// s001 na001 atom/anp001/index.ts
+			if (/s\d+\.ts$/.test(path) || /atoms[/|\\]anp\d+[/|\\]index\.ts/.test(path)) {
 				return 'nodejs-s';
 			} else if (/na\d+\.ts$/.test(path)) {
 				return 'nodejs-na';
@@ -114,7 +114,7 @@ async function insert_atom_snippets(textEditor: TextEditor, all_remote: Map<stri
 
 async function add_snippet(atom: IAtom, textEditor: TextEditor, client: boolean) {
 	if (atom.local) {
-		await insert_local_atom(atom, textEditor, client);
+		await insert_local_atom(atom, textEditor);
 		return;
 	}
 	await install(textEditor, atom.no, atom.version, client);
@@ -137,16 +137,13 @@ async function add_snippet(atom: IAtom, textEditor: TextEditor, client: boolean)
 
 async function load_local_atoms(root: string, client: boolean) {
 	try {
-		const atom_dir = join(root, 'src', 'atom', client ? 'ap' : 'anp');
+		const atom_dir = join(root, 'src', 'atoms');
 		const atoms_dirs = await workspace.fs.readDirectory(Uri.file(atom_dir));
 		return atoms_dirs.filter(([ad, type]) => {
 			if (type !== FileType.Directory) {
 				return false;
 			}
-			if (client) {
-				return ad.startsWith('ap');
-			}
-			return ad.startsWith('anp');
+			return ad.startsWith(client ? 'ap' : 'anp');
 		}).map(([p]) => {
 			return {
 				name: `项目级原子操作:${p}`,
@@ -159,9 +156,8 @@ async function load_local_atoms(root: string, client: boolean) {
 	}
 }
 
-async function insert_local_atom(atom: IAtom, editor: TextEditor, prj: boolean) {
-	const p = prj ? 'ap' : 'anp';
-	const dir = join(await root(editor), 'src', 'atom', p, atom.no);
+async function insert_local_atom(atom: IAtom, editor: TextEditor) {
+	const dir = join(await root(editor), 'src', 'atoms', atom.no);
 	const cur = dirname(editor.document.uri.fsPath);
 	const imp_path = relative(cur, dir);
 	const name = atom.no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3');
@@ -171,7 +167,7 @@ async function insert_local_atom(atom: IAtom, editor: TextEditor, prj: boolean) 
 	try {
 		await workspace.fs.stat(snippet_use);
 	} catch (error) {
-		window.showErrorMessage(`请先编辑'src/atom/${p}/${atom.no}/use.snippet'`);
+		window.showErrorMessage(`请先编辑'src/atom/${atom.no}/use.snippet'`);
 		return;
 	}
 	const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');

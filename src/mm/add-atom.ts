@@ -69,7 +69,7 @@ export default function add_atom() {
 			const n = parseInt(s, 10);
 			const rt = await root();
 			const prefix = p1.prefix;
-			const dir = join(rt, 'src', 'atom', prefix);
+			const dir = join(rt, 'src', 'atoms');
 			await workspace.fs.createDirectory(Uri.file(dir));
 			const atom_dir = await generate(dir, prefix, '', 3);
 			const no = basename(atom_dir);

@@ -32,188 +32,222 @@
 		"commands": [
 			{
 				"command": "mm.page.add",
+				"category": "mmstudio",
 				"title": "%mm.page.add%"
 			},
 			{
 				"command": "mm.component.add",
+				"category": "mmstudio",
 				"title": "%mm.component.add%"
 			},
 			{
 				"command": "mm.action.add",
+				"category": "mmstudio",
 				"title": "%mm.action.add%"
 			},
 			{
 				"command": "mm.presentation.add",
+				"category": "mmstudio",
 				"title": "%mm.presentation.add%"
 			},
 			{
 				"command": "mm.service.add",
+				"category": "mmstudio",
 				"title": "%mm.service.add%"
 			},
 			{
 				"command": "mm.service.router",
+				"category": "mmstudio",
 				"title": "%mm.service.router%"
 			},
 			{
 				"command": "mm.service.filter",
+				"category": "mmstudio",
 				"title": "%mm.service.filter%"
 			},
 			{
 				"command": "mm.service.schedule",
+				"category": "mmstudio",
 				"title": "%mm.service.schedule%"
 			},
 			{
 				"command": "mm.tpl.atom",
+				"category": "mmstudio",
 				"title": "%mm.tpl.atom%"
 			},
 			{
 				"command": "mm.tpl.tpl",
+				"category": "mmstudio",
 				"title": "%mm.tpl.tpl%"
 			},
 			{
 				"command": "mm.tpl.widget",
+				"category": "mmstudio",
 				"title": "%mm.tpl.widget%"
 			},
 			{
 				"command": "mm.shell.create",
+				"category": "mmstudio",
 				"title": "%mm.shell.create%"
 			},
 			{
 				"command": "mm.shell.debug",
+				"category": "mmstudio",
 				"title": "%mm.shell.debug%"
 			},
 			{
 				"command": "mm.shell.build",
+				"category": "mmstudio",
 				"title": "%mm.shell.build%"
 			},
 			{
 				"command": "mm.atom.add",
+				"category": "mmstudio",
 				"title": "%mm.atom.add%"
 			},
 			{
 				"command": "mm.widget.add",
+				"category": "mmstudio",
 				"title": "%mm.widget.add%"
+			},
+			{
+				"command": "mm.showmap",
+				"category": "mmstudio",
+				"title": "%mm.showmap%"
+			},
+			{
+				"command": "mm.refreshmap",
+				"category": "mmstudio",
+				"title": "%mm.refreshmap%"
 			}
 		],
 		"menus": {
 			"commandPalette": [
 				{
 					"command": "mm.page.add",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.action.add",
 					"when": "editorIsOpen",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.presentation.add",
 					"when": "resourceFilename == tpl.tpl || resourceFilename =~ /p\\d+\\.tpl/",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.service.add",
 					"when": "editorIsOpen",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.service.router",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.service.filter",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.service.schedule",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.tpl.atom",
 					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/ || resourceFilename == index.ts",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.tpl.tpl",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.tpl.widget",
 					"when": "resourceFilename =~ /(index|tpl|p\\d+)\\.(tsx?|tpl)/ || resourceFilename =~ /\\w*\\.wxml/",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.component.add",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.shell.create",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.shell.debug",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.shell.build",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.atom.add",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.widget.add",
-					"group": "mm"
+					"group": "mmstudio"
 				}
 			],
 			"editor/context": [
 				{
 					"command": "mm.action.add",
 					"when": "resourceFilename == b.ts || resourceFilename == p.ts || resourceFilename == n.ts",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.service.add",
 					"when": "editorIsOpen",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.service.router",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.service.filter",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.service.schedule",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.presentation.add",
 					"when": "resourceFilename == tpl.tpl || resourceFilename =~ /p\\d+\\.tpl/",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.tpl.atom",
 					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/ || resourceFilename == index.ts",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.tpl.tpl",
-					"group": "mm"
+					"group": "mmstudio"
 				},
 				{
 					"command": "mm.tpl.widget",
 					"when": "resourceFilename =~ /(index|tpl|p\\d+)\\.(tsx?|tpl)/ || resourceFilename =~ /\\w*\\.wxml/",
-					"group": "mm"
+					"group": "mmstudio"
 				}
 			],
 			"explorer/context": [
 				{
-					"command": "mm.page.add",
-					"group": "mm"
+					"command": "mm.refreshmap",
+					"group": "mmstudio",
+					"when": "resourceFilename == .mm.md && editorTextFocus"
+				}
+			],
+			"editor/title": [
+				{
+					"command": "mm.refreshmap",
+					"group": "mmstudio",
+					"when": "resourceFilename == .mm.md"
 				}
 			]
 		},
