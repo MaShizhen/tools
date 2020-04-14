@@ -6,7 +6,7 @@ import wxapp from '../wxapp/page/addpage';
 import mobile from '../mobile/page/add';
 import prj_type, { PrjType } from '../util/prj-type';
 
-export default function add() {
+export default function addpage() {
 	return commands.registerCommand('mm.page.add', async () => {
 		const rootPath = await root_path();
 		const type = prj_type();

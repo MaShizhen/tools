@@ -1,6 +1,6 @@
 import { basename, extname, join } from 'path';
 import { FileType, Uri, window, workspace } from 'vscode';
-import { existsasync, writefileasync } from '../../util/fs';
+import { existsasync, mkdirasync, writefileasync } from '../../util/fs';
 import { NO_MODIFY } from '../../util/blocks';
 import pickoption from '../../util/pickoption';
 
@@ -9,9 +9,9 @@ export default async function add(rootPath: string) {
 		window.showErrorMessage('缺少pages文件夹');
 		return;
 	}
-	if (!await existsasync(join(rootPath, 'src'))) {
-		window.showErrorMessage('缺少src文件夹');
-		return;
+	const src = join(rootPath, 'src');
+	if (!await existsasync(src)) {
+		await mkdirasync(src);
 	}
 	const folder = join(rootPath, 'src');
 	const value = await (async () => {

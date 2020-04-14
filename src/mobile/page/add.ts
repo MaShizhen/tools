@@ -1,7 +1,7 @@
 import { dirname, join } from 'path';
 import { window } from 'vscode';
 import addapp from './addapp';
-import { existsasync } from '../../util/fs';
+import { existsasync, mkdirasync } from '../../util/fs';
 import getpagetype from './pagetype';
 import addcontainerinapp from './add-container-in-app';
 import addcontainer from './add-container';
@@ -9,8 +9,11 @@ import addpage from './addpage';
 import { isapp } from './isapp';
 import iscontainer from './iscontainer';
 
-export default async function add(rootPath: string) {
+export default async function addpagemobile(rootPath: string) {
 	const src = join(rootPath, 'src');
+	if (!await existsasync(src)) {
+		await mkdirasync(src);
+	}
 	// 1. 查看是否存在app/app.js
 	if (await isapp(src)) {
 		window.showInformationMessage('该操作会在当前打开的页面中添加子页面');

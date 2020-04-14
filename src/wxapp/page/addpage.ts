@@ -1,12 +1,14 @@
 import { basename, join } from 'path';
 import { Uri, window } from 'vscode';
-import { readfileasync, writefileasync } from '../../util/fs';
+import { existsasync, mkdirasync, readfileasync, writefileasync } from '../../util/fs';
 import generate from '../../util/generate';
 
 export default async function addwxapppage(rootPath: string) {
-	const folder = join(rootPath, 'src');
-
-	const p_path = await generate(folder, 'pg', '', 3);
+	const src = join(rootPath, 'src');
+	if (!await existsasync(src)) {
+		await mkdirasync(src);
+	}
+	const p_path = await generate(src, 'pg', '', 3);
 	// 创建页面逻辑层目录
 	await create_a(p_path);		// 创建事件
 	await create_s(p_path);		// 创建响应
@@ -21,7 +23,7 @@ export default async function addwxapppage(rootPath: string) {
 	await create_wxss(p_path, name);	// 创建page.wxss
 
 	// 修改app.json和app-debug.json
-	await updata_app_json(folder, name);
+	await updata_app_json(src, name);
 	// updata_app_debug_json(folder, name);
 
 	window.setStatusBarMessage('成功添加页面文件');
