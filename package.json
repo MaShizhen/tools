@@ -12,7 +12,7 @@
 		"test": "tsc -w",
 		"lint": "eslint ./src/**/*.ts",
 		"clean": "del-cli ./dist/",
-		"compile": "tsc",
+		"compile": "webpack --mode production",
 		"build": "npm run clean && npm run lint && npm run compile",
 		"up": "git pull git@gitee.com:mmstudio/base.git cjs",
 		"vscode:prepublish": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && npm run build"
@@ -407,7 +407,10 @@
 		"eslint": "6.8.0",
 		"eslint-config-prettier": "6.10.0",
 		"eslint-plugin-import": "2.20.1",
+		"ts-loader": "6.2.2",
 		"typescript": "next",
-		"vscode-test": "1.3.0"
+		"vscode-test": "1.3.0",
+		"webpack": "4.42.1",
+		"webpack-cli": "3.3.11"
 	}
 }
