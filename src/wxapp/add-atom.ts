@@ -10,7 +10,7 @@ import tplatomusage from '../util/tpl-atom-useage';
 const { readFile, writeFile } = promises;
 
 export default async function addatomwx() {
-	const def = dirname(await workpath());
+	const def = dirname(workpath());
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
 		canSelectFiles: false,

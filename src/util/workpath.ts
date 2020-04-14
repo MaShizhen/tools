@@ -1,10 +1,25 @@
 import { homedir } from 'os';
-import root from './root';
+import { window, workspace } from 'vscode';
 
-export default async function workpath() {
-	try {
-		return await root();
-	} catch (error) {
+export default function workpath() {
+	const editor = window.activeTextEditor;
+	const wf = (() => {
+		if (editor) {
+			const w = workspace.getWorkspaceFolder(editor.document.uri);
+			if (w) {
+				return w;
+			}
+		}
+
+		const wfs = workspace.workspaceFolders;
+		if (!wfs || wfs.length === 0) {
+			return null;
+		}
+		return wfs[0];
+	})();
+	if (!wf) {
 		return homedir();
 	}
+	const dir = wf.uri.fsPath;
+	return dir;
 }
