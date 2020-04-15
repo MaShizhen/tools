@@ -23,7 +23,7 @@ pro_types.set(PrjType.wxapp, 'wxapp');
 export default function create_project() {
 	return commands.registerCommand('mm.shell.create', async () => {
 		window.showInformationMessage('进行此操作之前,请确保git已安装并配置好权限,且有一个可用的没有任何提交的git仓库');
-		const def = dirname(await workpath());
+		const def = dirname(workpath());
 		const picked = await window.showQuickPick([
 			{
 				description: '1.web/h5网站应用',
@@ -90,7 +90,8 @@ export default function create_project() {
 			return;
 		}
 		const remote = await window.showInputBox({
-			placeHolder: `git@gitee.com:mm-works/${no}.git`,
+			value: `git@github.com:mm-works/${no}.git`,
+			placeHolder: `git@github.com:mm-works/${no}.git`,
 			ignoreFocusOut: true,
 			validateInput(val) {
 				if (!val) {
@@ -125,7 +126,7 @@ async function replace_mobile(cwd: string, no: string) {
 	return Promise.all(files.map(async ([path, type]) => {
 		const fullpath = join(cwd, path);
 		const newpath = join(cwd, path.replace(/mmstudio/, no));
-		if (path.includes('webtest')) {
+		if (path.includes('mmstudio')) {
 			await workspace.fs.rename(Uri.file(fullpath), Uri.file(newpath));
 		}
 		if (type === FileType.Directory) {
