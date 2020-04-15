@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { workspace } from 'vscode';
+import { Uri, window } from 'vscode';
 import { writefileasync } from '../../util/fs';
 import { NO_MODIFY } from '../../util/blocks';
 import getcontainertype from './container-type';
@@ -18,7 +18,7 @@ export default async function addapp(src: string) {
 	await create_app(folder, type);
 
 	const path = join(folder, 'app.ts');
-	await workspace.openTextDocument(path);
+	await window.showTextDocument(Uri.file(path));
 }
 
 function create_app(folder: string, type: string) {

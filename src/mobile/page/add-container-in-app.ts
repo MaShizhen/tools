@@ -13,7 +13,7 @@ export default async function addcontainerinapp(dir: string, type: string) {
 	const a = await create_a(folder);
 	await create_container(folder, type);
 	await updatechildren(dir);
-	window.showTextDocument(Uri.file(a));
+	await window.showTextDocument(Uri.file(a));
 }
 
 function create_container(folder: string, type: string) {
