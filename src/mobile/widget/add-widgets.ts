@@ -10,7 +10,7 @@ import tplwidgetusage from './tpl-widget-useage';
 const { readFile, writeFile } = promises;
 
 export default async function add_common_widget_mobile() {
-	const def = dirname(await workpath());
+	const def = dirname(workpath());
 	const container = await window.showOpenDialog({
 		defaultUri: Uri.file(def),
 		canSelectFiles: false,

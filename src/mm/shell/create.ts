@@ -117,6 +117,8 @@ export default function create_project() {
 		await exec('git commit -m "init project"', cwd);
 		await exec('git push origin master:master', cwd);
 		await exec('git branch --set-upstream-to=origin/master master', cwd);
+		window.showInformationMessage('项目初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
+		await exec('yarn', cwd);
 		await commands.executeCommand('vscode.openFolder', uri);
 	});
 }
