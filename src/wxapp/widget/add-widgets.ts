@@ -99,7 +99,7 @@ async function update_pkg(folder: string, no: string, user: string, remote: stri
 	pkg.name = `@mmstudio/${no}`;
 	pkg.scripts.up = 'git pull git@github.com:mm-tpl/widgets-wxapp.git master';
 	const repository = remote.replace(':', '/').replace('git@', 'https://');	// git@github.com:mm-atom/no.git to https://github.com/mm-atom/no.git
-	pkg.repository.url = `${repository}.git`;
+	pkg.repository.url = repository;
 	const author = pkg.author || {};
 	author.name = user;
 	author.email = email;
