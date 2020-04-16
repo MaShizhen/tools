@@ -52,6 +52,7 @@ export default function create_project() {
 		if (!picked) {
 			return;
 		}
+		const type = picked.type;
 		const desc = await window.showInputBox({
 			placeHolder: '请用简单语言描述一下这个项目',
 			ignoreFocusOut: true,
@@ -103,15 +104,17 @@ export default function create_project() {
 		await workspace.fs.createDirectory(uri);
 		const cwd = uri.fsPath;
 		await exec('git init', cwd);
-		const proj_type = pro_types.get(picked.type);
+		const proj_type = pro_types.get(type);
 		await exec(`git pull git@github.com:mm-tpl/${proj_type}.git`, cwd);
 		await exec(`git remote add origin ${remote}`, cwd);
 		await replace(join(cwd, 'package.json'), [/prjno/, /\$desc/], [no, desc]);
-		if (picked.label.includes('mobile')) {
+		if (type === PrjType.mobile) {
 			await replace_mobile(join(cwd, 'android'), no);
 			await replace_mobile(join(cwd, 'ios'), no);
 			await replace(join(cwd, 'app.json'), [/mmstudio/, /\$desc/], [no, desc]);
 			await replace(join(cwd, 'index.js'), [/mmstudio/, /\$desc/], [no, desc]);
+		} else if (type === PrjType.wxapp) {
+			await replace(join(cwd, 'src', 'package.json'), [/prjno/, /\$desc/], [no, desc]);
 		}
 		await exec('git add .', cwd);
 		await exec('git commit -m "init project"', cwd);
