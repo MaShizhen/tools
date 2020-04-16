@@ -1,6 +1,6 @@
 {
 	"name": "mmstudio",
-	"version": "1.1.7",
+	"version": "1.1.8",
 	"description": "Tools for mmstudio development",
 	"publisher": "mm",
 	"icon": "images/mmstudio.jpeg",
@@ -374,7 +374,7 @@
 			}
 		]
 	},
-	"homepage": "https://mm-works.github.io",
+	"homepage": "https://mmstudio.gitee.io/",
 	"keywords": [
 		"蛮蛮",
 		"蛮蛮工作室",
@@ -390,7 +390,6 @@
 		"type": "git",
 		"url": "https://github.com/mm-core/tools"
 	},
-	"homepage": "https://mmstudio.gitee.io/",
 	"author": {
 		"name": "taoqf",
 		"email": "tao_qiufeng@126.com",
