@@ -12,7 +12,7 @@
 
 ## 1. Description
 
-vscode, speedup developing
+Code Speeder <https://mm-works.github.io/>
 
 Required: **vscode版本必须是1.37以上才可以使用**
 

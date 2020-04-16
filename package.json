@@ -14,7 +14,7 @@
 		"clean": "del-cli ./dist/",
 		"compile": "webpack --mode production",
 		"build": "npm run clean && npm run lint && npm run compile",
-		"up": "git pull git@gitee.com:mmstudio/base.git cjs",
+		"up": "git pull git@github.com:mm-core/base.git cjs",
 		"vscode:prepublish": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && npm run build"
 	},
 	"engines": {
