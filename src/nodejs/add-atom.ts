@@ -128,9 +128,9 @@ async function update_pkg(folder: string, no: string, user: string, remote: stri
 	const content = await readFile(path, 'utf-8');
 	const pkg = JSON.parse(content) as Package;
 	pkg.name = `@mmstudio/${no}`;
-	delete pkg.scripts.up;
+	pkg.scripts.up = 'git pull git@github.com:mm-tpl/atom-nodejs.git master';
 	const repository = remote.replace(':', '/').replace('git@', 'https://');	// git@github.com:mm-atom/no.git to https://github.com/mm-atom/no.git
-	pkg.repository.url = repository;
+	pkg.repository.url = `${repository}.git`;
 	const author = pkg.author || {};
 	author.name = user;
 	author.email = email;
