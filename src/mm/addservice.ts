@@ -20,7 +20,7 @@ function create_s(path: string, dir: string) {
 import an4 from '@mmstudio/an000004';
 
 interface Message {
-	// cookie: {
+	// cookies: {
 	// 	uk: string;
 	// 	[key: string]: string
 	// };
