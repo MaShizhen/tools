@@ -19,5 +19,7 @@
 	"mm.shell.debug": "调试",
 	"mm.shell.build": "打包",
 	"mm.atom.add": "新增原子操作",
-	"mm.widget.add": "新增控件"
+	"mm.atom.addlocal": "新增项目原子操作",
+	"mm.widget.add": "新增控件",
+	"mm.widget.addlocal": "新增项目控件"
 }

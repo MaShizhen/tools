@@ -14,7 +14,9 @@ import insert_tpl from './mm/snippets/insert-tpl';
 import insert_widget from './mm/snippets/insert-widget';
 import list_services from './nodejs/list-services';
 import addatom from './mm/add-atom';
+import addlocalatom from './mm/add-local-atom';
 import addwidget from './mm/add-widget';
+import addlocalwidget from './mm/add-local-widget';
 import addwebfilter from './mm/add-web-filter';
 import addschedule from './mm/add-schedule';
 import showsitemap from './mm/sitemap/show';
@@ -37,7 +39,9 @@ export function activate({ subscriptions }: ExtensionContext) {
 		shell_build(),
 		create_proj(),
 		addatom(),
+		addlocalatom(),
 		addwidget(),
+		addlocalwidget(),
 		addwebfilter(),
 		addschedule(),
 		showsitemap(),

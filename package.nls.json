@@ -19,5 +19,7 @@
 	"mm.shell.debug": "Debug",
 	"mm.shell.build": "Build",
 	"mm.atom.add": "Add new atom",
-	"mm.widget.add": "Add new widget"
+	"mm.atom.addlocal": "Add new project atom",
+	"mm.widget.add": "Add new widget",
+	"mm.widget.addlocal": "Add new project widget"
 }

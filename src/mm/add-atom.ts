@@ -1,15 +1,9 @@
-import { basename, join } from 'path';
-import { commands, QuickPickItem, Uri, window, workspace } from 'vscode';
+import { commands, QuickPickItem, window, workspace } from 'vscode';
 import nodejs from '../nodejs/add-atom';
 import web from '../web/atom/add-common';
 import wxapp from '../wxapp/add-atom';
 import mobile from '../mobile/add-atom';
-import root from '../util/root';
-import generate from '../util/generate';
-import tplatomusage from '../util/tpl-atom-useage';
 import { AtomType } from '../util/atom-type';
-import tplatom from '../util/tpl-atom';
-import { writefileasync } from '../util/fs';
 import pickoption from '../util/pickoption';
 
 const ap = new Map<AtomType, () => Promise<unknown>>();
@@ -27,68 +21,11 @@ export default function add_atom() {
 		if (!p1) {
 			return;
 		}
-		const p2 = await window.showQuickPick([
-			{
-				description: '只在该项目可用，多个项目无法共用',
-				label: '1.项目级原子操作',
-				detail: '具体操作需要参考相关文档<https://mmstudio.gitee.io>',
-				prj: true
-			},
-			{
-				description: '所有项目均将可用，编写相对较为复杂',
-				label: '2.通用原子操作',
-				prj: false
-			}], {
-			...pickoption,
-			placeHolder: '请选择原子操作类型'
-		});
-		if (!p2) {
-			return;
-		}
-		const isprj = p2.prj;
-		if (isprj) {
-			const s = await window.showInputBox({
-				value: '2',
-				prompt: '请设置参数个数，该操作为初始操作，后期仍需要修改use.snippet和index.ts文件',
-				ignoreFocusOut: true,
-				validateInput(v) {
-					try {
-						const n = parseInt(v, 10);
-						if (n >= 0) {
-							return null;
-						}
-						return '参数个数不能小于0';
-					} catch (error) {
-						return '不能为空';
-					}
-				}
-			});
-			if (!s) {
-				return;
-			}
-			const n = parseInt(s, 10);
-			const rt = await root();
-			const prefix = p1.prefix;
-			const dir = join(rt, 'src', 'atoms');
-			await workspace.fs.createDirectory(Uri.file(dir));
-			const atom_dir = await generate(dir, prefix, '', 3);
-			const no = basename(atom_dir);
-			const ts = join(atom_dir, 'index.ts');
-			await writefileasync(ts, tplatom(no, n));
-			await writefileasync(join(atom_dir, 'use.snippet'), tplatomusage('原子操作功能描述', no, n));
-			if (p1.type === 'web/h5') {
-				await writefileasync(join(atom_dir, 'amd.json'), '[]');
-			}
-			window.showInformationMessage('原子操作模板已生成');
-			const doc = await workspace.openTextDocument(ts);
-			window.showTextDocument(doc);
+		const fun = ap.get(p1.type);
+		if (fun) {
+			await fun();
 		} else {
-			const fun = ap.get(p1.type);
-			if (fun) {
-				await fun();
-			} else {
-				window.showErrorMessage('敬请期待');
-			}
+			window.showErrorMessage('敬请期待');
 		}
 	});
 }

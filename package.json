@@ -106,9 +106,19 @@
 				"title": "%mm.atom.add%"
 			},
 			{
+				"command": "mm.atom.addlocal",
+				"category": "mmstudio",
+				"title": "%mm.atom.addlocal%"
+			},
+			{
 				"command": "mm.widget.add",
 				"category": "mmstudio",
 				"title": "%mm.widget.add%"
+			},
+			{
+				"command": "mm.widget.addlocal",
+				"category": "mmstudio",
+				"title": "%mm.widget.addlocal%"
 			},
 			{
 				"command": "mm.showmap",
@@ -189,7 +199,15 @@
 					"group": "mmstudio"
 				},
 				{
+					"command": "mm.atom.addlocal",
+					"group": "mmstudio"
+				},
+				{
 					"command": "mm.widget.add",
+					"group": "mmstudio"
+				},
+				{
+					"command": "mm.widget.addlocal",
 					"group": "mmstudio"
 				}
 			],
@@ -326,14 +344,6 @@
 				"key": "alt+r"
 			},
 			{
-				"command": "mm.service.filter",
-				"key": "alt+m f"
-			},
-			{
-				"command": "mm.service.schedule",
-				"key": "alt+m s"
-			},
-			{
 				"command": "mm.presentation.add",
 				"when": "resourceFilename == tpl.tpl || resourceFilename =~ /p\\d+\\.tpl/",
 				"key": "alt+x"
@@ -353,8 +363,16 @@
 				"key": "alt+t w"
 			},
 			{
+				"command": "mm.service.filter",
+				"key": "alt+m f"
+			},
+			{
+				"command": "mm.service.schedule",
+				"key": "alt+m s"
+			},
+			{
 				"command": "mm.shell.create",
-				"key": "alt+m c"
+				"key": "alt+m p"
 			},
 			{
 				"command": "mm.shell.debug",
@@ -365,11 +383,19 @@
 				"key": "alt+m b"
 			},
 			{
-				"command": "mm.atom.build",
+				"command": "mm.atom.add",
+				"key": "alt+m alt+a"
+			},
+			{
+				"command": "mm.atom.addlocal",
 				"key": "alt+m a"
 			},
 			{
-				"command": "mm.widget.build",
+				"command": "mm.widget.add",
+				"key": "alt+m alt+w"
+			},
+			{
+				"command": "mm.widget.addlocal",
 				"key": "alt+m w"
 			}
 		]
