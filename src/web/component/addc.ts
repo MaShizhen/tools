@@ -86,7 +86,7 @@ async function update_n(path: string, components: string[]) {
 }
 
 function create_b(id: string, path: string) {
-	const tpl = `import { bc } from '@mmstudio/web';
+	const tpl = `import { component } from '@mmstudio/web';
 
 import s from './s';
 
@@ -103,14 +103,14 @@ export default function main(url: string, query: {}) {
 	/// ${NO_MODIFY}
 	const actions = {};
 	/// MM ACTIONS END
-	return bc('${id}', s, actions, url, query);
+	return component('${id}', s, actions, url, query);
 }
 `;
 	return writefileasync(join(path, 'b.ts'), tpl);
 }
 
 function create_n(id: string, path: string) {
-	const tpl = `import { nc } from '@mmstudio/web';
+	const tpl = `import { component } from '@mmstudio/nodejs';
 import { HTMLElement } from 'node-html-parser';
 import s from './ns';
 import tpl from './tpl';

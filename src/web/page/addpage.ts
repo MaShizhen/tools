@@ -63,7 +63,7 @@ export default async function addpageweb(rootPath: string) {
 }
 
 function create_b(path: string) {
-	const tpl = `import { bp } from '@mmstudio/web';
+	const tpl = `import { page } from '@mmstudio/web';
 
 import s from './s';
 
@@ -85,7 +85,7 @@ import s from './s';
 	const actions = {};
 	/// MM ACTIONS END
 
-	bp(s, actions
+	page(s, actions
 		/// MM COMPONENTS BEGIN
 		/// ${NO_MODIFY}
 		/// MM COMPONENTS END
@@ -125,7 +125,7 @@ function create_ns(path: string) {
 
 function create_n(path: string, page: string, html: string) {
 	const title = html.replace(/[.\s\S]*<\s*title\s*.*>[\s]*([\s\S.]*?)\s*<\/\s*title\s*.*>[.\s\S]*/i, '$1');
-	const tpl = `import { np } from '@mmstudio/web';
+	const tpl = `import { page } from '@mmstudio/nodejs';
 import html from './html';
 import s from './ns';
 
