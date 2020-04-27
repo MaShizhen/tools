@@ -1,6 +1,6 @@
 import { basename, extname, join } from 'path';
 import { FileType, Uri, window, workspace } from 'vscode';
-import { existsasync, mkdirasync, readdirasync, writefileasync } from '../../util/fs';
+import { existsasync, mkdirasync, readdirasync, readfileasync, writefileasync } from '../../util/fs';
 import generate from '../../util/generate';
 import { NO_MODIFY } from '../../util/blocks';
 import pickoption from '../../util/pickoption';
@@ -48,7 +48,7 @@ export default async function addpageweb(rootPath: string) {
 	await create_ns(p_path);
 	const html = await (async () => {
 		if (page !== newpage) {
-			return Buffer.from(await workspace.fs.readFile(Uri.file(join(rootPath, 'pages', `${page}.html`)))).toString('utf8');
+			return readfileasync(join(rootPath, 'pages', `${page}.html`));
 		}
 		return '';
 	})();
@@ -146,7 +146,7 @@ export default async function main(url: string, msg: unknown, headers: object) {
 	/// MM ACTIONS END
 
 
-	const res = await np(html, url, msg, headers, s, actions
+	const res = await page(html, url, msg, headers, s, actions
 		/// MM COMPONENTS BEGIN
 		/// ${NO_MODIFY}
 		/// MM COMPONENTS END

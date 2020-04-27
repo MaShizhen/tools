@@ -127,7 +127,7 @@ export default function main(html: HTMLElement, url: string, msg: unknown, heade
 	/// MM ACTIONS END
 
 
-	return nc('${id}', tpl, s, actions, html, url, msg, headers, query);
+	return component('${id}', tpl, s, actions, html, url, msg, headers, query);
 }
 
 `;
