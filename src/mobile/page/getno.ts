@@ -7,7 +7,7 @@ export default async function getno(prefix: string) {
 	const no = await getmaxno(prefix, dir, 0);
 	const num = no + 1;
 	const len = 3;
-	return prefix + (Array<string>(len).join('0') + num.toString()).slice(-len);
+	return prefix + num.toString().padStart(len, '0');
 }
 
 async function getmaxno(prefix: string, dir: string, max: number) {

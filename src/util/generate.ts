@@ -14,6 +14,6 @@ export default async function generate(path: string, prefix: string, postfix: st
 		as.push(0);
 	}
 	const num = Math.max(...as) + 1;
-	const new_file = prefix + (Array<string>(len).join('0') + num.toString()).slice(-len);
+	const new_file = prefix + num.toString().padStart(len, '0');
 	return join(path, new_file);
 }
