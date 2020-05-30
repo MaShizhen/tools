@@ -106,11 +106,11 @@ function create_s(path: string) {
 
 function create_html(path: string, html: string) {
 	const body = html.replace(/[.\s\S]*<\s*body\s*.*>[\s]*([\s\S.]*?)\s*<\/\s*body\s*.*>[.\s\S]*/i, '$1');
-	const tpl = `import { HTMLElement, parse } from 'node-html-parser';
+	const tpl = `import { parse } from 'node-html-parser';
 
 const html = \`${body}\`;
 
-export default parse(html) as HTMLElement;
+export default parse(html);
 
 `;
 	return writefileasync(join(path, 'html.ts'), tpl);
