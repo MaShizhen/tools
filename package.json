@@ -149,7 +149,6 @@
 				},
 				{
 					"command": "mm.service.add",
-					"when": "editorIsOpen",
 					"group": "mmstudio"
 				},
 				{
@@ -259,6 +258,11 @@
 					"command": "mm.refreshmap",
 					"group": "mmstudio",
 					"when": "resourceFilename == .mm.md && editorTextFocus"
+				},
+				{
+					"command": "mm.service.add",
+					"group": "mmstudio",
+					"key": "alt+s"
 				}
 			],
 			"editor/title": [
@@ -289,7 +293,8 @@
 							"web/h5",
 							"wxapp",
 							"desktop",
-							"mobile"
+							"mobile",
+							"serve"
 						],
 						"default": "web/h5",
 						"description": "%mm.proj.type%"
@@ -336,7 +341,6 @@
 			},
 			{
 				"command": "mm.service.add",
-				"when": "editorIsOpen",
 				"key": "alt+s"
 			},
 			{
