@@ -3,6 +3,7 @@ import prj_type, { PrjType } from '../../util/prj-type';
 import sitemapweb from '../../web/sitemap';
 import sitemapmobile from '../../mobile/sitemap';
 import sitemapwx from '../../wxapp/sitemap';
+import sitemapserve from '../../serve/sitemap';
 
 export default function refreshsitemap() {
 	return commands.registerCommand('mm.refreshmap', async () => {
@@ -18,6 +19,9 @@ export default function refreshsitemap() {
 				break;
 			case PrjType.mobile:
 				await sitemapmobile();
+				break;
+			case PrjType.serve:
+				await sitemapserve();
 				break;
 			default:
 				await window.showErrorMessage('请打开项目后操作');

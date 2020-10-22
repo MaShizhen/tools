@@ -29,7 +29,7 @@ export default function add() {
 	});
 }
 
-function create_s(path: string, dir: string) {
+export function create_s(path: string, dir: string) {
 	const no = basename(path, '.ts');
 	const tpl = `import an1 from '@mmstudio/an000001';
 import an4 from '@mmstudio/an000004';
