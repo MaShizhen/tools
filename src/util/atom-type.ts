@@ -5,7 +5,8 @@ export enum AtomType {
 	web = 'web/h5',
 	wxapp = 'wxapp',
 	desktop = 'desktop',
-	mobile = 'mobile'
+	mobile = 'mobile',
+	serve = 'serve'
 }
 
 export default function atom_type() {

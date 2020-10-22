@@ -17,6 +17,7 @@ snippets.set(PrjType.web, { remote: 'https://mmstudio.gitee.io/atom-web/index.js
 snippets.set(PrjType.wxapp, { remote: 'https://mmstudio.gitee.io/atom-wxapp/index.json' });
 snippets.set(PrjType.desktop, { remote: 'https://mmstudio.gitee.io/atom-desktop/index.json' });
 snippets.set(PrjType.mobile, { remote: 'https://mmstudio.gitee.io/atom-mobile/index.json' });
+snippets.set(PrjType.serve, snippets.get('nodejs-s')!);
 
 export default function add() {
 	return commands.registerTextEditorCommand('mm.tpl.atom', async (textEditor) => {

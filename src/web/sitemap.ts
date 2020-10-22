@@ -1,4 +1,5 @@
 import { join, relative } from 'path';
+import { workspace } from 'vscode';
 import root from '../util/root';
 import { readdirasync, readfileasync, writefileasync } from '../util/fs';
 
@@ -92,6 +93,7 @@ export default async function sitemapweb() {
 
 ${md}
 `);
+	await workspace.saveAll();
 }
 
 function l2t(link: Link) {

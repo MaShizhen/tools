@@ -10,10 +10,18 @@ import pickoption from '../util/pickoption';
 
 export default function add_local_atom() {
 	return commands.registerCommand('mm.atom.addlocal', async () => {
-		const p1 = await window.showQuickPick(get_types(), {
-			...pickoption,
-			placeHolder: '请选择项目端点类型'
-		});
+		const p1 = await (() => {
+			const types = get_types();
+			if (types.length === 0) {
+				return null;
+			} else if (types.length === 1) {
+				return types[0];
+			}
+			return window.showQuickPick(types, {
+				...pickoption,
+				placeHolder: '请选择项目端点类型'
+			});
+		})();
 		if (!p1) {
 			return;
 		}
@@ -65,6 +73,15 @@ function get_types(): SelectAtomTypeItem[] {
 	const ins = conf.inspect<string>('mm.proj.type');
 	if (ins && ins.workspaceValue) {
 		const type = ins.workspaceValue as AtomType;
+		if (type === AtomType.serve) {
+			return [
+				{
+					detail: '1.服务端原子操作',
+					label: 'nodejs',
+					type: AtomType.node,
+					prefix: 'anp'
+				}];
+		}
 		return [
 			{
 				detail: '1.服务端原子操作',

@@ -7,7 +7,7 @@ export default function showsitemap() {
 		try {
 			const file = join(await root(), '.mm.md');
 			await window.showTextDocument(Uri.file(file));
-			await commands.executeCommand('markdown.showPreview');
+			// await commands.executeCommand('markdown.showPreview');
 		} catch {
 			await commands.executeCommand('mm.refreshmap');
 		}

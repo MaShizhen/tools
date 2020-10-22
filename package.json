@@ -354,7 +354,7 @@
 			},
 			{
 				"command": "mm.tpl.atom",
-				"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/ || resourceFilename == index.ts",
+				"when": "resourceFilename =~ /\\.ts/",
 				"key": "alt+t a"
 			},
 			{
