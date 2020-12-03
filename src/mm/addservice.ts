@@ -3,7 +3,7 @@ import { commands, Uri, window, workspace } from 'vscode';
 import { mkdirasync, writefileasync } from '../util/fs';
 import generate from '../util/generate';
 
-export default function add() {
+export default function addservice() {
 	return commands.registerCommand('mm.service.add', async () => {
 		const path = (() => {
 			const editor = window.activeTextEditor;

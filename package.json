@@ -296,7 +296,6 @@
 							"mobile",
 							"serve"
 						],
-						"default": "web/h5",
 						"description": "%mm.proj.type%"
 					},
 					"mm.atom.type": {
@@ -308,7 +307,6 @@
 							"desktop",
 							"mobile"
 						],
-						"default": "web/h5",
 						"description": "%mm.atom.type%"
 					},
 					"mm.widget.type": {
@@ -319,7 +317,6 @@
 							"desktop",
 							"mobile"
 						],
-						"default": "web/h5",
 						"description": "%mm.widget.type%"
 					}
 				}

@@ -62,7 +62,7 @@ async function create_a(p_path: string) {
 	const a = basename(path);
 	const tpl = `import awx2 from '@mmstudio/awx000002';
 
-export default async function ${a}(mm: awx2) {
+export default function ${a}(mm: awx2) {
 	// todo
 }
 `;

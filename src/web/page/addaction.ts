@@ -46,7 +46,7 @@ function create_a(path: string) {
 	const a = basename(path);
 	const tpl = `import aw1 from '@mmstudio/aw000001';
 
-export default async function ${a}(mm: aw1) {
+export default function ${a}(mm: aw1) {
 	// todo
 }
 `;

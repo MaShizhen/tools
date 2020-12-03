@@ -6,6 +6,8 @@ import wxapp from '../wxapp/page/addpage';
 import mobile from '../mobile/page/add';
 import addpageserve from '../serve/page/add';
 import prj_type, { PrjType } from '../util/prj-type';
+import addpageuniapp from '../uniapp/addpage';
+import addpagenext from '../next/addpage';
 
 export default function addpage() {
 	return commands.registerCommand('mm.page.add', async () => {
@@ -26,6 +28,14 @@ export default function addpage() {
 				break;
 			case PrjType.serve:
 				await addpageserve(rootPath);
+				break;
+			default:
+				if (await addpageuniapp(rootPath)) {
+					break;
+				}
+				if (await addpagenext(rootPath)) {
+					break;
+				}
 				break;
 		}
 		commands.executeCommand('workbench.files.action.refreshFilesExplorer');

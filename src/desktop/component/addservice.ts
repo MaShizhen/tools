@@ -50,4 +50,3 @@ export default async function atom(msg: Message, actionid: string): Promise<an4>
 `;
 	return writefileasync(`${path}.ts`, tpl);
 }
-

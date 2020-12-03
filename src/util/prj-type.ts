@@ -9,5 +9,5 @@ export enum PrjType {
 }
 
 export default function prj_type() {
-	return workspace.getConfiguration().get('mm.proj.type', 'web/h5' as PrjType);
+	return workspace.getConfiguration().get<PrjType>('mm.proj.type');
 }

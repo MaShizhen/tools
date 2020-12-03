@@ -18,6 +18,10 @@ snippets.set(PrjType.mobile, { remote: 'https://mmstudio.gitee.io/widgets-mobile
 export default function add() {
 	return commands.registerTextEditorCommand('mm.tpl.widget', async (textEditor) => {
 		const type = prj_type();
+		if (!type) {
+			window.showErrorMessage('错误的项目类型');
+			return;
+		}
 		const proj = snippets.get(type);
 		if (!proj) {
 			window.showErrorMessage('错误的项目类型');

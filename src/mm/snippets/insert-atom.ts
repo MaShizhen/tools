@@ -33,6 +33,10 @@ export default function add() {
 			}
 			return prj_type();
 		})();
+		if (!type) {
+			window.showErrorMessage('错误的项目类型');
+			return;
+		}
 		const proj = snippets.get(type);
 		if (!proj) {
 			window.showErrorMessage('错误的项目类型');

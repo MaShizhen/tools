@@ -10,6 +10,7 @@ import web_p_na from '../web/page/addna';
 import wxapp from '../wxapp/page/addaction';
 import prj_type, { PrjType } from '../util/prj-type';
 import reg_in_comment from '../util/reg-in-component';
+import addactiondefault from './default/addaction';
 
 export default function addaction() {
 	return commands.registerTextEditorCommand('mm.action.add', async (editor) => {
@@ -57,6 +58,8 @@ export default function addaction() {
 					await mobile(editor);
 				}
 				break;
+			default:
+				await addactiondefault(editor);
 		}
 		commands.executeCommand('workbench.files.action.refreshFilesExplorer');
 	});

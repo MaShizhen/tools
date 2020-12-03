@@ -48,7 +48,7 @@ function create_a(path: string) {
 	const a = basename(path);
 	const tpl = `import { IAiDesktopComponent } from '@mmstudio/desktop/interfaces';
 
-export default async function ${a}(mm: IAiDesktopComponent) {
+export default function ${a}(mm: IAiDesktopComponent) {
 	// todo
 }
 `;
