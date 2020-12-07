@@ -20,14 +20,24 @@ export default async function addpagenext(rootPath: string) {
 }
 
 function create_page(path: string, name: string) {
-	const tpl = `
-export default function ${name}() {
+	const tpl = `import { NextPage } from 'next';
 
+interface IProps {
+}
+
+const ${name}: NextPage<IProps> = ({ }) => {
 	return (
 		<>
 		</>
 	)
 }
+
+${name}.getInitialProps = async (context) => {
+	return {
+	};
+}
+
+export default ${name};
 `;
 	return writefileasync(path, tpl);
 }
