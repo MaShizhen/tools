@@ -4,8 +4,8 @@ import { existsasync, writefileasync } from '../util/fs';
 import generate from '../util/generate';
 
 export default async function addpagenext(rootPath: string) {
-	const pages = join(rootPath, 'pages');
-	if (!await existsasync(join(pages, '_app.tsx'))) {
+	const pages = await get_pages(rootPath);
+	if (!pages) {
 		return false;
 	}
 	const p_path = await generate(pages, 'pg', '.tsx', 3);
@@ -17,6 +17,18 @@ export default async function addpagenext(rootPath: string) {
 	window.setStatusBarMessage('成功添加页面文件');
 	window.showTextDocument(Uri.file(pagefile));
 	return true;
+}
+
+async function get_pages(rootPath: string) {
+	const pages = join(rootPath, 'pages');
+	if (await existsasync(join(pages, '_app.tsx'))) {
+		return pages;
+	}
+	const src = join(rootPath, 'src', 'pages');
+	if (await existsasync(join(src, '_app.tsx'))) {
+		return src;
+	}
+	return false;
 }
 
 function create_page(path: string, name: string) {
