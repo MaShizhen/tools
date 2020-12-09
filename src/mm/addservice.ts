@@ -1,10 +1,14 @@
 import { basename, dirname, join } from 'path';
 import { commands, Uri, window, workspace } from 'vscode';
+import addservicenext from '../next/addservice';
 import { mkdirasync, writefileasync } from '../util/fs';
 import generate from '../util/generate';
 
 export default function addservice() {
 	return commands.registerCommand('mm.service.add', async () => {
+		if (await addservicenext()) {
+			return;
+		}
 		const path = (() => {
 			const editor = window.activeTextEditor;
 			if (!editor) {
@@ -21,7 +25,6 @@ export default function addservice() {
 			folder = join(folder, 'src');
 			await mkdirasync(folder);
 		}
-		// 如果当前目录不在某个页面中，则不允许操作
 		const p_path = await generate(folder, 's', '\\.ts', 3);
 		await create_s(p_path, p_path.replace(/.*src[/|\\]/, ''));
 		await workspace.saveAll();
