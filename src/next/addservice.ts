@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { dirname, join } from 'path';
 import { Uri, window, workspace } from 'vscode';
 import { existsasync, mkdirasync, writefileasync } from '../util/fs';
 import generate from '../util/generate';
@@ -11,10 +11,14 @@ export default async function addservicenext() {
 	if (!pages) {
 		return false;
 	}
-	const api = join(pages, 'api');
-	if (await existsasync(api)) {
-		await mkdirasync(api);
-	}
+
+	const api = (() => {
+		const editor = window.activeTextEditor;
+		if (!editor) {
+			return join(pages, 'api');
+		}
+		return dirname(editor.document.fileName);
+	})();
 
 	const path = await generate(api, 's', '.ts', 3);
 	// create service file
