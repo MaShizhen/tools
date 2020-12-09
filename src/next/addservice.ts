@@ -1,4 +1,4 @@
-import { basename, join } from 'path';
+import { join } from 'path';
 import { Uri, window, workspace } from 'vscode';
 import { existsasync, mkdirasync, writefileasync } from '../util/fs';
 import generate from '../util/generate';
