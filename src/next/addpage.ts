@@ -1,4 +1,4 @@
-import { basename } from 'path';
+import { basename, dirname } from 'path';
 import { Uri, window, workspace } from 'vscode';
 import { writefileasync } from '../util/fs';
 import generate from '../util/generate';
@@ -9,7 +9,14 @@ export default async function addpagenext(rootPath: string) {
 	if (!pages) {
 		return false;
 	}
-	const p_path = await generate(pages, 'pg', '.tsx', 3);
+	const page_dir = (() => {
+		const editor = window.activeTextEditor;
+		if (!editor) {
+			return pages;
+		}
+		return dirname(editor.document.fileName);
+	})();
+	const p_path = await generate(page_dir, 'pg', '.tsx', 3);
 	const name = basename(p_path);
 	// create page file
 	const pagefile = `${p_path}.tsx`;
@@ -21,7 +28,7 @@ export default async function addpagenext(rootPath: string) {
 }
 
 function create_page(path: string, name: string) {
-	const tpl = `import { NextPage, GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next';
+	const tpl = `import { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } from 'next';
 
 interface IProps {
 }
@@ -34,8 +41,8 @@ const ${name}: NextPage<IProps> = ({ }) => {
 }
 
 ${name}.getInitialProps = async (context) => {
-	return {
-	};
+	return Promise.resolve({
+	});
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
