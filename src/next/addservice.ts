@@ -1,6 +1,6 @@
 import { dirname, join } from 'path';
 import { Uri, window, workspace } from 'vscode';
-import { existsasync, mkdirasync, writefileasync } from '../util/fs';
+import { writefileasync } from '../util/fs';
 import generate from '../util/generate';
 import { get_pages } from './get-pages';
 import root_path from '../util/root';
@@ -32,14 +32,16 @@ export default async function addservicenext() {
 
 function create_page(path: string) {
 	const tpl = `import nextConnect from 'next-connect'
-import { NextApiRequest, NextApiResponse } from 'next';
+import { NextApiRequest, NextApiResponse, PageConfig } from 'next';
 
 const handler = nextConnect<NextApiRequest, NextApiResponse<{}>>();
 
 handler.get((req, res) => {
 	res.statusCode = 200
-	res.json({ name: 'taoqf' })
+	res.json({ name: 'mmstudio' })
 });
+
+export const config = {} as PageConfig;
 
 export default handler;
 `;

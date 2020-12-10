@@ -21,7 +21,7 @@ export default async function addpagenext(rootPath: string) {
 }
 
 function create_page(path: string, name: string) {
-	const tpl = `import { NextPage } from 'next';
+	const tpl = `import { NextPage, GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next';
 
 interface IProps {
 }
@@ -36,6 +36,18 @@ const ${name}: NextPage<IProps> = ({ }) => {
 ${name}.getInitialProps = async (context) => {
 	return {
 	};
+}
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  // ...
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  // ...
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // ...
 }
 
 export default ${name};

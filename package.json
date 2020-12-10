@@ -9,7 +9,7 @@
 		"theme": "light"
 	},
 	"scripts": {
-		"test": "tsc -w",
+		"dev": "tsc -w",
 		"lint": "eslint ./src/**/*.ts",
 		"clean": "del-cli ./dist/",
 		"compile": "webpack --mode production",
