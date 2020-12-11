@@ -1,8 +1,8 @@
 import { basename, dirname, join } from 'path';
 import { TextEditor, window } from 'vscode';
-import Base from './base';
+import AddActionWebBase from './base';
 
-export default class ComponentN extends Base {
+export default class AddActionWebComponentN extends AddActionWebBase {
 	public async addaction(editor: TextEditor): Promise<void> {
 		const path = editor.document.fileName;
 		const folder = dirname(path);

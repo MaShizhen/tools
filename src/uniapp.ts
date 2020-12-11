@@ -1,8 +1,9 @@
 import { TextEditor } from 'vscode';
 import Base from './base';
+import AddActionUniappPage from './uniapp/addpage';
 
 export default class UniApp extends Base {
-	public addaction(editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
+	public addaction(_editor: TextEditor): Promise<void> {
+		return new AddActionUniappPage().addaction();
 	}
 }

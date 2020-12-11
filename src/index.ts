@@ -1,5 +1,4 @@
 import { ExtensionContext } from 'vscode';
-import adda from './mm/addaction';
 import addc from './mm/addc';
 import addtpl from './mm/add-tpl';
 import addpage from './mm/addpage';
@@ -21,10 +20,12 @@ import addwebfilter from './mm/add-web-filter';
 import addschedule from './mm/add-schedule';
 import showsitemap from './mm/sitemap/show';
 import refreshsitemap from './mm/sitemap/refresh';
+import MM from './mm';
 
 export function activate({ subscriptions }: ExtensionContext) {
+	const mm = new MM();
 	subscriptions.push(
-		adda(),
+		mm.addaction(),
 		addc(),
 		adds(),
 		addpage(),

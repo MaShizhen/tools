@@ -1,7 +1,6 @@
 import { basename, join } from 'path';
-import { Uri, window, workspace } from 'vscode';
-import { existsasync, mkdirasync, readfileasync, writefileasync } from '../util/fs';
-import generate from '../util/generate';
+import { workspace } from 'vscode';
+import Tools from '../tools';
 
 interface IPageConfig {
 	pages: Array<{
@@ -12,48 +11,43 @@ interface IPageConfig {
 	}>
 }
 
-export default async function addpageuniapp(rootPath: string) {
-	const src = join(rootPath, 'src');
-	const pagesjson = join(src, 'pages.json');
-	if (!await existsasync(pagesjson)) {
-		return false;
-	}
-	if (!await existsasync(pagesjson)) {
-		return false;
-	}
-	const pagesconfigstr = await readfileasync(pagesjson);
-	const pagesconfig = JSON.parse(pagesconfigstr.replace(/\/\/.*/g, '')) as IPageConfig;
-	if (!pagesconfig.pages) {
-		pagesconfig.pages = [];
-	}
-	const pages = join(src, 'pages');
-	if (!await existsasync(pages)) {
-		await mkdirasync(pages);
-	}
-	const p_path = await generate(pages, 'pg', '', 3);
-	const name = basename(p_path);
-	pagesconfig.pages.push({
-		path: `pages/${name}/${name}`,
-		style: {
-			navigationBarTitleText: name
+export default class AddActionUniappPage extends Tools {
+	public async addaction() {
+		const rootPath = await this.root();
+		const src = join(rootPath, 'src');
+		const pagesjson = join(src, 'pages.json');
+		const pagesconfigstr = await this.readfileasync(pagesjson);
+		const pagesconfig = JSON.parse(pagesconfigstr.replace(/\/\/.*/g, '')) as IPageConfig;
+		if (!pagesconfig.pages) {
+			pagesconfig.pages = [];
 		}
-	});
-	if (!await existsasync(p_path)) {
-		await mkdirasync(p_path);
+		const pages = join(src, 'pages');
+		if (!await this.existsasync(pages)) {
+			await this.mkdirasync(pages);
+		}
+		const p_path = await this.generate(pages, 'pg', '', 3);
+		const name = basename(p_path);
+		pagesconfig.pages.push({
+			path: `pages/${name}/${name}`,
+			style: {
+				navigationBarTitleText: name
+			}
+		});
+		if (!await this.existsasync(p_path)) {
+			await this.mkdirasync(p_path);
+		}
+		const page = join(p_path, name);
+		// create vue file
+		const vue = `${page}.vue`;
+		await this.create_page(vue);
+		await this.writefileasync(pagesjson, JSON.stringify(pagesconfig, undefined, '\t'));
+		await workspace.saveAll();
+		this.set_status_bar_message('成功添加页面文件');
+		this.show_doc(vue);
 	}
-	const page = join(p_path, name);
-	// create vue file
-	const vue = `${page}.vue`;
-	await create_page(vue);
-	await writefileasync(pagesjson, JSON.stringify(pagesconfig, undefined, '\t'));
-	await workspace.saveAll();
-	window.setStatusBarMessage('成功添加页面文件');
-	window.showTextDocument(Uri.file(vue));
-	return true;
-}
 
-function create_page(path: string) {
-	const tpl = `<template>
+	private create_page(path: string) {
+		const tpl = `<template>
 	<view></view>
 </template>
 <script lang="ts">
@@ -67,5 +61,6 @@ export default vue.extend({
 </script>
 <style lang="css"></style>
 `;
-	return writefileasync(path, tpl);
+		return this.writefileasync(path, tpl);
+	}
 }

@@ -1,30 +1,30 @@
 import { basename, dirname, join } from 'path';
 import { TextEditor, window } from 'vscode';
-import AddActionWebBase from './base';
+import Tools from '../../tools';
 
-export default class AddActionWebPageN extends AddActionWebBase {
+export default class AddActionDesktopPage extends Tools {
 	public async addaction(editor: TextEditor) {
 		const path = editor.document.fileName;
-		const folder = dirname(path);
+		const dir = dirname(path);
 		// 如果当前目录不在某个页面中，则不允许操作
-		const r = /[/\\](src[/\\]\w[\w\d-]*)[/\\]?/.exec(path);
+		const r = /[/\\](src[/\\]\w[\w\d-]*)[/\\]?/.exec(dir);
 		if (r === null) {
-			window.showErrorMessage('请在页面b.ts中进行该操作!');
+			window.showErrorMessage('警示');
 		} else {
-			const p_path = await this.generate(folder, 'na', '\\.ts', 3);
-			const a = await this.create_a(p_path);
-			await this.update_b(folder);
+			const p_path = await this.generate(dir, 'a', '\\.ts', 3);
+			await this.create_a(p_path);
+			await this.update_b(dir);
 			this.set_status_bar_message('成功');
-			this.show_doc(a);
+			this.show_doc(`${p_path}.ts`);
 		}
 	}
 
-	protected async update_b(path: string) {
-		const file_name = join(path, 'n.ts');
+	private async update_b(path: string) {
+		const file_name = join(path, 'b.ts');
 		const eol = '\n';
 		const files = await this.readdirasync(path);
 		const as = files.filter((f) => {
-			return /^na\d{3}\.ts$/.test(f);
+			return /^a\d{3}\.ts$/.test(f);
 		}).map((f) => {
 			return basename(f, '.ts');
 		});
@@ -41,17 +41,14 @@ export default class AddActionWebPageN extends AddActionWebBase {
 		await this.replace(file_name, 'ACTIONS', actions);
 	}
 
-	protected async create_a(path: string) {
+	private create_a(path: string) {
 		const a = basename(path);
-		const tpl = `import an3 from '@mmstudio/an000003';
+		const tpl = `import { IAiDesktopComponent } from '@mmstudio/desktop/interfaces';
 
-export default function ${a}(mm: an3) {
+export default function ${a}(mm: IAiDesktopComponent) {
 	// todo
 }
 `;
-		const af = `${path}.ts`;
-		await this.writefileasync(af, tpl);
-		return af;
+		return this.writefileasync(`${path}.ts`, tpl);
 	}
-
 }
