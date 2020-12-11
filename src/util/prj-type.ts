@@ -5,7 +5,8 @@ export enum PrjType {
 	wxapp = 'wxapp',
 	desktop = 'desktop',
 	mobile = 'mobile',
-	serve = 'serve'
+	serve = 'serve',
+	uniapp = 'uniapp'
 }
 
 export default function prj_type() {

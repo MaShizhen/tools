@@ -2,15 +2,9 @@ import { parse } from 'path';
 import { commands, window } from 'vscode';
 import desktop_c from '../desktop/component/addaction';
 import desktop_p from '../desktop/page/addaction';
-import mobile from '../mobile/addaction';
-import web_c_a from '../web/component/addaction';
-import web_c_na from '../web/component/addna';
-import web_p_a from '../web/page/addaction';
-import web_p_na from '../web/page/addna';
 import wxapp from '../wxapp/page/addaction';
 import prj_type, { PrjType } from '../util/prj-type';
 import reg_in_comment from '../util/reg-in-component';
-import addactiondefault from './default/addaction';
 
 export default function addaction() {
 	return commands.registerTextEditorCommand('mm.action.add', async (editor) => {
@@ -21,17 +15,6 @@ export default function addaction() {
 		const r = reg_in_comment(path);
 		switch (type) {
 			case PrjType.web:
-				if (r) {
-					if (fileName === 'n.ts') {
-						await web_c_na(editor);
-					} else {
-						await web_c_a(editor);
-					}
-				} else if (fileName === 'n.ts') {
-					await web_p_na(editor);
-				} else {
-					await web_p_a(editor);
-				}
 				break;
 			case PrjType.wxapp:
 				if (r) {
@@ -52,14 +35,8 @@ export default function addaction() {
 				}
 				break;
 			case PrjType.mobile:
-				if (r) {
-					window.showErrorMessage('不能在mobile项目中进行该操作!');
-				} else {
-					await mobile(editor);
-				}
 				break;
 			default:
-				await addactiondefault(editor);
 		}
 		commands.executeCommand('workbench.files.action.refreshFilesExplorer');
 	});
