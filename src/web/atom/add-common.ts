@@ -73,7 +73,8 @@ export default async function addatomweb() {
 	await exec(`git commit -am "init atom ${no}"`, cwd);
 	// 推送代码到远程仓库
 	await exec(`git remote add origin ${remote}`, cwd);
-	await exec('git push -u origin master', cwd);
+	await exec('git branch -M main', cwd);
+	await exec('git push -u origin main', cwd);
 	window.showInformationMessage('原子操作初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
 	await exec('yarn', cwd);
 	await commands.executeCommand('vscode.openFolder', uri);

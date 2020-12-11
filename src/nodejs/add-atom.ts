@@ -69,7 +69,8 @@ export default async function addatomnodejs() {
 	await exec(`git commit -am "init atom ${no}"`, cwd);
 	// 推送代码到远程仓库
 	await exec(`git remote add origin ${remote}`, cwd);
-	await exec('git push -u origin master', cwd);
+	await exec('git branch -M main', cwd);
+	await exec('git push -u origin main', cwd);
 	window.showInformationMessage('原子操作初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
 	await exec('yarn', cwd);
 	await commands.executeCommand('vscode.openFolder', uri);
@@ -128,7 +129,7 @@ async function update_pkg(folder: string, no: string, user: string, remote: stri
 	const content = await readFile(path, 'utf-8');
 	const pkg = JSON.parse(content) as Package;
 	pkg.name = `@mmstudio/${no}`;
-	pkg.scripts.up = 'git pull git@github.com:mm-tpl/atom-nodejs.git master';
+	pkg.scripts.up = 'git pull git@github.com:mm-tpl/atom-nodejs.git main';
 	const repository = remote.replace(':', '/').replace('git@', 'https://');	// git@github.com:mm-atom/no.git to https://github.com/mm-atom/no.git
 	pkg.repository.url = repository;
 	const author = pkg.author || {};
