@@ -14,9 +14,20 @@ export default abstract class Tools {
 	protected show_doc(path: string) {
 		return window.showTextDocument(Uri.file(path));
 	}
+	protected getdefaultpickoption() {
+		return {
+			matchOnDescription: true,
+			matchOnDetail: true,
+			canPickMany: false,
+			ignoreFocusOut: true
+		};
+	}
 	//#endregion
 
 	//#region File(name) operate
+	protected prefix(pre: string, num: number, len: number) {
+		return pre + num.toString().padStart(len, '0');
+	}
 	protected async generate(path: string, prefix: string, postfix: string, len: number) {
 		const files = await this.readdirasync(path);
 		const reg = new RegExp(`^${prefix}\\d{${len}}${postfix}$`);

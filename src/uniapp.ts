@@ -3,6 +3,12 @@ import Base from './base';
 import AddPageUniapp from './uniapp/addpage';
 
 export default class UniApp extends Base {
+	public addwebfilter(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public addwebrouter(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addpresentation(_editor: TextEditor): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

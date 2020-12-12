@@ -1,5 +1,4 @@
 import { ExtensionContext } from 'vscode';
-import addwebrouters from './mm/add-web-routers';
 import list_events from './mm/list-events';
 import shell_build from './mm/shell/build';
 import create_proj from './mm/shell/create';
@@ -12,7 +11,6 @@ import addatom from './mm/add-atom';
 import addlocalatom from './mm/add-local-atom';
 import addwidget from './mm/add-widget';
 import addlocalwidget from './mm/add-local-widget';
-import addwebfilter from './mm/add-web-filter';
 import addschedule from './mm/add-schedule';
 import showsitemap from './mm/sitemap/show';
 import refreshsitemap from './mm/sitemap/refresh';
@@ -26,7 +24,8 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.addpage(),
 		mm.addservice(),
 		mm.addpresentation(),
-		addwebrouters(),
+		mm.addwebrouter(),
+		mm.addwebfilter(),
 		insert_atom(),
 		insert_tpl(),
 		insert_widget(),
@@ -39,7 +38,6 @@ export function activate({ subscriptions }: ExtensionContext) {
 		addlocalatom(),
 		addwidget(),
 		addlocalwidget(),
-		addwebfilter(),
 		addschedule(),
 		showsitemap(),
 		refreshsitemap()

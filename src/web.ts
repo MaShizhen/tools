@@ -10,6 +10,12 @@ import AddPageWeb from './web/addpage';
 import AddPresentationWeb from './web/addpresentation';
 
 export default class Web extends Base {
+	public addwebfilter(): Promise<void> {
+		return this.baseaddwebrouter('filters');
+	}
+	public addwebrouter(): Promise<void> {
+		return this.baseaddwebrouter('routers');
+	}
 	public addpresentation(editor: TextEditor): Promise<void> {
 		return new AddPresentationWeb().addpresentation(editor);
 	}

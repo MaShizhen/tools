@@ -20,6 +20,20 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public addwebfilter() {
+		return commands.registerCommand('mm.service.filter', async () => {
+			const tool = await this.get_instance();
+			await tool.addwebfilter();
+			return this.refreshexplorer();
+		});
+	}
+	public addwebrouter() {
+		return commands.registerCommand('mm.service.router', async () => {
+			const tool = await this.get_instance();
+			await tool.addwebrouter();
+			return this.refreshexplorer();
+		});
+	}
 	public addpresentation() {
 		return commands.registerTextEditorCommand('mm.presentation.add', async (editor) => {
 			const tool = await this.get_instance();

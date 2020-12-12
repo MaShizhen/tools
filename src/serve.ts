@@ -3,6 +3,12 @@ import Base from './base';
 import AddPageServe from './serve/addpage';
 
 export default class Serve extends Base {
+	public addwebfilter(): Promise<void> {
+		return this.baseaddwebrouter('filters');
+	}
+	public addwebrouter(): Promise<void> {
+		return this.baseaddwebrouter('routers');
+	}
 	public addpresentation(_editor: TextEditor): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
