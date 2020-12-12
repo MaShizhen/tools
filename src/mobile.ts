@@ -1,11 +1,19 @@
 import { homedir, platform } from 'os';
 import { dirname, join } from 'path';
-import { CompletionItem, CompletionItemKind, Disposable, languages, Position, TextDocument, TextEditor, window, workspace } from 'vscode';
+import { CompletionItem, CompletionItemKind, Disposable, FileType, languages, Position, TextDocument, TextEditor, Uri, window, workspace } from 'vscode';
 import Base from './base';
 import AddActionMobile from './mobile/addaction/component';
 import AddComponentMobile from './mobile/addcomponent';
 
 export default class Mobile extends Base {
+	public async shellcreate(cwd: string, no: string, desc: string): Promise<void> {
+		await this.downloadandextractrepo(cwd, { name: 'mobile', branch: 'master' });
+		await this.replacefile(join(cwd, 'package.json'), [/prjno/, /\$desc/], [no, desc]);
+		await this.replace_mobile(join(cwd, 'android'), no);
+		await this.replace_mobile(join(cwd, 'ios'), no);
+		await this.replacefile(join(cwd, 'app.json'), [/mmstudio/, /\$desc/], [no, desc]);
+		await this.replacefile(join(cwd, 'index.js'), [/mmstudio/, /\$desc/], [no, desc]);
+	}
 	public shelldebug(): void {
 		const command = 'npm t';
 		this.shellrun(command, 'debug');
@@ -130,5 +138,20 @@ export default class Mobile extends Base {
 			default:
 				return false;
 		}
+	}
+	private async replace_mobile(cwd: string, no: string) {
+		const files = await workspace.fs.readDirectory(Uri.file(cwd));
+		return Promise.all(files.map(async ([path, type]) => {
+			const fullpath = join(cwd, path);
+			const newpath = join(cwd, path.replace(/mmstudio/, no));
+			if (path.includes('mmstudio')) {
+				await workspace.fs.rename(Uri.file(fullpath), Uri.file(newpath));
+			}
+			if (type === FileType.Directory) {
+				await this.replace_mobile(newpath, no);
+			} else if (type === FileType.File) {
+				await this.replacefile(newpath, [/mmstudio/g], [no]);
+			}
+		}));
 	}
 }

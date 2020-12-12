@@ -1,13 +1,68 @@
 import { promises as fs, statSync } from 'fs';
 import { dirname, join } from 'path';
 import { exec as node_exec } from 'child_process';
-import { platform } from 'os';
+import { homedir, platform } from 'os';
+import { Stream } from 'stream';
 import { commands, TextEditor, Uri, window, workspace } from 'vscode';
+import got from 'got';
+import tar from 'tar';
 import { NO_MODIFY } from './util/blocks';
 
+type RepoInfo = {
+	username?: string
+	name: string
+	branch?: string
+}
 export default abstract class Tools {
+	//#region repo
+	protected downloadandextractrepo(
+		cwd: string,
+		{ username = 'mm-tpl', name, branch = 'main' }: RepoInfo
+	): Promise<void> {
+		return new Promise<void>((res, rej) => {
+			Stream.pipeline(
+				got.stream(
+					`https://codeload.github.com/${username}/${name}/tar.gz/${branch}`
+				),
+				tar.extract(
+					{ cwd, strip: 1 },
+					[`${name}-${branch}`]
+				),
+				(err) => {
+					if (err) {
+						rej(err);
+					} else {
+						res();
+					}
+				}
+			);
+		});
+	}
+	//#endregion
 
-	//#endregion Shell
+	//#region Shell
+	protected workpath() {
+		const editor = window.activeTextEditor;
+		const wf = (() => {
+			if (editor) {
+				const w = workspace.getWorkspaceFolder(editor.document.uri);
+				if (w) {
+					return w;
+				}
+			}
+
+			const wfs = workspace.workspaceFolders;
+			if (!wfs || wfs.length === 0) {
+				return null;
+			}
+			return wfs[0];
+		})();
+		if (!wf) {
+			return homedir();
+		}
+		const dir = wf.uri.fsPath;
+		return dir;
+	}
 	protected shellexec(cmd: string, cwd?: string) {
 		const shell = (() => {
 			const shell = workspace.getConfiguration('terminal.integrated.shell');
@@ -54,7 +109,7 @@ export default abstract class Tools {
 		terminal.show();
 		terminal.sendText(command);
 	}
-	//#region 
+	//#endregion
 	//#region vs
 	protected refreshexplorer() {
 		return commands.executeCommand('workbench.files.action.refreshFilesExplorer');

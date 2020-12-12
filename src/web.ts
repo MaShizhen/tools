@@ -1,4 +1,4 @@
-import { dirname, parse } from 'path';
+import { dirname, join, parse } from 'path';
 import { CompletionItem, CompletionItemKind, Disposable, languages, Position, TextDocument, TextEditor } from 'vscode';
 import Base from './base';
 import AddActionWebComponent from './web/addaction/component';
@@ -10,6 +10,10 @@ import AddPageWeb from './web/addpage';
 import AddPresentationWeb from './web/addpresentation';
 
 export default class Web extends Base {
+	public async shellcreate(cwd: string, no: string, desc: string): Promise<void> {
+		await this.downloadandextractrepo(cwd, { name: 'web', branch: 'master' });
+		await this.replacefile(join(cwd, 'package.json'), [/prjno/, /\$desc/], [no, desc]);
+	}
 	public shelldebug(): void {
 		const command = 'npm t';
 		this.shellrun(command, 'debug');

@@ -1,9 +1,14 @@
+import { join } from 'path';
 import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
 import AddPageNext from './next/addpage';
 import AddServiceNext from './next/addservice';
 
 export default class Next extends Base {
+	public async shellcreate(cwd: string, no: string, desc: string): Promise<void> {
+		await this.downloadandextractrepo(cwd, { name: 'next' });
+		await this.replacefile(join(cwd, 'package.json'), [/p000000/, /\$desc/], [no, desc]);
+	}
 	public shellbuild(): void {
 		const command = 'yarn build';
 		this.shellrun(command, 'build');

@@ -1,8 +1,13 @@
+import { join } from 'path';
 import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
 import AddPageUniapp from './uniapp/addpage';
 
 export default class UniApp extends Base {
+	public async shellcreate(cwd: string, no: string, desc: string): Promise<void> {
+		await this.downloadandextractrepo(cwd, { name: 'uniapp' });
+		await this.replacefile(join(cwd, 'package.json'), [/p000000/, /\$desc/], [no, desc]);
+	}
 	public shellbuild(): void {
 		const command = 'yarn build';
 		this.shellrun(command, 'build');

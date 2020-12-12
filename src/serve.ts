@@ -1,8 +1,13 @@
+import { join } from 'path';
 import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
 import AddPageServe from './serve/addpage';
 
 export default class Serve extends Base {
+	public async shellcreate(cwd: string, no: string, desc: string): Promise<void> {
+		await this.downloadandextractrepo(cwd, { name: 'serve' });
+		await this.replacefile(join(cwd, 'package.json'), [/prjno/, /\$desc/], [no, desc]);
+	}
 	public shellbuild(): void {
 		const command = "npm version '1.0.'$(date +%Y%m%d%H%M) && yarn build && npm publish";
 		this.shellrun(command, 'build');

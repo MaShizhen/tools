@@ -1,5 +1,4 @@
 import { ExtensionContext } from 'vscode';
-import create_proj from './mm/shell/create';
 import insert_atom from './mm/snippets/insert-atom';
 import insert_tpl from './mm/snippets/insert-tpl';
 import insert_widget from './mm/snippets/insert-widget';
@@ -26,11 +25,11 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.completion(),
 		mm.shellbuild(),
 		mm.shelldebug(),
+		mm.shellcreate(),
 		insert_atom(),
 		insert_tpl(),
 		insert_widget(),
 		list_services(),
-		create_proj(),
 		addatom(),
 		addlocalatom(),
 		addwidget(),

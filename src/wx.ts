@@ -1,10 +1,15 @@
-import { dirname } from 'path';
+import { dirname, join } from 'path';
 import { CompletionItem, CompletionItemKind, Disposable, languages, Position, TextDocument, TextEditor } from 'vscode';
 import Base from './base';
 import AddActionWeixinPage from './wxapp/addaction/page';
 import AddComponentWeixin from './wxapp/addcomponent';
 
 export default class WeiXin extends Base {
+	public async shellcreate(cwd: string, no: string, desc: string): Promise<void> {
+		await this.downloadandextractrepo(cwd, { name: 'wxapp', branch: 'master' });
+		await this.replacefile(join(cwd, 'package.json'), [/prjno/, /\$desc/], [no, desc]);
+		await this.replacefile(join(cwd, 'src', 'package.json'), [/prjno/, /\$desc/], [no, desc]);
+	}
 	public shelldebug(): void {
 		const command = 'npm t';
 		return this.shellrun(command, 'debug');

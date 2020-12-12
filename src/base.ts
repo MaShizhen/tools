@@ -4,6 +4,7 @@ import generate from './util/generate';
 import Tools from './tools';
 
 export default abstract class Base extends Tools {
+	public abstract shellcreate(cwd: string, no: string, desc: string): Promise<void>;
 	public abstract shellbuild(): void;
 	public abstract shelldebug(): void;
 
@@ -17,6 +18,17 @@ export default abstract class Base extends Tools {
 
 	public abstract addwebfilter(): Promise<void>;
 	public abstract addwebrouter(): Promise<void>;
+
+	protected async replacefile(path: string, src: Array<{ [Symbol.replace](src: string, rep: string): string; }>, rep: string[]) {
+		const uri = Uri.file(path);
+		const content = Buffer.from(await workspace.fs.readFile(uri)).toString('utf8');
+		const result = src.reduce((pre, cur, i) => {
+			return pre.replace(cur, rep[i]);
+		}, content);
+		if (content !== result) {
+			await workspace.fs.writeFile(uri, Buffer.from(result, 'utf-8'));
+		}
+	}
 
 	protected async baseaddwebrouter(name: 'routers' | 'filters') {
 		const rootPath = this.root();
