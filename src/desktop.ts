@@ -4,6 +4,9 @@ import AddComponentDesktop from './desktop/addcomponent';
 import AddPageDesktop from './desktop/addpage';
 
 export default class Desktop extends Base {
+	public addservice(): Promise<void> {
+		return this.baseaddservice();
+	}
 	public addpage(): Promise<void> {
 		return new AddPageDesktop().addpage();
 	}

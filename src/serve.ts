@@ -3,6 +3,9 @@ import Base from './base';
 import AddPageServe from './serve/addpage';
 
 export default class Serve extends Base {
+	public addservice(): Promise<void> {
+		return this.baseaddservice();
+	}
 	public addpage(): Promise<void> {
 		return new AddPageServe().addpage();
 	}

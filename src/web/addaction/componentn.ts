@@ -16,7 +16,7 @@ export default class AddActionWebComponentN extends AddActionWebBase {
 			this.show_doc(a);
 		}
 	}
-	protected update_b(path: string): Promise<void> {
+	protected update_b(_path: string): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 	protected async create_a(p_path: string): Promise<string> {

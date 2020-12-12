@@ -9,6 +9,9 @@ import AddComponentWeb from './web/addcomponent';
 import AddPageWeb from './web/addpage';
 
 export default class Web extends Base {
+	public addservice(): Promise<void> {
+		return this.baseaddservice();
+	}
 	public addpage(): Promise<void> {
 		return new AddPageWeb().addpage();
 	}

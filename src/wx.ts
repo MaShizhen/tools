@@ -4,6 +4,9 @@ import AddActionWeixinPage from './wxapp/addaction/page';
 import AddComponentWeixin from './wxapp/addcomponent';
 
 export default class WeiXin extends Base {
+	public addservice(): Promise<void> {
+		return this.baseaddservice();
+	}
 	public addpage(): Promise<void> {
 		return new AddComponentWeixin().addcomponent();
 	}

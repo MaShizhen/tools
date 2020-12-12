@@ -4,6 +4,9 @@ import AddActionMobile from './mobile/addaction/component';
 import AddComponentMobile from './mobile/addcomponent';
 
 export default class Mobile extends Base {
+	public addservice(): Promise<void> {
+		return this.baseaddservice();
+	}
 	public addpage(): Promise<void> {
 		return new AddComponentMobile().addpage();
 	}
