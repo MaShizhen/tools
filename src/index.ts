@@ -8,8 +8,6 @@ import addlocalatom from './mm/add-local-atom';
 import addwidget from './mm/add-widget';
 import addlocalwidget from './mm/add-local-widget';
 import addschedule from './mm/add-schedule';
-import showsitemap from './mm/sitemap/show';
-import refreshsitemap from './mm/sitemap/refresh';
 import MM from './mm';
 
 export function activate({ subscriptions }: ExtensionContext) {
@@ -26,6 +24,8 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.shellbuild(),
 		mm.shelldebug(),
 		mm.shellcreate(),
+		mm.showsitemap(),
+		mm.refreshsitemap(),
 		insert_atom(),
 		insert_tpl(),
 		insert_widget(),
@@ -34,8 +34,6 @@ export function activate({ subscriptions }: ExtensionContext) {
 		addlocalatom(),
 		addwidget(),
 		addlocalwidget(),
-		addschedule(),
-		showsitemap(),
-		refreshsitemap()
+		addschedule()
 	);
 }

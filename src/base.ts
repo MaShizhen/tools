@@ -4,6 +4,7 @@ import generate from './util/generate';
 import Tools from './tools';
 
 export default abstract class Base extends Tools {
+	public abstract refreshsitemap(): Promise<void>;
 	public abstract shellcreate(cwd: string, no: string, desc: string): Promise<void>;
 	public abstract shellbuild(): void;
 	public abstract shelldebug(): void;

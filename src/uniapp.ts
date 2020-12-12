@@ -4,6 +4,9 @@ import Base from './base';
 import AddPageUniapp from './uniapp/addpage';
 
 export default class UniApp extends Base {
+	public refreshsitemap(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public async shellcreate(cwd: string, no: string, desc: string): Promise<void> {
 		await this.downloadandextractrepo(cwd, { name: 'uniapp' });
 		await this.replacefile(join(cwd, 'package.json'), [/p000000/, /\$desc/], [no, desc]);

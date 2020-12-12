@@ -5,6 +5,9 @@ import AddComponentDesktop from './desktop/addcomponent';
 import AddPageDesktop from './desktop/addpage';
 
 export default class Desktop extends Base {
+	public refreshsitemap(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public shellcreate(_cwd: string, _no: string, _desc: string): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

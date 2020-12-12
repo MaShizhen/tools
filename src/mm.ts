@@ -20,6 +20,24 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public refreshsitemap() {
+		return commands.registerCommand('mm.refreshmap', async () => {
+			const tool = this.getinstance();
+			tool.refreshsitemap();
+			await commands.executeCommand('mm.showmap');
+		});
+	}
+	public showsitemap() {
+		return commands.registerCommand('mm.showmap', async () => {
+			try {
+				const file = join(this.root(), '.mm.md');
+				await window.showTextDocument(Uri.file(file));
+				// await commands.executeCommand('markdown.showPreview');
+			} catch {
+				await commands.executeCommand('mm.refreshmap');
+			}
+		});
+	}
 	public shellcreate() {
 		return commands.registerCommand('mm.shell.create', async () => {
 			window.showInformationMessage('进行此操作之前,请确保git已安装并配置好权限,且有一个可用的没有任何提交的git仓库');
