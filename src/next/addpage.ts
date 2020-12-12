@@ -1,34 +1,31 @@
 import { basename, dirname } from 'path';
-import { Uri, window, workspace } from 'vscode';
-import { writefileasync } from '../util/fs';
-import generate from '../util/generate';
+import { window, workspace } from 'vscode';
+import Tools from '../tools';
 import { get_pages } from './get-pages';
 
-export default async function addpagenext(rootPath: string) {
-	const pages = await get_pages(rootPath);
-	if (!pages) {
-		return false;
+export default class AddPageNext extends Tools {
+	public async addpage() {
+		const rootPath = await this.root();
+		const pages = await get_pages(rootPath);
+		const page_dir = (() => {
+			const editor = window.activeTextEditor;
+			if (!editor) {
+				return pages;
+			}
+			return dirname(editor.document.fileName);
+		})();
+		const p_path = await this.generate(page_dir, 'pg', '.tsx', 3);
+		const name = basename(p_path);
+		// create page file
+		const pagefile = `${p_path}.tsx`;
+		await this.create_page(pagefile, name);
+		await workspace.saveAll();
+		this.set_status_bar_message('成功添加页面文件');
+		this.show_doc(pagefile);
 	}
-	const page_dir = (() => {
-		const editor = window.activeTextEditor;
-		if (!editor) {
-			return pages;
-		}
-		return dirname(editor.document.fileName);
-	})();
-	const p_path = await generate(page_dir, 'pg', '.tsx', 3);
-	const name = basename(p_path);
-	// create page file
-	const pagefile = `${p_path}.tsx`;
-	await create_page(pagefile, name);
-	await workspace.saveAll();
-	window.setStatusBarMessage('成功添加页面文件');
-	window.showTextDocument(Uri.file(pagefile));
-	return true;
-}
 
-function create_page(path: string, name: string) {
-	const tpl = `import { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } from 'next';
+	private create_page(path: string, name: string) {
+		const tpl = `import { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } from 'next';
 
 interface IProps {
 }
@@ -59,5 +56,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default ${name};
 `;
-	return writefileasync(path, tpl);
+		return this.writefileasync(path, tpl);
+	}
 }

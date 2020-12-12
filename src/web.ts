@@ -5,8 +5,16 @@ import AddActionWebComponent from './web/addaction/component';
 import AddActionWebComponentN from './web/addaction/componentn';
 import AddActionWebPage from './web/addaction/page';
 import AddActionWebPageN from './web/addaction/pagen';
+import AddComponentWeb from './web/addcomponent';
+import AddPageWeb from './web/addpage';
 
 export default class Web extends Base {
+	public addpage(): Promise<void> {
+		return new AddPageWeb().addpage();
+	}
+	public addcomponent(editor: TextEditor): Promise<void> {
+		return new AddComponentWeb().addcomponent(editor);
+	}
 	public async addaction(editor: TextEditor): Promise<void> {
 		const path = editor.document.fileName;
 		const fileName = parse(path).base;

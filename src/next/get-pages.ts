@@ -10,5 +10,5 @@ export async function get_pages(rootPath: string) {
 	if (await existsasync(join(src, '_app.tsx'))) {
 		return src;
 	}
-	return false;
+	throw new Error('Wrong type');
 }

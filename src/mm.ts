@@ -7,6 +7,7 @@ import WeiXin from './wx';
 import Desktop from './desktop';
 import Next from './next';
 import UniApp from './uniapp';
+import Serve from './serve';
 
 enum PrjType {
 	web = 'web/h5',
@@ -19,12 +20,13 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
-	private web = new Web();
-	private mobile = new Mobile();
-	private wx = new WeiXin();
-	private desktop = new Desktop();
-	private next = new Next();
-	private uniapp = new UniApp();
+	public addpage() {
+		return commands.registerCommand('mm.page.add', async () => {
+			const tool = await this.get_instance();
+			await tool.addpage();
+			return this.refreshexplorer();
+		});
+	}
 	public addaction() {
 		return commands.registerTextEditorCommand('mm.action.add', async (editor) => {
 			const tool = await this.get_instance();
@@ -32,7 +34,21 @@ export default class MM extends Tools {
 			return this.refreshexplorer();
 		});
 	}
+	public addcomponent() {
+		return commands.registerTextEditorCommand('mm.component.add', async (editor) => {
+			const tool = await this.get_instance();
+			await tool.addcomponent(editor);
+			this.refreshexplorer();
+		});
+	}
 
+	private web = new Web();
+	private mobile = new Mobile();
+	private wx = new WeiXin();
+	private desktop = new Desktop();
+	private next = new Next();
+	private uniapp = new UniApp();
+	private serve = new Serve();
 	private async get_instance() {
 		const type = await this.prj_type();
 		// 如果当前目录不在某个页面中，则不允许操作
@@ -49,6 +65,8 @@ export default class MM extends Tools {
 				return this.uniapp;
 			case PrjType.next:
 				return this.next;
+			case PrjType.serve:
+				return this.serve;
 			default:
 				throw new Error('unknown project type');
 		}

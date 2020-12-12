@@ -11,7 +11,7 @@ interface IPageConfig {
 	}>
 }
 
-export default class AddActionUniappPage extends Tools {
+export default class AddPageUniapp extends Tools {
 	public async addaction() {
 		const rootPath = await this.root();
 		const src = join(rootPath, 'src');

@@ -1,9 +1,15 @@
 import { TextEditor } from 'vscode';
 import Base from './base';
-import AddActionUniappPage from './uniapp/addpage';
+import AddPageUniapp from './uniapp/addpage';
 
 export default class UniApp extends Base {
-	public addaction(_editor: TextEditor): Promise<void> {
-		return new AddActionUniappPage().addaction();
+	public addpage(): Promise<void> {
+		return new AddPageUniapp().addaction();
+	}
+	public addcomponent(_editor: TextEditor): Promise<void> {
+		return this.addpage();
+	}
+	public addaction(editor: TextEditor): Promise<void> {
+		return this.baseaddaction(editor);
 	}
 }
