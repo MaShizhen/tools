@@ -4,6 +4,9 @@ import AddPageNext from './next/addpage';
 import AddServiceNext from './next/addservice';
 
 export default class Next extends Base {
+	public addpresentation(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addservice(): Promise<void> {
 		return new AddServiceNext().addservice();
 	}

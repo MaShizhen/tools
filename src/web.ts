@@ -7,8 +7,12 @@ import AddActionWebPage from './web/addaction/page';
 import AddActionWebPageN from './web/addaction/pagen';
 import AddComponentWeb from './web/addcomponent';
 import AddPageWeb from './web/addpage';
+import AddPresentationWeb from './web/addpresentation';
 
 export default class Web extends Base {
+	public addpresentation(editor: TextEditor): Promise<void> {
+		return new AddPresentationWeb().addpresentation(editor);
+	}
 	public addservice(): Promise<void> {
 		return this.baseaddservice();
 	}

@@ -1,5 +1,4 @@
 import { ExtensionContext } from 'vscode';
-import addtpl from './mm/add-tpl';
 import addwebrouters from './mm/add-web-routers';
 import list_events from './mm/list-events';
 import shell_build from './mm/shell/build';
@@ -26,7 +25,7 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.addcomponent(),
 		mm.addpage(),
 		mm.addservice(),
-		addtpl(),
+		mm.addpresentation(),
 		addwebrouters(),
 		insert_atom(),
 		insert_tpl(),

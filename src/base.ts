@@ -4,6 +4,7 @@ import generate from './util/generate';
 import Tools from './tools';
 
 export default abstract class Base extends Tools {
+	public abstract addpresentation(editor: TextEditor): Promise<void>;
 	public abstract addaction(editor: TextEditor): Promise<void>;
 	public abstract addcomponent(editor: TextEditor): Promise<void>;
 	public abstract addpage(): Promise<void>;

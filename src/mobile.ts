@@ -4,6 +4,9 @@ import AddActionMobile from './mobile/addaction/component';
 import AddComponentMobile from './mobile/addcomponent';
 
 export default class Mobile extends Base {
+	public addpresentation(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addservice(): Promise<void> {
 		return this.baseaddservice();
 	}
