@@ -1,5 +1,4 @@
 import { ExtensionContext } from 'vscode';
-import list_events from './mm/list-events';
 import shell_build from './mm/shell/build';
 import create_proj from './mm/shell/create';
 import shell_debug from './mm/shell/debug';
@@ -26,10 +25,10 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.addpresentation(),
 		mm.addwebrouter(),
 		mm.addwebfilter(),
+		mm.completion(),
 		insert_atom(),
 		insert_tpl(),
 		insert_widget(),
-		list_events(),
 		list_services(),
 		shell_debug(),
 		shell_build(),

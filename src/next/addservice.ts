@@ -5,7 +5,7 @@ import Tools from '../tools';
 
 export default class AddServiceNext extends Tools {
 	public async addservice() {
-		const rootPath = await this.root();
+		const rootPath = this.root();
 		const pages = await get_pages(rootPath);
 
 		const api = (() => {

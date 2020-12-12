@@ -3,7 +3,7 @@ import Tools from '../tools';
 
 export default class AddComponentWeixin extends Tools {
 	public async addcomponent() {
-		const rootPath = await this.root();
+		const rootPath = this.root();
 		const src = join(rootPath, 'src');
 		if (!await this.existsasync(src)) {
 			await this.mkdirasync(src);

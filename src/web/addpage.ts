@@ -6,7 +6,7 @@ import Tools from '../tools';
 
 export default class AddPageWeb extends Tools {
 	public async addpage() {
-		const rootPath = await this.root();
+		const rootPath = this.root();
 		if (!await this.existsasync(join(rootPath, 'pages'))) {
 			window.showErrorMessage('缺少pages文件夹');
 			return;

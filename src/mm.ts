@@ -20,51 +20,55 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public completion() {
+		const tool = this.get_instance();
+		return tool.completion();
+	}
 	public addwebfilter() {
 		return commands.registerCommand('mm.service.filter', async () => {
-			const tool = await this.get_instance();
+			const tool = this.get_instance();
 			await tool.addwebfilter();
 			return this.refreshexplorer();
 		});
 	}
 	public addwebrouter() {
 		return commands.registerCommand('mm.service.router', async () => {
-			const tool = await this.get_instance();
+			const tool = this.get_instance();
 			await tool.addwebrouter();
 			return this.refreshexplorer();
 		});
 	}
 	public addpresentation() {
 		return commands.registerTextEditorCommand('mm.presentation.add', async (editor) => {
-			const tool = await this.get_instance();
+			const tool = this.get_instance();
 			await tool.addpresentation(editor);
 			return this.refreshexplorer();
 		});
 	}
 	public addservice() {
 		return commands.registerCommand('mm.service.add', async () => {
-			const tool = await this.get_instance();
+			const tool = this.get_instance();
 			await tool.addservice();
 			return this.refreshexplorer();
 		});
 	}
 	public addpage() {
 		return commands.registerCommand('mm.page.add', async () => {
-			const tool = await this.get_instance();
+			const tool = this.get_instance();
 			await tool.addpage();
 			return this.refreshexplorer();
 		});
 	}
 	public addaction() {
 		return commands.registerTextEditorCommand('mm.action.add', async (editor) => {
-			const tool = await this.get_instance();
+			const tool = this.get_instance();
 			await tool.addaction(editor);
 			return this.refreshexplorer();
 		});
 	}
 	public addcomponent() {
 		return commands.registerTextEditorCommand('mm.component.add', async (editor) => {
-			const tool = await this.get_instance();
+			const tool = this.get_instance();
 			await tool.addcomponent(editor);
 			this.refreshexplorer();
 		});
@@ -77,8 +81,8 @@ export default class MM extends Tools {
 	private next = new Next();
 	private uniapp = new UniApp();
 	private serve = new Serve();
-	private async get_instance() {
-		const type = await this.prj_type();
+	private get_instance() {
+		const type = this.prj_type();
 		// 如果当前目录不在某个页面中，则不允许操作
 		switch (type) {
 			case PrjType.web:
@@ -100,23 +104,23 @@ export default class MM extends Tools {
 		}
 	}
 
-	private async prj_type() {
+	private prj_type() {
 		const type = workspace.getConfiguration().get<PrjType>('mm.proj.type');
 		if (type) {
 			return type;
 		}
-		const root_path = await this.root();
+		const root_path = this.root();
 		const src = join(root_path, 'src');
 		const pagesjson = join(src, 'pages.json');
-		if (await this.existsasync(pagesjson) && await this.existsasync(pagesjson)) {
+		if (this.exists(pagesjson) && this.exists(pagesjson)) {
 			return PrjType.uniapp;
 		}
 		const pages = join(root_path, 'pages');
-		if (await this.existsasync(join(pages, '_app.tsx'))) {
+		if (this.exists(join(pages, '_app.tsx'))) {
 			return PrjType.next;
 		}
 		const srcpages = join(root_path, 'src', 'pages');
-		if (await this.existsasync(join(srcpages, '_app.tsx'))) {
+		if (this.exists(join(srcpages, '_app.tsx'))) {
 			return PrjType.next;
 		}
 		return null;

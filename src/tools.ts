@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs';
+import { promises as fs, statSync } from 'fs';
 import { dirname, join } from 'path';
 import { commands, TextEditor, Uri, window, workspace } from 'vscode';
 import { NO_MODIFY } from './util/blocks';
@@ -52,7 +52,7 @@ export default abstract class Tools {
 	protected reg_in_comment(path: string) {
 		return /[/\\](src[/\\]\w[\w\d-]*[/\\](zj-\d{3,6}))[/\\]?/.exec(path);
 	}
-	protected async root(editor?: TextEditor) {
+	protected root(editor?: TextEditor) {
 		editor = editor || window.activeTextEditor;
 		const wf = (() => {
 			if (editor) {
@@ -73,7 +73,8 @@ export default abstract class Tools {
 			throw new Error('请打开工程进行操作');
 		}
 		const dir = wf.uri.fsPath;
-		if (!await this.existsasync(join(dir, 'package.json'))) {
+		// !!! we should not use async operation here
+		if (!this.exists(join(dir, 'package.json'))) {
 			window.showErrorMessage('错误的目录');
 			throw new Error('错误的目录');
 		}
@@ -84,6 +85,15 @@ export default abstract class Tools {
 	protected async writefileasync(path: string, data: string) {
 		await this.mkdirasync(dirname(path));
 		await fs.writeFile(path, data, 'utf-8');
+	}
+
+	protected exists(path: string) {
+		try {
+			statSync(path);
+			return true;
+		} catch (error) {
+			return false;
+		}
 	}
 
 	protected async existsasync(path: string) {

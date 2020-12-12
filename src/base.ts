@@ -1,9 +1,10 @@
 import { basename, dirname, join, sep } from 'path';
-import { FileType, TextEditor, Uri, window, workspace } from 'vscode';
+import { Disposable, FileType, TextEditor, Uri, window, workspace } from 'vscode';
 import generate from './util/generate';
 import Tools from './tools';
 
 export default abstract class Base extends Tools {
+	public abstract completion(): Disposable;
 	public abstract addwebfilter(): Promise<void>;
 	public abstract addwebrouter(): Promise<void>;
 	public abstract addpresentation(editor: TextEditor): Promise<void>;
@@ -13,7 +14,7 @@ export default abstract class Base extends Tools {
 	public abstract addservice(): Promise<void>;
 
 	protected async baseaddwebrouter(name: 'routers' | 'filters') {
-		const rootPath = await this.root();
+		const rootPath = this.root();
 		const config_path = join(rootPath, 'mm.json');
 		const doc = await workspace.openTextDocument(Uri.file(config_path));
 		const raw = doc.getText();
@@ -57,7 +58,7 @@ export default abstract class Base extends Tools {
 		await this.show_doc(config_path);
 	}
 	private async get_all_service(editor?: TextEditor) {
-		const root_dir = await this.root(editor);
+		const root_dir = this.root(editor);
 		const src = join(root_dir, 'src');
 		const ss = await this.get_all_s(src, src);
 		return window.showQuickPick(ss, {

@@ -13,7 +13,7 @@ interface IPageConfig {
 
 export default class AddPageUniapp extends Tools {
 	public async addaction() {
-		const rootPath = await this.root();
+		const rootPath = this.root();
 		const src = join(rootPath, 'src');
 		const pagesjson = join(src, 'pages.json');
 		const pagesconfigstr = await this.readfileasync(pagesjson);

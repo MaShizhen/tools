@@ -1,9 +1,19 @@
-import { TextEditor } from 'vscode';
+import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
 import AddPageNext from './next/addpage';
 import AddServiceNext from './next/addservice';
 
 export default class Next extends Base {
+	public completion(): Disposable {
+		return languages.registerCompletionItemProvider(
+			'typescript',
+			{
+				provideCompletionItems() {
+					return undefined;
+				}
+			}
+		);
+	}
 	public addwebfilter(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

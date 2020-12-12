@@ -11,7 +11,7 @@ import Tools from '../tools';
 
 export default class AddComponentMobile extends Tools {
 	public async addpage() {
-		const rootPath = await this.root();
+		const rootPath = this.root();
 		const src = join(rootPath, 'src');
 		if (!await this.existsasync(src)) {
 			await this.mkdirasync(src);

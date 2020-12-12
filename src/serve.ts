@@ -1,8 +1,18 @@
-import { TextEditor } from 'vscode';
+import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
 import AddPageServe from './serve/addpage';
 
 export default class Serve extends Base {
+	public completion(): Disposable {
+		return languages.registerCompletionItemProvider(
+			'typescript',
+			{
+				provideCompletionItems() {
+					return undefined;
+				}
+			}
+		);
+	}
 	public addwebfilter(): Promise<void> {
 		return this.baseaddwebrouter('filters');
 	}

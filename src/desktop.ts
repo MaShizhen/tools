@@ -1,9 +1,39 @@
-import { TextEditor } from 'vscode';
+import { dirname } from 'path';
+import { CompletionItem, CompletionItemKind, Disposable, languages, Position, TextDocument, TextEditor } from 'vscode';
 import Base from './base';
 import AddComponentDesktop from './desktop/addcomponent';
 import AddPageDesktop from './desktop/addpage';
 
 export default class Desktop extends Base {
+	public completion(): Disposable {
+		const events = ['mm-events-init'];
+		return languages.registerCompletionItemProvider(
+			'typescript',
+			{
+				provideCompletionItems: async (document: TextDocument, position: Position) => {
+					if (!/[\\|/]n?s\.ts$/.test(document.fileName) || events.length === 0) {
+						return undefined;
+					}
+					const linePrefix = document.lineAt(position).text.substr(0, position.character);
+					if (linePrefix.includes(':')) {
+						const dir = dirname(document.fileName);
+						const files = await this.readdirasync(dir);
+						const reg = /[\\|/]ns\.ts$/.test(document.fileName) ? /^na\d+.ts$/ : /^a\d+.ts$/;
+						return files.filter((it) => {
+							return reg.test(it);
+						}).map((it) => {
+							return new CompletionItem(it.replace('.ts', ''), CompletionItemKind.File);
+						});
+					}
+					return events.map((event) => {
+						return new CompletionItem(event, CompletionItemKind.Enum);
+					});
+				}
+			},
+			'\'',
+			'"'
+		);
+	}
 	public addwebfilter(): Promise<void> {
 		return this.baseaddwebrouter('filters');
 	}

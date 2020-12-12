@@ -1,9 +1,39 @@
-import { TextEditor } from 'vscode';
+import { dirname } from 'path';
+import { CompletionItem, CompletionItemKind, Disposable, languages, Position, TextDocument, TextEditor } from 'vscode';
 import Base from './base';
 import AddActionWeixinPage from './wxapp/addaction/page';
 import AddComponentWeixin from './wxapp/addcomponent';
 
 export default class WeiXin extends Base {
+	public completion(): Disposable {
+		const events = ['mm-events-init', 'mm-events-wx-app-launch', 'mm-events-wx-app-show', 'mm-events-wx-app-hide', 'mm-events-wx-app-error', 'mm-events-wx-page-load', 'mm-events-wx-page-ready', 'mm-events-wx-page-show', 'mm-events-wx-page-hide', 'mm-events-wx-page-unload', 'mm-events-wx-page-pulldown_refresh', 'mm-events-wx-page-reach-bottom', 'mm-events-wx-page-page-scroll'];
+		return languages.registerCompletionItemProvider(
+			'typescript',
+			{
+				provideCompletionItems: async (document: TextDocument, position: Position) => {
+					if (!/[\\|/]n?s\.ts$/.test(document.fileName) || events.length === 0) {
+						return undefined;
+					}
+					const linePrefix = document.lineAt(position).text.substr(0, position.character);
+					if (linePrefix.includes(':')) {
+						const dir = dirname(document.fileName);
+						const files = await this.readdirasync(dir);
+						const reg = /[\\|/]ns\.ts$/.test(document.fileName) ? /^na\d+.ts$/ : /^a\d+.ts$/;
+						return files.filter((it) => {
+							return reg.test(it);
+						}).map((it) => {
+							return new CompletionItem(it.replace('.ts', ''), CompletionItemKind.File);
+						});
+					}
+					return events.map((event) => {
+						return new CompletionItem(event, CompletionItemKind.Enum);
+					});
+				}
+			},
+			'\'',
+			'"'
+		);
+	}
 	public addwebfilter(): Promise<void> {
 		return this.baseaddwebrouter('filters');
 	}

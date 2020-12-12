@@ -5,7 +5,7 @@ import { get_pages } from './get-pages';
 
 export default class AddPageNext extends Tools {
 	public async addpage() {
-		const rootPath = await this.root();
+		const rootPath = this.root();
 		const pages = await get_pages(rootPath);
 		const page_dir = (() => {
 			const editor = window.activeTextEditor;

@@ -11,7 +11,7 @@ export default class AddActionDesktopPage extends Tools {
 			window.showErrorMessage('请在组件中进行该操作!');
 		} else {
 			const folder = basename(path);
-			const dir = join(await this.root(editor), folder);
+			const dir = join(this.root(editor), folder);
 			const p_path = await this.generate(dir, 'a', '\\.ts', 3);
 			await this.create_a(p_path);
 			await this.update_b(dir);
