@@ -5,6 +5,10 @@ import AddActionWeixinPage from './wxapp/addaction/page';
 import AddComponentWeixin from './wxapp/addcomponent';
 
 export default class WeiXin extends Base {
+	public shellbuild(): void {
+		const command = "npm version '1.0.'$(date +%Y%m%d%H%M) && npm run build && npm publish";
+		this.shellrun(command, 'build');
+	}
 	public completion(): Disposable {
 		const events = ['mm-events-init', 'mm-events-wx-app-launch', 'mm-events-wx-app-show', 'mm-events-wx-app-hide', 'mm-events-wx-app-error', 'mm-events-wx-page-load', 'mm-events-wx-page-ready', 'mm-events-wx-page-show', 'mm-events-wx-page-hide', 'mm-events-wx-page-unload', 'mm-events-wx-page-pulldown_refresh', 'mm-events-wx-page-reach-bottom', 'mm-events-wx-page-page-scroll'];
 		return languages.registerCompletionItemProvider(

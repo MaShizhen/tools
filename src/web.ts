@@ -10,6 +10,10 @@ import AddPageWeb from './web/addpage';
 import AddPresentationWeb from './web/addpresentation';
 
 export default class Web extends Base {
+	public shellbuild(): void {
+		const command = "npm version '1.0.'$(date +%Y%m%d%H%M) && npm run build:n && npm run build && git commit -am 'build' && npm publish";
+		this.shellrun(command, 'build');
+	}
 	public completion(): Disposable {
 		const events = ['mm-events-init'];
 		return languages.registerCompletionItemProvider(

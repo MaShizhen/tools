@@ -4,14 +4,18 @@ import generate from './util/generate';
 import Tools from './tools';
 
 export default abstract class Base extends Tools {
+	public abstract shellbuild(): void;
+
 	public abstract completion(): Disposable;
+
+	public abstract addpage(): Promise<void>;
+	public abstract addcomponent(editor: TextEditor): Promise<void>;
+	public abstract addservice(): Promise<void>;
+	public abstract addaction(editor: TextEditor): Promise<void>;
+	public abstract addpresentation(editor: TextEditor): Promise<void>;
+
 	public abstract addwebfilter(): Promise<void>;
 	public abstract addwebrouter(): Promise<void>;
-	public abstract addpresentation(editor: TextEditor): Promise<void>;
-	public abstract addaction(editor: TextEditor): Promise<void>;
-	public abstract addcomponent(editor: TextEditor): Promise<void>;
-	public abstract addpage(): Promise<void>;
-	public abstract addservice(): Promise<void>;
 
 	protected async baseaddwebrouter(name: 'routers' | 'filters') {
 		const rootPath = this.root();

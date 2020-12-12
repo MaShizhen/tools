@@ -1,9 +1,60 @@
 import { promises as fs, statSync } from 'fs';
 import { dirname, join } from 'path';
+import { exec as node_exec } from 'child_process';
+import { platform } from 'os';
 import { commands, TextEditor, Uri, window, workspace } from 'vscode';
 import { NO_MODIFY } from './util/blocks';
 
 export default abstract class Tools {
+
+	//#endregion Shell
+	protected shellexec(cmd: string, cwd?: string) {
+		const shell = (() => {
+			const shell = workspace.getConfiguration('terminal.integrated.shell');
+			switch (platform()) {
+				case 'darwin':
+					return shell.get<string>('osx');
+				case 'win32':
+					return shell.get<string>('windows');
+				case 'linux':
+				default:
+					return shell.get<string>('linux');
+			}
+		})();
+		return new Promise<string>((resolve, reject) => {
+			// Fix "stdout maxBuffer exceeded" error
+			// See https://github.com/DefinitelyTyped/DefinitelyTyped/pull/26545#issuecomment-402274021
+			const maxBuffer = 1024 * 1024 * 1024; // Max = 1 MiB, default is 200 KiB
+
+			const handler = window.setStatusBarMessage(`running ${cmd}`);
+
+			node_exec(cmd, {
+				cwd,
+				encoding: 'utf8',
+				maxBuffer,
+				shell
+			}, (error, stdout, stderr) => {
+				handler.dispose();
+				if (error === null) {
+					resolve(stdout.trim());
+				} else {
+					reject(new Error(stderr.trim()));
+				}
+			});
+		});
+	}
+	protected shellrun(command: string, name: string) {
+		const named_ternimal = window.terminals.find((t) => {
+			return t.name === name;
+		});
+		if (named_ternimal) {
+			named_ternimal.dispose();
+		}
+		const terminal = window.createTerminal(name);
+		terminal.show();
+		terminal.sendText(command);
+	}
+	//#region 
 	//#region vs
 	protected refreshexplorer() {
 		return commands.executeCommand('workbench.files.action.refreshFilesExplorer');
