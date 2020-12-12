@@ -3,6 +3,14 @@ import Base from './base';
 import AddPageServe from './serve/addpage';
 
 export default class Serve extends Base {
+	public shellbuild(): void {
+		const command = "npm version '1.0.'$(date +%Y%m%d%H%M) && yarn build && npm publish";
+		this.shellrun(command, 'build');
+	}
+	public shelldebug(): void {
+		const command = 'npm t';
+		this.shellrun(command, 'debug');
+	}
 	public completion(): Disposable {
 		return languages.registerCompletionItemProvider(
 			'typescript',

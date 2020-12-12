@@ -5,6 +5,7 @@ import Tools from './tools';
 
 export default abstract class Base extends Tools {
 	public abstract shellbuild(): void;
+	public abstract shelldebug(): void;
 
 	public abstract completion(): Disposable;
 

@@ -3,6 +3,14 @@ import Base from './base';
 import AddPageUniapp from './uniapp/addpage';
 
 export default class UniApp extends Base {
+	public shellbuild(): void {
+		const command = 'yarn build';
+		this.shellrun(command, 'build');
+	}
+	public shelldebug(): void {
+		const command = 'yarn dev';
+		this.shellrun(command, 'debug');
+	}
 	public completion(): Disposable {
 		return languages.registerCompletionItemProvider(
 			'typescript',

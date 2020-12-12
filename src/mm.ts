@@ -20,6 +20,12 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public shelldebug() {
+		return commands.registerCommand('mm.shell.debug', () => {
+			const tool = this.get_instance();
+			return tool.shelldebug();
+		});
+	}
 	public shellbuild() {
 		return commands.registerCommand('mm.shell.build', () => {
 			const tool = this.get_instance();

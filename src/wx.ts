@@ -5,6 +5,10 @@ import AddActionWeixinPage from './wxapp/addaction/page';
 import AddComponentWeixin from './wxapp/addcomponent';
 
 export default class WeiXin extends Base {
+	public shelldebug(): void {
+		const command = 'npm t';
+		return this.shellrun(command, 'debug');
+	}
 	public shellbuild(): void {
 		const command = "npm version '1.0.'$(date +%Y%m%d%H%M) && npm run build && npm publish";
 		this.shellrun(command, 'build');

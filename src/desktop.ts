@@ -5,6 +5,10 @@ import AddComponentDesktop from './desktop/addcomponent';
 import AddPageDesktop from './desktop/addpage';
 
 export default class Desktop extends Base {
+	public shelldebug(): void {
+		const command = 'npm t';
+		return this.shellrun(command, 'debug');
+	}
 	public shellbuild(): void {
 		const command = "npm version '1.0.'$(date +%Y%m%d%H%M) && npm run build && npm publish && npm run build:linux";
 		this.shellrun(command, 'build');

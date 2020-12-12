@@ -6,6 +6,26 @@ import AddActionMobile from './mobile/addaction/component';
 import AddComponentMobile from './mobile/addcomponent';
 
 export default class Mobile extends Base {
+	public shelldebug(): void {
+		const command = 'npm t';
+		this.shellrun(command, 'debug');
+		if (this.isios()) {
+			const app = 'npm run test:ios';
+			this.shellrun(app, 'debug app');
+		} else {
+			// const env = (() => {
+			// 	const home = homedir();
+			// 	const android = join(home, 'Android');
+			// 	const javahome = join(android, 'jdk1.8.0_191');
+			// 	const path = join(javahome, 'bin');
+			// 	const androidhome = join(android, 'Sdk');
+			// 	return `export JAVA_HOME=${javahome} && export PATH=${path}:$PATH && export ANDROID_HOME=${androidhome}`;
+			// })();
+			// run(env, 'debug app');
+			const app = 'npm run test:dev';
+			this.shellrun(app, 'debug app');
+		}
+	}
 	public async shellbuild() {
 		const pickoption = this.getdefaultpickoption();
 		const select = await window.showQuickPick([

@@ -4,6 +4,14 @@ import AddPageNext from './next/addpage';
 import AddServiceNext from './next/addservice';
 
 export default class Next extends Base {
+	public shellbuild(): void {
+		const command = 'yarn build';
+		this.shellrun(command, 'build');
+	}
+	public shelldebug(): void {
+		const command = 'yarn dev';
+		this.shellrun(command, 'debug');
+	}
 	public completion(): Disposable {
 		return languages.registerCompletionItemProvider(
 			'typescript',
