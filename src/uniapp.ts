@@ -1,9 +1,18 @@
 import { join } from 'path';
 import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
+import { IAtomCatagory } from './interfaces';
 import AddPageUniapp from './uniapp/addpage';
+import get from './util/get';
 
 export default class UniApp extends Base {
+	private remoteatoms = [] as IAtomCatagory[];
+	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
+		if (!this.remoteatoms) {
+			this.remoteatoms = await get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-uniapp/index.json');
+		}
+		return this.remoteatoms;
+	}
 	public refreshsitemap(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

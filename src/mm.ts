@@ -20,6 +20,12 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public addtplatom() {
+		return commands.registerTextEditorCommand('mm.tpl.atom', (textEditor) => {
+			const tool = this.getinstance();
+			return tool.addtplatom(textEditor);
+		});
+	}
 	public refreshsitemap() {
 		return commands.registerCommand('mm.refreshmap', async () => {
 			const tool = this.getinstance();

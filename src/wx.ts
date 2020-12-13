@@ -1,6 +1,8 @@
 import { dirname, join, relative } from 'path';
 import { CompletionItem, CompletionItemKind, Disposable, languages, Position, TextDocument, TextEditor } from 'vscode';
 import Base from './base';
+import { IAtomCatagory } from './interfaces';
+import get from './util/get';
 import AddActionWeixinPage from './wxapp/addaction/page';
 import AddComponentWeixin from './wxapp/addcomponent';
 
@@ -14,6 +16,13 @@ interface Section extends Link {
 }
 
 export default class WeiXin extends Base {
+	private remoteatoms = [] as IAtomCatagory[];
+	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
+		if (!this.remoteatoms) {
+			this.remoteatoms = await get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-wxapp/index.json');
+		}
+		return this.remoteatoms;
+	}
 	public async refreshsitemap(): Promise<void> {
 		const rt = this.root();
 		const mdfile = join(rt, '.mm.md');

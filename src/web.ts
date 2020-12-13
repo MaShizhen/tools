@@ -1,6 +1,8 @@
 import { dirname, join, parse, relative } from 'path';
 import { CompletionItem, CompletionItemKind, Disposable, languages, Position, TextDocument, TextEditor, workspace } from 'vscode';
 import Base from './base';
+import { IAtomCatagory } from './interfaces';
+import get from './util/get';
 import AddActionWebComponent from './web/addaction/component';
 import AddActionWebComponentN from './web/addaction/componentn';
 import AddActionWebPage from './web/addaction/page';
@@ -19,6 +21,13 @@ interface Section extends Link {
 }
 
 export default class Web extends Base {
+	private remoteatoms = [] as IAtomCatagory[];
+	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
+		if (!this.remoteatoms) {
+			this.remoteatoms = await get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-web/index.json');
+		}
+		return this.remoteatoms;
+	}
 	public async refreshsitemap(): Promise<void> {
 		const rt = this.root();
 		const mdfile = join(rt, '.mm.md');
@@ -222,5 +231,4 @@ ${md}
 			return new Map<string, string>();
 		}
 	}
-
 }

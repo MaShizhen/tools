@@ -3,8 +3,17 @@ import { CompletionItem, CompletionItemKind, Disposable, languages, Position, Te
 import Base from './base';
 import AddComponentDesktop from './desktop/addcomponent';
 import AddPageDesktop from './desktop/addpage';
+import { IAtomCatagory } from './interfaces';
+import get from './util/get';
 
 export default class Desktop extends Base {
+	private remoteatoms = [] as IAtomCatagory[];
+	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
+		if (!this.remoteatoms) {
+			this.remoteatoms = await get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-desktop/index.json');
+		}
+		return this.remoteatoms;
+	}
 	public refreshsitemap(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

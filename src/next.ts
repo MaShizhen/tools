@@ -1,10 +1,19 @@
 import { join } from 'path';
 import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
+import { IAtomCatagory } from './interfaces';
 import AddPageNext from './next/addpage';
 import AddServiceNext from './next/addservice';
+import get from './util/get';
 
 export default class Next extends Base {
+	private remoteatoms = [] as IAtomCatagory[];
+	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
+		if (!this.remoteatoms) {
+			this.remoteatoms = await get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-next/index.json');
+		}
+		return this.remoteatoms;
+	}
 	public refreshsitemap(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

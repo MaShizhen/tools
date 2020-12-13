@@ -1,7 +1,9 @@
 import { join, relative } from 'path';
 import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
+import { IAtomCatagory } from './interfaces';
 import AddPageServe from './serve/addpage';
+import get from './util/get';
 
 interface Link {
 	name: string;
@@ -13,6 +15,13 @@ interface Section extends Link {
 }
 
 export default class Serve extends Base {
+	private remoteatoms = [] as IAtomCatagory[];
+	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
+		if (!this.remoteatoms) {
+			this.remoteatoms = await get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-nodejs/index.json');
+		}
+		return this.remoteatoms;
+	}
 	public async refreshsitemap(): Promise<void> {
 		const rt = this.root();
 		const mdfile = join(rt, '.mm.md');

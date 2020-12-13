@@ -3,7 +3,7 @@ import { dirname, join } from 'path';
 import { exec as node_exec } from 'child_process';
 import { homedir, platform } from 'os';
 import { Stream } from 'stream';
-import { commands, TextEditor, Uri, window, workspace } from 'vscode';
+import { commands, Position, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import got from 'got';
 import tar from 'tar';
 import { NO_MODIFY } from './util/blocks';
@@ -41,6 +41,39 @@ export default abstract class Tools {
 	//#endregion
 
 	//#region Shell
+	protected async shellinstall(editor: TextEditor, atom: string, version: string, isdev: boolean) {
+		if (!atom) {
+			return;
+		}
+		if (!version || version === '*') {
+			version = 'latest';
+		}
+		const cwd = this.root(editor);
+		const dir = join(cwd, 'node_modules', atom);
+		if (await this.existsasync(dir)) {
+			return;
+		}
+		const yarn = isdev ? 'yarn add --dev' : 'yarn add';
+		const package_name = `${atom}@${version}`;
+		const msg_install = `正在安装依赖: ${package_name}`;
+		const command = `${yarn} ${package_name}`;
+		const p = this.shellexec(command, cwd);
+		window.setStatusBarMessage(msg_install, p);
+		await p;
+		const msg_installed = `成功安装: ${package_name}`;
+		window.setStatusBarMessage(msg_installed);
+
+		const filename = Uri.file(join(dir, 'package.json'));
+		const pkg = JSON.parse(Buffer.from(await workspace.fs.readFile(filename)).toString('utf8')) as { peerDependencies: { [name: string]: string; } };
+		const dep = pkg.peerDependencies;
+		if (dep) {
+			await Promise.all(Object.keys(dep).map(async (name) => {
+				const ver = dep[name];
+				await this.shellinstall(editor, name, ver, isdev);
+			}));
+		}
+	}
+
 	protected workpath() {
 		const editor = window.activeTextEditor;
 		const wf = (() => {
@@ -111,6 +144,37 @@ export default abstract class Tools {
 	}
 	//#endregion
 	//#region vs
+	protected async insetSnippet(textEditor: TextEditor, use: string, imp: string) {
+		const doc = textEditor.document;
+		const max = doc.lineCount;
+		let hasimport = false;
+		let lastimport = -1;
+		for (let i = 0; i < max; i++) {
+			const line = doc.lineAt(i);
+			const text = line.text;
+			if (/^import\s+.+/.test(text)) {
+				if (text === imp) {
+					hasimport = true;
+					break;
+				} else {
+					lastimport = i;
+				}
+			}
+		}
+		const imppos = new Position(lastimport + 1, 0);
+		if (!hasimport) {
+			const we = new WorkspaceEdit();
+			const uri = doc.uri;
+			we.insert(uri, imppos, `${imp}\n`);
+			await workspace.applyEdit(we);
+		}
+		const active = textEditor.selection.active;
+		// const pos = hasimport ? active : active.translate(1); we do not need translate here, active will auto tranlate after insert importing
+		await textEditor.insertSnippet(new SnippetString(use), active, {
+			undoStopAfter: true,
+			undoStopBefore: true
+		});
+	}
 	protected refreshexplorer() {
 		return commands.executeCommand('workbench.files.action.refreshFilesExplorer');
 	}

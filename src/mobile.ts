@@ -2,8 +2,10 @@ import { homedir, platform } from 'os';
 import { dirname, join, relative } from 'path';
 import { CompletionItem, CompletionItemKind, Disposable, FileType, languages, Position, TextDocument, TextEditor, Uri, window, workspace } from 'vscode';
 import Base from './base';
+import { IAtomCatagory } from './interfaces';
 import AddActionMobile from './mobile/addaction/component';
 import AddComponentMobile from './mobile/addcomponent';
+import get from './util/get';
 
 interface Link {
 	name: string;
@@ -15,6 +17,13 @@ interface Section extends Link {
 }
 
 export default class Mobile extends Base {
+	private remoteatoms = [] as IAtomCatagory[];
+	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
+		if (!this.remoteatoms) {
+			this.remoteatoms = await get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-mobile/index.json');
+		}
+		return this.remoteatoms;
+	}
 	public async refreshsitemap(): Promise<void> {
 		const rt = this.root();
 		const mdfile = join(rt, '.mm.md');
