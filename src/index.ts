@@ -1,5 +1,4 @@
 import { ExtensionContext } from 'vscode';
-import insert_tpl from './mm/snippets/insert-tpl';
 import list_services from './nodejs/list-services';
 import addatom from './mm/add-atom';
 import addlocalatom from './mm/add-local-atom';
@@ -26,7 +25,6 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.refreshsitemap(),
 		mm.addtplatom(),
 		mm.addtplwidget(),
-		insert_tpl(),
 		list_services(),
 		addatom(),
 		addlocalatom(),
