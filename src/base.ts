@@ -6,6 +6,7 @@ import { IAtom, IAtomCatagory } from './interfaces';
 import get from './util/get';
 
 export default abstract class Base extends Tools {
+	public abstract addtplwidget(editor: TextEditor): Promise<void>;
 	public async addtplatom(editor: TextEditor) {
 		const servertype = (() => {
 			const doc = editor.document;

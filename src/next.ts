@@ -7,6 +7,9 @@ import AddServiceNext from './next/addservice';
 import get from './util/get';
 
 export default class Next extends Base {
+	public addtplwidget(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	private remoteatoms = [] as IAtomCatagory[];
 	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
 		if (!this.remoteatoms) {
