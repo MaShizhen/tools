@@ -30,7 +30,7 @@ export interface Package {
 		lint: string;
 		compile: string;
 		build: string;
-		up: string;
+		up?: string;
 	};
 	repository: {
 		type: string;

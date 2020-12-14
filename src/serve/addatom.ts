@@ -80,6 +80,7 @@ export default class AddAtomServe extends Actor {
 		const content = await this.readfile(path);
 		const pkg = JSON.parse(content) as Package;
 		pkg.name = `@mmstudio/${no}`;
+		delete pkg.scripts.up;
 		if (remote) {
 			const repository = remote.replace(':', '/').replace('git@', 'https://');	// git@github.com:mm-atom/no.git to https://github.com/mm-atom/no.git
 			pkg.repository.url = repository;
