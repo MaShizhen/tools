@@ -15,6 +15,9 @@ interface Section extends Link {
 }
 
 export default class Serve extends Base {
+	public addwidgetlocal(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addwidget(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

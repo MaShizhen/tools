@@ -3,8 +3,13 @@ import { Disposable, FileType, QuickPickItem, TextEditor, Uri, window, workspace
 import generate from './util/generate';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
+import AddAtomLocal from './mm/addatomlocal';
 
 export default abstract class Base extends Tools {
+	public abstract addwidgetlocal(): Promise<void>;
+	public addatomlocal(): Promise<void> {
+		return new AddAtomLocal().act();
+	}
 	public abstract addwidget(): Promise<void>;
 	public abstract addatom(): Promise<void>;
 

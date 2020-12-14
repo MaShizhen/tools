@@ -20,6 +20,18 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public addwidgetlocal() {
+		return commands.registerCommand('mm.widget.addlocal', async () => {
+			const tool = this.getinstance();
+			return tool.addwidgetlocal();
+		});
+	}
+	public addatomlocal() {
+		return commands.registerCommand('mm.atom.addlocal', async () => {
+			const tool = this.getinstance();
+			return tool.addatomlocal();
+		});
+	}
 	public addwidget() {
 		return commands.registerCommand('mm.widget.add', async () => {
 			const items = [

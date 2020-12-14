@@ -12,6 +12,7 @@ import AddPageWeb from './web/addpage';
 import AddPresentationWeb from './web/addpresentation';
 import AddTplWidgetWeb from './web/addtplwidget';
 import AddWidgetWeb from './web/addwidget';
+import AddWidgetLocalWeb from './web/addwidgetlocal';
 
 interface Link {
 	name: string;
@@ -23,6 +24,9 @@ interface Section extends Link {
 }
 
 export default class Web extends Base {
+	public addwidgetlocal(): Promise<void> {
+		return new AddWidgetLocalWeb().act();
+	}
 	public addwidget(): Promise<void> {
 		return new AddWidgetWeb().act();
 	}

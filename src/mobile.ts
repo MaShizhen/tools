@@ -7,6 +7,7 @@ import AddActionMobile from './mobile/addaction/component';
 import AddAtomMobile from './mobile/addatom';
 import AddComponentMobile from './mobile/addcomponent';
 import AddTplWidgetMobile from './mobile/addtplwidget';
+import AddWidgetLocalMobile from './mobile/addwidgetlocal';
 import AddWidgetMobile from './mobile/addwidgets';
 
 interface Link {
@@ -19,6 +20,9 @@ interface Section extends Link {
 }
 
 export default class Mobile extends Base {
+	public addwidgetlocal(): Promise<void> {
+		return new AddWidgetLocalMobile().act();
+	}
 	public addwidget(): Promise<void> {
 		return new AddWidgetMobile().act();
 	}
