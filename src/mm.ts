@@ -51,11 +51,7 @@ export default class MM extends Tools {
 					type: PrjType.wxapp
 				}
 			];
-			const pickoption = this.getdefaultpickoption();
-			const picked = await window.showQuickPick(items, {
-				...pickoption,
-				placeHolder: '请选择项目端点类型'
-			});
+			const picked = await this.pick(items, '请选择项目端点类型');
 			if (!picked) {
 				return;
 			}
@@ -103,11 +99,7 @@ export default class MM extends Tools {
 					type: PrjType.wxapp
 				}
 			];
-			const pickoption = this.getdefaultpickoption();
-			const p1 = await window.showQuickPick(pickitems, {
-				...pickoption,
-				placeHolder: '请选择项目端点类型'
-			});
+			const p1 = await this.pick(pickitems, '请选择项目端点类型');
 			if (!p1) {
 				return;
 			}
@@ -150,14 +142,15 @@ export default class MM extends Tools {
 			}
 
 			const ss = await get_all_s(src, src);
-			const pickoption = this.getdefaultpickoption();
-			const service = await window.showQuickPick(ss, {
-				...pickoption,
-				placeHolder: '请选择服务'
-			});
-			if (!service) {
+			const picked = await this.pick(ss.map((it) => {
+				return {
+					label: it
+				};
+			}), '请选择服务');
+			if (!picked) {
 				return;
 			}
+			const service = picked.label;
 			const description = await window.showInputBox({
 				ignoreFocusOut: true,
 				prompt: '定时任务描述'
@@ -211,8 +204,7 @@ export default class MM extends Tools {
 	public shellcreate() {
 		return commands.registerCommand('mm.shell.create', async () => {
 			window.showInformationMessage('进行此操作之前,请确保git已安装并配置好权限,且有一个可用的没有任何提交的git仓库');
-			const pickoption = this.getdefaultpickoption();
-			const picked = await window.showQuickPick([
+			const picked = await this.pick([
 				{
 					description: '1.next.js',
 					label: 'next.js',
@@ -243,10 +235,7 @@ export default class MM extends Tools {
 					label: 'desktop',
 					type: PrjType.desktop
 				}
-			], {
-				...pickoption,
-				placeHolder: '请选择项目端点类型'
-			});
+			], '请选择项目端点类型');
 			if (!picked) {
 				return;
 			}

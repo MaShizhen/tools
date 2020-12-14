@@ -1,5 +1,5 @@
 import { basename, dirname, join, relative } from 'path';
-import { FileType, QuickPickItem, SnippetString, TextEditor, Uri, window, workspace } from 'vscode';
+import { FileType, QuickPickItem, SnippetString, TextEditor, Uri, workspace } from 'vscode';
 import Actor from '../actor';
 import { IAtom, IAtomCatagory } from '../interfaces';
 
@@ -52,11 +52,7 @@ export default class AddTplWidgetWx extends Actor {
 			return item;
 		}));
 
-		const pickoption = this.getdefaultpickoption();
-		const picked = await window.showQuickPick(selects, {
-			...pickoption,
-			placeHolder: '选择一个分类或直接输入控件编号并回车'
-		});
+		const picked = await this.pick(selects, '选择一个分类或直接输入控件编号并回车');
 		if (!picked) {
 			return;
 		}
@@ -67,16 +63,13 @@ export default class AddTplWidgetWx extends Actor {
 			return;
 		}
 		const atoms = catagories.get(picked.label)!;
-		const selected_atom = await window.showQuickPick(atoms.map((it) => {
+		const selected_atom = await this.pick(atoms.map((it) => {
 			const item: QuickPickItem = {
 				detail: it.name,
 				label: it.no
 			};
 			return item;
-		}), {
-			...pickoption,
-			placeHolder: '选择一个控件编号并回车'
-		});
+		}), '选择一个控件编号并回车');
 		if (!selected_atom) {
 			return;
 		}

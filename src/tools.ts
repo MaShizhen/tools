@@ -4,7 +4,7 @@ import { exec as node_exec } from 'child_process';
 import { homedir, platform } from 'os';
 import { Stream } from 'stream';
 import { get as base } from 'https';
-import { commands, Position, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { commands, Position, QuickPickItem, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import got from 'got';
 import tar from 'tar';
 import { NO_MODIFY } from './util/blocks';
@@ -192,6 +192,15 @@ export default abstract class Tools {
 	}
 	//#endregion
 	//#region vs
+	protected pick<T extends QuickPickItem>(items: T[] | Thenable<T[]>, placeHolder = '') {
+		return window.showQuickPick(items, {
+			placeHolder,
+			matchOnDescription: true,
+			matchOnDetail: true,
+			canPickMany: false,
+			ignoreFocusOut: true
+		});
+	}
 	protected async insetSnippet(textEditor: TextEditor, use: string, imp: string) {
 		const doc = textEditor.document;
 		const max = doc.lineCount;
@@ -231,14 +240,6 @@ export default abstract class Tools {
 	}
 	protected show_doc(path: string) {
 		return window.showTextDocument(Uri.file(path));
-	}
-	protected getdefaultpickoption() {
-		return {
-			matchOnDescription: true,
-			matchOnDetail: true,
-			canPickMany: false,
-			ignoreFocusOut: true
-		};
 	}
 	//#endregion
 

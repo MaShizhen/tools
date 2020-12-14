@@ -90,11 +90,7 @@ export default abstract class Base extends Tools {
 			};
 			return item;
 		}));
-		const pickoption = this.getdefaultpickoption();
-		const picked = await window.showQuickPick(selects, {
-			...pickoption,
-			placeHolder: '选择一个分类或直接输入原子操作编号并回车'
-		});
+		const picked = await this.pick(selects, '选择一个分类或直接输入原子操作编号并回车');
 		if (!picked) {
 			return;
 		}
@@ -104,16 +100,13 @@ export default abstract class Base extends Tools {
 				return pick;
 			}
 			const atoms = catagories.get(picked.label)!;
-			const selected_atom = await window.showQuickPick(atoms.map((it) => {
+			const selected_atom = await this.pick(atoms.map((it) => {
 				const item: QuickPickItem = {
 					detail: it.name,
 					label: it.no
 				};
 				return item;
-			}), {
-				...pickoption,
-				placeHolder: '选择一个原子操作编号并回车'
-			});
+			}), '选择一个原子操作编号并回车');
 			if (!selected_atom) {
 				return null;
 			}
@@ -204,8 +197,12 @@ export default abstract class Base extends Tools {
 		if (!service) {
 			return;
 		}
-		const method = await window.showQuickPick(['get', 'post', 'put', 'delete', 'all']);
-		if (!method) {
+		const picked = await this.pick(['get', 'post', 'put', 'delete', 'all'].map((it) => {
+			return {
+				label: it
+			};
+		}));
+		if (!picked) {
 			return;
 		}
 		const url = (() => {
@@ -224,7 +221,7 @@ export default abstract class Base extends Tools {
 		})();
 		routers.push({
 			data: {},
-			method,
+			method: picked.label,
 			service,
 			url
 		});
@@ -236,10 +233,15 @@ export default abstract class Base extends Tools {
 		const root_dir = this.root(editor);
 		const src = join(root_dir, 'src');
 		const ss = await this.get_all_s(src, src);
-		return window.showQuickPick(ss, {
-			...this.getdefaultpickoption(),
-			placeHolder: '请选择服务'
-		});
+		const picked = await this.pick(ss.map((it) => {
+			return {
+				label: it
+			};
+		}), '请选择服务');
+		if (!picked) {
+			return undefined;
+		}
+		return picked.label;
 	}
 	private async get_all_s(cwd: string, root: string): Promise<string[]> {
 		const files = await workspace.fs.readDirectory(Uri.file(cwd));

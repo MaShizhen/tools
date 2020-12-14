@@ -6,8 +6,7 @@ import TplUtil from '../util/tpl';
 export default class AddAtomLocal extends Actor {
 	private tpl = new TplUtil();
 	public async do(): Promise<void> {
-		const pickoption = this.getdefaultpickoption();
-		const p1 = await window.showQuickPick([
+		const p1 = await this.pick([
 			{
 				detail: '1.服务端原子操作',
 				label: 'serve',
@@ -17,10 +16,7 @@ export default class AddAtomLocal extends Actor {
 				detail: '2.客户端原子操作',
 				label: 'client',
 				prefix: 'ap'
-			}], {
-			...pickoption,
-			placeHolder: '请选择项目端点类型'
-		});
+			}], '请选择项目端点类型');
 		if (!p1) {
 			return;
 		}

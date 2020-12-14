@@ -31,14 +31,13 @@ export default class AddPageWeb extends Actor {
 			pages.splice(pages.indexOf(value), 1);
 			pages.unshift(value);
 		}
-		const pickoption = this.getdefaultpickoption();
-		const page = await window.showQuickPick(pages, {
-			...pickoption,
-			placeHolder: '请输入页面名称'
-		});
-		if (!page) {
+		const picked = await this.pick(pages.map((it) => {
+			return { label: it };
+		}), '请输入页面名称');
+		if (!picked) {
 			return;
 		}
+		const page = picked.label;
 		const p_path = await this.generate(folder, 'pg', '', 3);
 		if (!await this.exists(folder)) {
 			await this.mkdir(folder);

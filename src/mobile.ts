@@ -1,6 +1,6 @@
 import { homedir, platform } from 'os';
 import { dirname, join, relative } from 'path';
-import { CompletionItem, CompletionItemKind, Disposable, FileType, languages, Position, TextDocument, TextEditor, Uri, window, workspace } from 'vscode';
+import { CompletionItem, CompletionItemKind, Disposable, FileType, languages, Position, TextDocument, TextEditor, Uri, workspace } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
 import AddActionMobile from './mobile/addaction/component';
@@ -151,8 +151,7 @@ ${md}
 		}
 	}
 	public async shellbuild() {
-		const pickoption = this.getdefaultpickoption();
-		const select = await window.showQuickPick([
+		const select = await this.pick([
 			{
 				description: '服务包一般指向服务器部署的软件包,部署才能生效',
 				label: '服务包',
@@ -163,10 +162,7 @@ ${md}
 				label: 'app包',
 				picked: false
 			}
-		], {
-			...pickoption,
-			placeHolder: '请选择打包类型'
-		});
+		], '请选择打包类型');
 		if (!select) {
 			return;
 		}
