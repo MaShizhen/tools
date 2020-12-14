@@ -162,12 +162,12 @@ export default class Desktop extends Base {
 		return this.baseaddservice();
 	}
 	public addpage(): Promise<void> {
-		return new AddPageDesktop().addpage();
+		return new AddPageDesktop().act();
 	}
 	public addaction(editor: TextEditor): Promise<void> {
 		return this.baseaddaction(editor);
 	}
 	public addcomponent(editor: TextEditor): Promise<void> {
-		return new AddComponentDesktop().addcomponnet(editor);
+		return new AddComponentDesktop().do(editor);
 	}
 }

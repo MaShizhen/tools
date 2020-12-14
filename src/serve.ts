@@ -128,7 +128,7 @@ ${md}
 		return this.baseaddservice();
 	}
 	public addpage(): Promise<void> {
-		return new AddPageServe().addpage();
+		return new AddPageServe().act();
 	}
 	public addaction(editor: TextEditor): Promise<void> {
 		return this.baseaddaction(editor);

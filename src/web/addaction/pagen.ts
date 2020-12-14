@@ -3,7 +3,10 @@ import { TextEditor, window } from 'vscode';
 import AddActionWebBase from './base';
 
 export default class AddActionWebPageN extends AddActionWebBase {
-	public async addaction(editor: TextEditor) {
+	public act(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async do(editor: TextEditor): Promise<void> {
 		const path = editor.document.fileName;
 		const folder = dirname(path);
 		// 如果当前目录不在某个页面中，则不允许操作

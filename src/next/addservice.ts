@@ -1,10 +1,13 @@
 import { dirname, join } from 'path';
-import { window, workspace } from 'vscode';
+import { TextEditor, window, workspace } from 'vscode';
 import { get_pages } from './get-pages';
-import Tools from '../tools';
+import Actor from '../actor';
 
-export default class AddServiceNext extends Tools {
-	public async addservice() {
+export default class AddServiceNext extends Actor {
+	public do(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async act(): Promise<void> {
 		const rootPath = this.root();
 		const pages = await get_pages(rootPath);
 

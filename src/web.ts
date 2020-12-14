@@ -350,16 +350,16 @@ ${md}
 		return this.baseaddwebrouter('routers');
 	}
 	public addpresentation(editor: TextEditor): Promise<void> {
-		return new AddPresentationWeb().addpresentation(editor);
+		return new AddPresentationWeb().do(editor);
 	}
 	public addservice(): Promise<void> {
 		return this.baseaddservice();
 	}
 	public addpage(): Promise<void> {
-		return new AddPageWeb().addpage();
+		return new AddPageWeb().act();
 	}
 	public addcomponent(editor: TextEditor): Promise<void> {
-		return new AddComponentWeb().addcomponent(editor);
+		return new AddComponentWeb().do(editor);
 	}
 	public async addaction(editor: TextEditor): Promise<void> {
 		const path = editor.document.fileName;
@@ -369,17 +369,17 @@ ${md}
 		if (r) {
 			if (fileName === 'n.ts') {
 				const componentn = new AddActionWebComponentN();
-				await componentn.addaction(editor);
+				await componentn.do(editor);
 			} else {
 				const component = new AddActionWebComponent();
-				await component.addaction(editor);
+				await component.do(editor);
 			}
 		} else if (fileName === 'n.ts') {
 			const pagena = new AddActionWebPageN();
-			await pagena.addaction(editor);
+			await pagena.do(editor);
 		} else {
 			const page = new AddActionWebPage();
-			await page.addaction(editor);
+			await page.do(editor);
 		}
 	}
 	private l2t(link: Link) {

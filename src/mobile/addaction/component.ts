@@ -1,9 +1,12 @@
 import { basename, dirname, join } from 'path';
 import { TextEditor, window } from 'vscode';
-import Tools from '../../tools';
+import Actor from '../../actor';
 
-export default class AddActionMobile extends Tools {
-	public async addaction(editor: TextEditor) {
+export default class AddActionMobile extends Actor {
+	public act(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async do(editor: TextEditor): Promise<void> {
 		const path = editor.document.fileName;
 		// 如果当前目录不在某个页面中，则不允许操作
 		const r = this.reg_in_comment(path);

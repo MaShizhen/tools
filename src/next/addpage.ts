@@ -1,10 +1,13 @@
 import { basename, dirname } from 'path';
-import { window, workspace } from 'vscode';
-import Tools from '../tools';
+import { TextEditor, window, workspace } from 'vscode';
+import Actor from '../actor';
 import { get_pages } from './get-pages';
 
-export default class AddPageNext extends Tools {
-	public async addpage() {
+export default class AddPageNext extends Actor {
+	public do(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implement_ed.');
+	}
+	public async act(): Promise<void> {
 		const rootPath = this.root();
 		const pages = await get_pages(rootPath);
 		const page_dir = (() => {

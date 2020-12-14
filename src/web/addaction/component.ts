@@ -3,7 +3,10 @@ import { TextEditor, window } from 'vscode';
 import AddActionWebBase from './base';
 
 export default class AddActionWebComponent extends AddActionWebBase {
-	public async addaction(editor: TextEditor): Promise<void> {
+	public act(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async do(editor: TextEditor): Promise<void> {
 		const uri = editor.document.uri;
 		const folder = dirname(uri.fsPath);
 		// 如果当前目录不在某个组件中，则不允许操作

@@ -1,9 +1,12 @@
 import { basename, dirname } from 'path';
 import { TextEditor, Uri, window } from 'vscode';
-import Tools from '../tools';
+import Actor from '../actor';
 
-export default class AddPresentationWeb extends Tools {
-	public async addpresentation(editor: TextEditor) {
+export default class AddPresentationWeb extends Actor {
+	public act(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async do(editor: TextEditor): Promise<void> {
 		const uri = editor.document.uri;
 		const folder = dirname(uri.fsPath);
 		// 如果当前目录不在某个页面中，则不允许操作

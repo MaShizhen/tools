@@ -1,11 +1,14 @@
 import { basename, extname, join } from 'path';
-import { FileType, Uri, window, workspace } from 'vscode';
+import { FileType, TextEditor, Uri, window, workspace } from 'vscode';
 import { NO_MODIFY } from '../util/blocks';
 import pickoption from '../util/pickoption';
-import Tools from '../tools';
+import Actor from '../actor';
 
-export default class AddPageWeb extends Tools {
-	public async addpage() {
+export default class AddPageWeb extends Actor {
+	public do(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async act(): Promise<void> {
 		const rootPath = this.root();
 		if (!await this.existsasync(join(rootPath, 'pages'))) {
 			window.showErrorMessage('缺少pages文件夹');

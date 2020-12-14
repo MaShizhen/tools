@@ -382,14 +382,14 @@ ${md}
 		return this.baseaddservice();
 	}
 	public addpage(): Promise<void> {
-		return new AddComponentMobile().addpage();
+		return new AddComponentMobile().act();
 	}
 	public addcomponent(_editor: TextEditor): Promise<void> {
 		return this.addpage();
 	}
 	public async addaction(editor: TextEditor): Promise<void> {
 		const addactionmobile = new AddActionMobile();
-		return addactionmobile.addaction(editor);
+		return addactionmobile.do(editor);
 	}
 	private isios() {
 		switch (platform()) {

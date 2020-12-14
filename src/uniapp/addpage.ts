@@ -1,6 +1,6 @@
 import { basename, join } from 'path';
-import { workspace } from 'vscode';
-import Tools from '../tools';
+import { TextEditor, workspace } from 'vscode';
+import Actor from '../actor';
 
 interface IPageConfig {
 	pages: Array<{
@@ -11,8 +11,11 @@ interface IPageConfig {
 	}>
 }
 
-export default class AddPageUniapp extends Tools {
-	public async addaction() {
+export default class AddPageUniapp extends Actor {
+	public do(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async act(): Promise<void> {
 		const rootPath = this.root();
 		const src = join(rootPath, 'src');
 		const pagesjson = join(src, 'pages.json');

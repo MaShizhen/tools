@@ -1,5 +1,5 @@
 import { dirname, join } from 'path';
-import { window } from 'vscode';
+import { TextEditor, window } from 'vscode';
 import addapp from './page/addapp';
 import getpagetype from './page/pagetype';
 import addcontainerinapp from './page/add-container-in-app';
@@ -7,10 +7,13 @@ import addcontainer from './page/add-container';
 import addpage from './page/addpage';
 import { isapp } from './page/isapp';
 import iscontainer from './page/iscontainer';
-import Tools from '../tools';
+import Actor from '../actor';
 
-export default class AddComponentMobile extends Tools {
-	public async addpage() {
+export default class AddComponentMobile extends Actor {
+	public do(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async act(): Promise<void> {
 		const rootPath = this.root();
 		const src = join(rootPath, 'src');
 		if (!await this.existsasync(src)) {

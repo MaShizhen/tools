@@ -52,10 +52,10 @@ export default class Next extends Base {
 		throw new Error('Method not implemented.');
 	}
 	public addservice(): Promise<void> {
-		return new AddServiceNext().addservice();
+		return new AddServiceNext().act();
 	}
 	public addpage(): Promise<void> {
-		return new AddPageNext().addpage();
+		return new AddPageNext().act();
 	}
 	public addcomponent(_editor: TextEditor): Promise<void> {
 		return this.addpage();

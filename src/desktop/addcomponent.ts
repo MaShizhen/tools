@@ -1,10 +1,13 @@
 import { basename, dirname, join } from 'path';
 import { TextEditor, window } from 'vscode';
 import { NO_MODIFY } from '../util/blocks';
-import Tools from '../tools';
+import Actor from '../actor';
 
-export default class AddComponentDesktop extends Tools {
-	public async addcomponnet(editor: TextEditor) {
+export default class AddComponentDesktop extends Actor {
+	public act(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async do(editor: TextEditor): Promise<void> {
 		try {
 			const path = editor.document.fileName;
 			const folder = dirname(path);

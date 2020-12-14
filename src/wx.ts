@@ -310,13 +310,13 @@ ${md}
 		return this.baseaddservice();
 	}
 	public addpage(): Promise<void> {
-		return new AddComponentWeixin().addcomponent();
+		return new AddComponentWeixin().act();
 	}
 	public addcomponent(_editor: TextEditor): Promise<void> {
 		return this.addpage();
 	}
 	public addaction(editor: TextEditor): Promise<void> {
-		return new AddActionWeixinPage().addaction(editor);
+		return new AddActionWeixinPage().do(editor);
 	}
 	private l2t(link: Link) {
 		return `[${link.name}](${link.addr})`;

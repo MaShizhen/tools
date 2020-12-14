@@ -1,9 +1,12 @@
 import { basename, dirname, join } from 'path';
 import { TextEditor, window } from 'vscode';
-import Tools from '../../tools';
+import Actor from '../../actor';
 
-export default class AddActionWeixinPage extends Tools {
-	public async addaction(editor: TextEditor) {
+export default class AddActionWeixinPage extends Actor {
+	public act(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async do(editor: TextEditor): Promise<void> {
 		const path = editor.document.fileName;
 		const dir = dirname(path);
 		// 如果当前目录不在某个页面中，则不允许操作

@@ -1,9 +1,12 @@
 import { basename, join } from 'path';
 import { TextEditor, window, workspace } from 'vscode';
-import Tools from '../../tools';
+import Actor from '../../actor';
 
-export default class AddActionDesktopPage extends Tools {
-	public async addaction(editor: TextEditor) {
+export default class AddActionDesktopPage extends Actor {
+	public act(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async do(editor: TextEditor): Promise<void> {
 		const path = workspace.asRelativePath(editor.document.uri);
 		// 如果当前目录不在某个页面中，则不允许操作
 		const r = this.reg_in_comment(path);

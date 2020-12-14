@@ -1,8 +1,12 @@
 import { basename, join } from 'path';
-import Tools from '../tools';
+import { TextEditor } from 'vscode';
+import Actor from '../actor';
 
-export default class AddComponentWeixin extends Tools {
-	public async addcomponent() {
+export default class AddComponentWeixin extends Actor {
+	public do(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async act(): Promise<void> {
 		const rootPath = this.root();
 		const src = join(rootPath, 'src');
 		if (!await this.existsasync(src)) {

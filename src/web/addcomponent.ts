@@ -1,10 +1,13 @@
 import { basename, dirname, join } from 'path';
 import { TextEditor, Uri, window } from 'vscode';
 import { NO_MODIFY } from '../util/blocks';
-import Tools from '../tools';
+import Actor from '../actor';
 
-export default class AddComponentWeb extends Tools {
-	public async addcomponent(editor: TextEditor) {
+export default class AddComponentWeb extends Actor {
+	public act(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public async do(editor: TextEditor): Promise<void> {
 		try {
 			const doc = editor.document;
 			const uri = doc.uri;
