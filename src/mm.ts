@@ -1,5 +1,5 @@
 import { dirname, join, sep } from 'path';
-import { commands, FileType, Uri, window, workspace } from 'vscode';
+import { commands, Disposable, FileType, Uri, window, workspace } from 'vscode';
 import Web from './web';
 import Tools from './tools';
 import Mobile from './mobile';
@@ -319,6 +319,11 @@ export default class MM extends Tools {
 		});
 	}
 	public completion() {
+		const type = this.prj_type();
+		if (!type) {
+			return Disposable.from();
+		}
+
 		const tool = this.getinstance();
 		return tool.completion();
 	}

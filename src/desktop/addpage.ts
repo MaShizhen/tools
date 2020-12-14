@@ -44,7 +44,10 @@ export default class AddPageDesktop extends Actor {
 			const picked = await this.pick(selects.map((it) => {
 				return { label: it };
 			}), '请输入页面名称:');
-			if (picked?.label === '➕ 新建...') {
+			if (!picked) {
+				return null;
+			}
+			if (picked.label === '➕ 新建...') {
 				await window.showInputBox({
 					placeHolder: '请输入页面名称:',
 					value: '',
@@ -59,7 +62,7 @@ export default class AddPageDesktop extends Actor {
 					}
 				});
 			}
-			return picked?.label;
+			return picked.label;
 		})();
 		if (name) {
 			if (has_pages.includes(name)) {

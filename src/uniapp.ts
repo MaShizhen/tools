@@ -2,6 +2,7 @@ import { join } from 'path';
 import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
+import AddAtomUniapp from './uniapp/addatom';
 import AddPageUniapp from './uniapp/addpage';
 
 export default class UniApp extends Base {
@@ -12,7 +13,7 @@ export default class UniApp extends Base {
 		throw new Error('Method not implemented.');
 	}
 	public addatom(): Promise<void> {
-		throw new Error('Method not implemented.');
+		return new AddAtomUniapp().do();
 	}
 	public addtplwidget(_editor: TextEditor): Promise<void> {
 		throw new Error('Method not implemented.');
