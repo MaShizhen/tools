@@ -1,7 +1,6 @@
 import { basename, extname, join } from 'path';
 import { FileType, TextEditor, Uri, window, workspace } from 'vscode';
 import { NO_MODIFY } from '../util/blocks';
-import pickoption from '../util/pickoption';
 import Actor from '../actor';
 
 export default class AddPageDesktop extends Actor {
@@ -45,6 +44,7 @@ export default class AddPageDesktop extends Actor {
 			selects.unshift(value);
 		}
 		const name = await (async () => {
+			const pickoption = this.getdefaultpickoption();
 			const pick = await window.showQuickPick(selects, {
 				...pickoption,
 				placeHolder: '请输入页面名称:'

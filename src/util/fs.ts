@@ -25,10 +25,10 @@ export function readfileasync(path: string) {
 	return readFile(path, 'utf-8');
 }
 
-export function mkdirasync(dir: string) {
+function mkdirasync(dir: string) {
 	try {
 		return mkdir(dir, { recursive: true });
-	} catch{
+	} catch {
 		return Promise.resolve();	// already exits
 	}
 }

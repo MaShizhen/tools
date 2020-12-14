@@ -1,7 +1,6 @@
 import { basename, extname, join } from 'path';
 import { FileType, TextEditor, Uri, window, workspace } from 'vscode';
 import { NO_MODIFY } from '../util/blocks';
-import pickoption from '../util/pickoption';
 import Actor from '../actor';
 
 export default class AddPageWeb extends Actor {
@@ -35,6 +34,7 @@ export default class AddPageWeb extends Actor {
 			pages.splice(pages.indexOf(value), 1);
 			pages.unshift(value);
 		}
+		const pickoption = this.getdefaultpickoption();
 		const page = await window.showQuickPick(pages, {
 			...pickoption,
 			placeHolder: '请输入页面名称'

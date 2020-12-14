@@ -1,6 +1,5 @@
 import { basename, dirname, join, relative, sep } from 'path';
 import { Disposable, FileType, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
-import generate from './util/generate';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
 import AddAtomLocal from './mm/addatomlocal';
@@ -277,7 +276,7 @@ export default abstract class Base extends Tools {
 			folder = join(folder, 'src');
 			await this.mkdirasync(folder);
 		}
-		const p_path = await generate(folder, 's', '\\.ts', 3);
+		const p_path = await this.generate(folder, 's', '\\.ts', 3);
 		await this.create_s(p_path, p_path.replace(/.*src[/|\\]/, ''));
 		await workspace.saveAll();
 		this.show_doc(`${p_path}.ts`);
@@ -317,7 +316,7 @@ export default async function ${no}(msg: Message, actionid: string): Promise<an4
 	protected async baseaddaction(editor: TextEditor) {
 		const uri = editor.document.uri;
 		const folder = dirname(uri.fsPath);
-		const p_path = await generate(folder, 'a', '\\.ts', 3);
+		const p_path = await this.generate(folder, 'a', '\\.ts', 3);
 		const a = basename(p_path);
 		const tpl = `
 export default function ${a}() {

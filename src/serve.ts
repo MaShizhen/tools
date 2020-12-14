@@ -2,7 +2,7 @@ import { join, relative } from 'path';
 import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
-import AddAtomServe from './nodejs/addatom';
+import AddAtomServe from './serve/addatom';
 import AddPageServe from './serve/addpage';
 
 interface Link {
