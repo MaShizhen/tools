@@ -6,6 +6,9 @@ import AddPageDesktop from './desktop/addpage';
 import { IAtom, IAtomCatagory } from './interfaces';
 
 export default class Desktop extends Base {
+	public addwidget(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addatom(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

@@ -11,6 +11,7 @@ import AddComponentWeb from './web/addcomponent';
 import AddPageWeb from './web/addpage';
 import AddPresentationWeb from './web/addpresentation';
 import AddTplWidgetWeb from './web/addtplwidget';
+import AddWidgetWeb from './web/addwidget';
 
 interface Link {
 	name: string;
@@ -22,6 +23,9 @@ interface Section extends Link {
 }
 
 export default class Web extends Base {
+	public addwidget(): Promise<void> {
+		return new AddWidgetWeb().act();
+	}
 	public async addatom(): Promise<void> {
 		return new AddAtomWeb().act();
 	}

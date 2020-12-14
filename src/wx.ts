@@ -6,6 +6,7 @@ import AddActionWeixinPage from './wxapp/addaction/page';
 import AddAtomWx from './wxapp/addatom';
 import AddComponentWeixin from './wxapp/addcomponent';
 import AddTplWidgetWx from './wxapp/addtplwidget';
+import AddWidgetWx from './wxapp/addwidgets';
 
 interface Link {
 	name: string;
@@ -17,6 +18,9 @@ interface Section extends Link {
 }
 
 export default class WeiXin extends Base {
+	public addwidget(): Promise<void> {
+		return new AddWidgetWx().act();
+	}
 	public addatom(): Promise<void> {
 		return new AddAtomWx().act();
 	}

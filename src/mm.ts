@@ -20,6 +20,38 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public addwidget() {
+		return commands.registerCommand('mm.widget.add', async () => {
+			const items = [
+				{
+					detail: '1.web/h5控件',
+					label: 'web/h5',
+					type: PrjType.web
+				},
+				{
+					detail: '2.移动端app控件',
+					label: 'mobile',
+					type: PrjType.mobile
+				},
+				{
+					detail: '3.微信小程序控件',
+					label: 'wxapp',
+					type: PrjType.wxapp
+				}
+			];
+			const pickoption = this.getdefaultpickoption();
+			const picked = await window.showQuickPick(items, {
+				...pickoption,
+				placeHolder: '请选择项目端点类型'
+			});
+			if (!picked) {
+				return;
+			}
+			const type = picked.type;
+			const instance = this.getinstancebytype(type);
+			instance.addwidget();
+		});
+	}
 	public addatom() {
 		return commands.registerCommand('mm.atom.add', async () => {
 			const pickitems = [
@@ -29,32 +61,32 @@ export default class MM extends Tools {
 					type: PrjType.next
 				},
 				{
-					detail: '1.服务端原子操作',
+					detail: '2.服务端原子操作',
 					label: 'serve',
 					type: PrjType.serve
 				},
 				{
-					detail: '1.uniapp原子操作',
+					detail: '3.uniapp原子操作',
 					label: 'uniapp',
 					type: PrjType.uniapp
 				},
 				{
-					detail: '1.服务端原子操作',
+					detail: '4.服务端原子操作',
 					label: 'nodejs',
 					type: PrjType.serve
 				},
 				{
-					detail: '2.web/h5原子操作',
+					detail: '5.web/h5原子操作',
 					label: 'web/h5',
 					type: PrjType.web
 				},
 				{
-					detail: '3.移动端app原子操作',
+					detail: '6.移动端app原子操作',
 					label: 'mobile',
 					type: PrjType.mobile
 				},
 				{
-					detail: '4.微信小程序原子操作',
+					detail: '7.微信小程序原子操作',
 					label: 'wxapp',
 					type: PrjType.wxapp
 				}

@@ -15,6 +15,9 @@ interface Section extends Link {
 }
 
 export default class Serve extends Base {
+	public addwidget(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addatom(): Promise<void> {
 		return new AddAtomServe().act();
 	}

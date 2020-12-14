@@ -1,6 +1,5 @@
 import { ExtensionContext } from 'vscode';
 import addlocalatom from './mm/add-local-atom';
-import addwidget from './mm/add-widget';
 import addlocalwidget from './mm/add-local-widget';
 import MM from './mm';
 
@@ -24,8 +23,8 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.addtplwidget(),
 		mm.addschedule(),
 		mm.addatom(),
+		mm.addwidget(),
 		addlocalatom(),
-		addwidget(),
 		addlocalwidget()
 	);
 }

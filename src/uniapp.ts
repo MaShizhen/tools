@@ -5,6 +5,9 @@ import { IAtomCatagory } from './interfaces';
 import AddPageUniapp from './uniapp/addpage';
 
 export default class UniApp extends Base {
+	public addwidget(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addatom(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

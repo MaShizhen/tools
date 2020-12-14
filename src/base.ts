@@ -5,6 +5,7 @@ import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
 
 export default abstract class Base extends Tools {
+	public abstract addwidget(): Promise<void>;
 	public abstract addatom(): Promise<void>;
 
 	public abstract addtplwidget(editor: TextEditor): Promise<void>;
