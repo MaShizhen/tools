@@ -96,7 +96,6 @@ export default class AddAtomUniapp extends Actor {
 		const content = await this.readfile(path);
 		const pkg = JSON.parse(content) as Package;
 		pkg.name = `@mmstudio/${no}`;
-		pkg.scripts.up = 'git pull git@github.com:mm-tpl/atom-uniapp.git main';
 		if (remote) {
 			const repository = remote.replace(':', '/').replace('git@', 'https://');	// git@github.com:mm-atom/no.git to https://github.com/mm-atom/no.git
 			pkg.repository.url = repository;
