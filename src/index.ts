@@ -1,5 +1,4 @@
 import { ExtensionContext } from 'vscode';
-import list_services from './nodejs/list-services';
 import addatom from './mm/add-atom';
 import addlocalatom from './mm/add-local-atom';
 import addwidget from './mm/add-widget';
@@ -25,7 +24,6 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.refreshsitemap(),
 		mm.addtplatom(),
 		mm.addtplwidget(),
-		list_services(),
 		addatom(),
 		addlocalatom(),
 		addwidget(),

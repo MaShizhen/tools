@@ -315,11 +315,11 @@ ${md}
 		this.shellrun(command, 'build');
 	}
 	public completion(): Disposable {
-		const events = ['mm-events-init'];
-		return languages.registerCompletionItemProvider(
+		const ns = languages.registerCompletionItemProvider(
 			'typescript',
 			{
 				provideCompletionItems: async (document: TextDocument, position: Position) => {
+					const events = ['mm-events-init'];
 					if (!/[\\|/]n?s\.ts$/.test(document.fileName) || events.length === 0) {
 						return undefined;
 					}
@@ -342,6 +342,29 @@ ${md}
 			'\'',
 			'"'
 		);
+		const listservice = languages.registerCompletionItemProvider(
+			'typescript',
+			{
+				provideCompletionItems: async (document: TextDocument, position: Position) => {
+					const linePrefix = document.lineAt(position).text.substr(0, position.character);
+					if (!/aw17<.*>\(['|"]$/.test(linePrefix) && !/const service_name = ['|"]$/.test(linePrefix)) {
+						return undefined;
+					}
+					const dir = dirname(document.fileName);
+
+					const files = await this.readdirasync(dir);
+					return files.filter((it) => {
+						return /s\d+.ts$/.test(it);
+					}).map((it) => {
+						const full = join(dir, it);
+						return new CompletionItem(full.replace(/\\/g, '/').replace(/.*src\/(.*)\.ts/, '$1'), CompletionItemKind.File);
+					});
+				}
+			},
+			'\'',
+			'"'
+		);
+		return Disposable.from(ns, listservice);
 	}
 	public addwebfilter(): Promise<void> {
 		return this.baseaddwebrouter('filters');
