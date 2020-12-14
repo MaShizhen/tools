@@ -288,7 +288,6 @@ export default abstract class Tools {
 			return wfs[0];
 		})();
 		if (!wf) {
-			window.showErrorMessage('请打开工程进行操作');
 			throw new Error('请打开工程进行操作');
 		}
 		const dir = wf.uri.fsPath;
