@@ -5,7 +5,6 @@ import Actor from '../actor';
 
 export default class AddAtomServe extends Actor {
 	public async do(): Promise<void> {
-		debugger;
 		const def = dirname(this.workpath());
 		const container = await window.showOpenDialog({
 			defaultUri: Uri.file(def),
