@@ -1,5 +1,4 @@
 import { window } from 'vscode';
-import pickoption from '../../util/pickoption';
 
 //  'drawer' | 'bottom-tab' | 'material-bottom-tab' | 'material-top-tab'
 export default async function getcontainertype() {
@@ -28,7 +27,12 @@ export default async function getcontainertype() {
 		description: '顶部为tab页，带手势特效，延迟加载',
 		detail: 'https://reactnavigation.org/docs/material-top-tab-navigator',
 		type: 'material-top-tab'
-	}], pickoption);
+	}], {
+		matchOnDescription: true,
+		matchOnDetail: true,
+		canPickMany: false,
+		ignoreFocusOut: true
+	});
 	if (!type) {
 		return null;
 	}

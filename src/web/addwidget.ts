@@ -1,15 +1,12 @@
 import { basename, dirname, join } from 'path';
-import { commands, TextEditor, Uri, window, workspace } from 'vscode';
+import { commands, Uri, window, workspace } from 'vscode';
 import { Package } from '../interfaces';
-import tplwidgetusage from './widget/tpl-web-widget-useage';
-import tplwidget from './widget/tpl-web-widget';
 import Actor from '../actor';
+import TplWeb from './tpl';
 
 export default class AddWidgetWeb extends Actor {
-	public do(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public async act(): Promise<void> {
+	private tpl = new TplWeb();
+	public async do(): Promise<void> {
 		const def = dirname(this.workpath());
 		const container = await window.showOpenDialog({
 			defaultUri: Uri.file(def),
@@ -85,9 +82,9 @@ export default class AddWidgetWeb extends Actor {
 		no = no.replace(/[a-z]*/, '');
 		const tag = `mm-${no}`;
 		const path = join(folder, 'tests', pagename);
-		const old = await this.readfileasync(path);
+		const old = await this.readfile(path);
 		const content = old.replace(/(<title>).*(<\/title>)/, `$1${desc}$2`).replace(/<mm-\d+(.*)<\/mm-\d+>/g, `<${tag}$1</${tag}>`);;
-		await this.writefileasync(path, content);
+		await this.writefile(path, content);
 	}
 
 	private async update_amd(folder: string, no: string) {
@@ -101,30 +98,30 @@ export default class AddWidgetWeb extends Actor {
 	}
 ]
 `;
-		await this.writefileasync(path, content);
+		await this.writefile(path, content);
 	}
 
 	private async update_ts(folder: string, no: string) {
-		const content = tplwidget(no, false);
+		const content = this.tpl.widget(no, false);
 		const path = join(folder, 'src', 'index.ts');
-		await this.writefileasync(path, content);
+		await this.writefile(path, content);
 	}
 
 	private async update_usage(folder: string, no: string) {
 		const path = join(folder, 'use.snippet');
-		const content = tplwidgetusage(no, false);
-		await this.writefileasync(path, content);
+		const content = this.tpl.widgetusage(no, false);
+		await this.writefile(path, content);
 	}
 
 	private async update_readme(folder: string, description: string) {
 		const path = join(folder, 'readme.md');
-		await this.writefileasync(path, `# ${description}\n`);
+		await this.writefile(path, `# ${description}\n`);
 	}
 
 	private async update_pkg(folder: string, no: string, user: string, remote: string) {
 		const path = join(folder, 'package.json');
 		const email = await this.shellexec('git config user.email');
-		const content = await this.readfileasync(path);
+		const content = await this.readfile(path);
 		const pkg = JSON.parse(content) as Package;
 		pkg.name = `@mmstudio/${no}`;
 		pkg.scripts.up = 'git pull git@github.com:mm-tpl/widgets-web.git master';
@@ -146,7 +143,7 @@ export default class AddWidgetWeb extends Actor {
 		if (d) {
 			pkg.description = d;
 		}
-		await this.writefileasync(path, JSON.stringify(pkg, null, '\t'));
+		await this.writefile(path, JSON.stringify(pkg, null, '\t'));
 		return pkg;
 	}
 }

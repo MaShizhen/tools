@@ -1,9 +1,17 @@
+import Tools from '../tools';
 
-export default function tplwebwidget(no: string, project: boolean) {
-	no = no.replace(/[a-z]*/, '');
-	const prefix = project ? 'mm-p' : 'mm-';
-	const tag = `${prefix}${no}`;
-	return `import on, { emit } from '@mmstudio/on';
+export default class TplWeb extends Tools {
+	public widgetusage(no: string, project: boolean) {
+		no = no.replace(/[a-z]*/, '');
+		const prefix = project ? 'mm-p' : 'mm-';
+		const tag = `${prefix}${no}`;
+		return `<${tag} data-mm-id="${no}"></${tag}>`;
+	}
+	public widget(no: string, project: boolean) {
+		no = no.replace(/[a-z]*/, '');
+		const prefix = project ? 'mm-p' : 'mm-';
+		const tag = `${prefix}${no}`;
+		return `import on, { emit } from '@mmstudio/on';
 
 const no = '${tag}';
 
@@ -67,4 +75,6 @@ if (!window.customElements.get(no)) {
 }
 
 `;
+	}
+
 }

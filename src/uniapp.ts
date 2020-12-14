@@ -62,7 +62,7 @@ export default class UniApp extends Base {
 		return this.baseaddservice();
 	}
 	public addpage(): Promise<void> {
-		return new AddPageUniapp().act();
+		return new AddPageUniapp().do();
 	}
 	public addcomponent(_editor: TextEditor): Promise<void> {
 		return this.addpage();

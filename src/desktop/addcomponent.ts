@@ -4,11 +4,12 @@ import { NO_MODIFY } from '../util/blocks';
 import Actor from '../actor';
 
 export default class AddComponentDesktop extends Actor {
-	public act(): Promise<void> {
-		throw new Error('Method not implemented.');
+	public constructor(private editor: TextEditor) {
+		super();
 	}
-	public async do(editor: TextEditor): Promise<void> {
+	public async do(): Promise<void> {
 		try {
+			const editor = this.editor;
 			const path = editor.document.fileName;
 			const folder = dirname(path);
 			// 如果当前目录不在某个页面中，则不允许操作
@@ -24,7 +25,7 @@ export default class AddComponentDesktop extends Actor {
 				await this.create_n(id, c);
 				await this.create_b(id, c);
 				// update b.ts, n.ts
-				const files = await this.readdirasync(folder);
+				const files = await this.readdir(folder);
 				const cs = files.filter((f) => {
 					return /zj-\d{3,6}/.test(f);
 				});
@@ -95,7 +96,7 @@ export default function main(url: string, query: {}) {
 	return init('${id}', s, actions, url, query);
 }
 `;
-		return this.writefileasync(join(path, 'b.ts'), tpl);
+		return this.writefile(join(path, 'b.ts'), tpl);
 	}
 
 	private create_n(id: string, path: string) {
@@ -110,20 +111,20 @@ export default function main(html: HTMLElement) {
 }
 
 `;
-		return this.writefileasync(join(path, 'n.ts'), tpl);
+		return this.writefile(join(path, 'n.ts'), tpl);
 	}
 
 	private create_s(path: string) {
 		const tpl = `export default {
 };
 `;
-		return this.writefileasync(join(path, 's.ts'), tpl);
+		return this.writefile(join(path, 's.ts'), tpl);
 	}
 
 	private create_tpl(path: string) {
 		const tpl = `export default \`
 \`;
 `;
-		return this.writefileasync(join(path, 'tpl.ts'), tpl);
+		return this.writefile(join(path, 'tpl.ts'), tpl);
 	}
 }

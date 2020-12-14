@@ -4,7 +4,13 @@ import Actor from '../actor';
 import { IAtom, IAtomCatagory } from '../interfaces';
 
 export default class AddTplWidgetMobile extends Actor {
-	public async do(editor: TextEditor): Promise<void> {
+	private editor: TextEditor;
+	public set_editor(editor: TextEditor) {
+		this.editor = editor;
+		return this;
+	}
+	public async do(): Promise<void> {
+		const editor = this.editor;
 		if (!this.remotewidgets) {
 			this.remotewidgets = await this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/widgets-mobile/index.json');
 		}
@@ -112,11 +118,11 @@ export default class AddTplWidgetMobile extends Actor {
 		const snippet_use = join(dir, 'use.snippet');
 		const name = atom.no.replace(/(.+\/)?/, '').toUpperCase();
 		const imp = `import ${name} from '${atom.no}';`;
-		if (!await this.existsasync(snippet_use)) {
+		if (!await this.exists(snippet_use)) {
 			window.showErrorMessage('无法自动添加脚本，请联系供应商');
 			return;
 		}
-		const use = await this.readfileasync(snippet_use);
+		const use = await this.readfile(snippet_use);
 		await this.update_import(imp, editor);
 		await editor.insertSnippet(new SnippetString(use), editor.selection.active, {
 			undoStopAfter: true,

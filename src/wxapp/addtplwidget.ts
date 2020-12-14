@@ -4,7 +4,12 @@ import Actor from '../actor';
 import { IAtom, IAtomCatagory } from '../interfaces';
 
 export default class AddTplWidgetWx extends Actor {
-	public async do(editor: TextEditor): Promise<void> {
+	private editor: TextEditor;
+	public set_editor(editor: TextEditor) {
+		this.editor = editor;
+		return this;
+	}
+	public async do(): Promise<void> {
 		if (!this.remotewidgets) {
 			this.remotewidgets = await this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/widgets-wxapp/index.json');
 		}
@@ -17,10 +22,7 @@ export default class AddTplWidgetWx extends Actor {
 				all.set(atom.no, atom);
 			});
 		});
-		await this.insert_widget_snippet(editor, all, catagories);
-	}
-	public act(): Promise<void> {
-		throw new Error('Method not implemented.');
+		await this.insert_widget_snippet(this.editor, all, catagories);
 	}
 	private async insert_widget_snippet(editor: TextEditor, all_remote: Map<string, IAtom>, catagories_remote: Map<string, IAtom[]>) {
 		const root_path = this.root(editor);
@@ -111,7 +113,7 @@ export default class AddTplWidgetWx extends Actor {
 		const root_dir = this.root(editor);
 		const dir = join(root_dir, 'node_modules', atom.no);
 		// update components config
-		const pkg = JSON.parse(await this.readfileasync(join(dir, 'package.json'))) as { main?: string; miniprogram?: string; };
+		const pkg = JSON.parse(await this.readfile(join(dir, 'package.json'))) as { main?: string; miniprogram?: string; };
 		const file_path = this.get_config_file_path(editor);
 		const conf = await this.get_config(file_path);
 		const uc = conf.usingComponents || {};
@@ -120,11 +122,11 @@ export default class AddTplWidgetWx extends Actor {
 		// const main = join(atom.no, pkg.miniprogram ? pkg.miniprogram : '', 'index');	
 		uc[atom.no.replace(/(.+\/)?/, '')] = path;
 		conf.usingComponents = uc;
-		await this.writefileasync(file_path, JSON.stringify(conf, null, '\t'));
+		await this.writefile(file_path, JSON.stringify(conf, null, '\t'));
 
 		// insert template
 		const snippet_use = join(dir, 'use.snippet');
-		const use = await this.readfileasync(snippet_use);
+		const use = await this.readfile(snippet_use);
 
 		await editor.insertSnippet(new SnippetString(use), editor.selection.active, {
 			undoStopAfter: true,
@@ -134,7 +136,7 @@ export default class AddTplWidgetWx extends Actor {
 	}
 
 	private async get_config(file_path: string) {
-		return JSON.parse(await this.readfileasync(file_path)) as { usingComponents: { [key: string]: string; }; };
+		return JSON.parse(await this.readfile(file_path)) as { usingComponents: { [key: string]: string; }; };
 	}
 
 	private get_config_file_path(editor: TextEditor) {
@@ -158,10 +160,10 @@ export default class AddTplWidgetWx extends Actor {
 		const uc = conf.usingComponents || {};
 		uc[atom.no] = widget_path;
 		conf.usingComponents = uc;
-		await this.writefileasync(file_path, JSON.stringify(conf, null, '\t'));
+		await this.writefile(file_path, JSON.stringify(conf, null, '\t'));
 		// insert template
 		const snippet_use = join(dir, 'use.snippet');
-		const use = await this.readfileasync(snippet_use);
+		const use = await this.readfile(snippet_use);
 		await editor.insertSnippet(new SnippetString(use), editor.selection.active, {
 			undoStopAfter: true,
 			undoStopBefore: true

@@ -1,5 +1,4 @@
 import { window } from 'vscode';
-import pickoption from '../../util/pickoption';
 import getcontainertype from './container-type';
 
 export default async function getpagetype() {
@@ -11,7 +10,12 @@ export default async function getpagetype() {
 		label: '2. 容器页面',
 		description: '组织普通页面的展示方式及顺序',
 		type: 'container'
-	}], pickoption);
+	}], {
+		matchOnDescription: true,
+		matchOnDetail: true,
+		canPickMany: false,
+		ignoreFocusOut: true
+	});
 	if (!picked) {
 		// 取消操作
 		return null;

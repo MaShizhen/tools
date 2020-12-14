@@ -1,21 +1,18 @@
 import { basename, extname, join } from 'path';
-import { FileType, TextEditor, Uri, window, workspace } from 'vscode';
+import { FileType, Uri, window, workspace } from 'vscode';
 import { NO_MODIFY } from '../util/blocks';
 import Actor from '../actor';
 
 export default class AddPageWeb extends Actor {
-	public do(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public async act(): Promise<void> {
+	public async do(): Promise<void> {
 		const rootPath = this.root();
-		if (!await this.existsasync(join(rootPath, 'pages'))) {
+		if (!await this.exists(join(rootPath, 'pages'))) {
 			window.showErrorMessage('缺少pages文件夹');
 			return;
 		}
 		const src = join(rootPath, 'src');
-		if (!await this.existsasync(src)) {
-			await this.mkdirasync(src);
+		if (!await this.exists(src)) {
+			await this.mkdir(src);
 		}
 		const folder = join(rootPath, 'src');
 		const value = await (async () => {
@@ -25,7 +22,7 @@ export default class AddPageWeb extends Actor {
 			}
 			return null;
 		})();
-		const pages = (await this.readdirasync(join(rootPath, 'pages'))).map((_p) => {
+		const pages = (await this.readdir(join(rootPath, 'pages'))).map((_p) => {
 			return _p.substring(0, _p.lastIndexOf('.'));
 		});
 		const newpage = '以下都不是';
@@ -43,16 +40,16 @@ export default class AddPageWeb extends Actor {
 			return;
 		}
 		const p_path = await this.generate(folder, 'pg', '', 3);
-		if (!await this.existsasync(folder)) {
-			await this.mkdirasync(folder);
+		if (!await this.exists(folder)) {
+			await this.mkdir(folder);
 		}
 		const name = basename(p_path);
-		await this.mkdirasync(p_path);
+		await this.mkdir(p_path);
 		// create n
 		await this.create_ns(p_path);
 		const html = await (async () => {
 			if (page !== newpage) {
-				return this.readfileasync(join(rootPath, 'pages', `${page}.html`));
+				return this.readfile(join(rootPath, 'pages', `${page}.html`));
 			}
 			return '';
 		})();
@@ -97,7 +94,7 @@ import s from './s';
 })();
 
 `;
-		return this.writefileasync(join(path, 'b.ts'), tpl);
+		return this.writefile(join(path, 'b.ts'), tpl);
 	}
 
 	private create_s(path: string) {
@@ -105,7 +102,7 @@ import s from './s';
 };
 
 `;
-		return this.writefileasync(join(path, 's.ts'), tpl);
+		return this.writefile(join(path, 's.ts'), tpl);
 	}
 
 	private create_html(path: string, html: string) {
@@ -117,14 +114,14 @@ const html = \`${body}\`;
 export default parse(html);
 
 `;
-		return this.writefileasync(join(path, 'html.ts'), tpl);
+		return this.writefile(join(path, 'html.ts'), tpl);
 	}
 
 	private create_ns(path: string) {
 		const tpl = `export default {
 };
 `;
-		return this.writefileasync(join(path, 'ns.ts'), tpl);
+		return this.writefile(join(path, 'ns.ts'), tpl);
 	}
 
 	private create_n(path: string, page: string, html: string) {
@@ -187,6 +184,6 @@ export default async function main(url: string, msg: unknown, headers: object) {
 	\`;
 }
 `;
-		return this.writefileasync(join(path, 'n.ts'), tpl);
+		return this.writefile(join(path, 'n.ts'), tpl);
 	}
 }

@@ -1,15 +1,11 @@
 import { basename, join } from 'path';
-import { TextEditor, Uri, window, workspace } from 'vscode';
-import tplatomusage from '../util/tpl-atom-useage';
-import tplatom from '../util/tpl-atom';
-import { writefileasync } from '../util/fs';
+import { Uri, window, workspace } from 'vscode';
 import Actor from '../actor';
+import TplUtil from '../util/tpl';
 
 export default class AddAtomLocal extends Actor {
-	public do(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public async act(): Promise<void> {
+	private tpl = new TplUtil();
+	public async do(): Promise<void> {
 		const pickoption = this.getdefaultpickoption();
 		const p1 = await window.showQuickPick([
 			{
@@ -55,8 +51,8 @@ export default class AddAtomLocal extends Actor {
 		const atom_dir = await this.generate(dir, prefix, '', 3);
 		const no = basename(atom_dir);
 		const ts = join(atom_dir, 'index.ts');
-		await writefileasync(ts, tplatom(no, n));
-		await writefileasync(join(atom_dir, 'use.snippet'), tplatomusage('原子操作功能描述', no, n));
+		await this.writefile(ts, this.tpl.atom(no, n));
+		await this.writefile(join(atom_dir, 'use.snippet'), this.tpl.atomusage('原子操作功能描述', no, n));
 		// if (p1.type === 'web/h5') {
 		// 	await writefileasync(join(atom_dir, 'amd.json'), '[]');
 		// }

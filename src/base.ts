@@ -7,7 +7,7 @@ import AddAtomLocal from './mm/addatomlocal';
 export default abstract class Base extends Tools {
 	public abstract addwidgetlocal(): Promise<void>;
 	public addatomlocal(): Promise<void> {
-		return new AddAtomLocal().act();
+		return new AddAtomLocal().do();
 	}
 	public abstract addwidget(): Promise<void>;
 	public abstract addatom(): Promise<void>;
@@ -229,7 +229,7 @@ export default abstract class Base extends Tools {
 			url
 		});
 		conf[name] = routers;
-		await this.writefileasync(config_path, JSON.stringify(conf, null, '\t'));
+		await this.writefile(config_path, JSON.stringify(conf, null, '\t'));
 		await this.show_doc(config_path);
 	}
 	private async get_all_service(editor?: TextEditor) {
@@ -274,7 +274,7 @@ export default abstract class Base extends Tools {
 		let folder = dirname(path);
 		if (!folder.includes('src')) {
 			folder = join(folder, 'src');
-			await this.mkdirasync(folder);
+			await this.mkdir(folder);
 		}
 		const p_path = await this.generate(folder, 's', '\\.ts', 3);
 		await this.create_s(p_path, p_path.replace(/.*src[/|\\]/, ''));
@@ -311,7 +311,7 @@ export default async function ${no}(msg: Message, actionid: string): Promise<an4
 	} as an4;
 }
 `;
-		return this.writefileasync(`${path}.ts`, tpl);
+		return this.writefile(`${path}.ts`, tpl);
 	}
 	protected async baseaddaction(editor: TextEditor) {
 		const uri = editor.document.uri;
@@ -323,7 +323,7 @@ export default function ${a}() {
 	// todo
 }
 `;
-		await this.writefileasync(`${p_path}.ts`, tpl);
+		await this.writefile(`${p_path}.ts`, tpl);
 		window.showTextDocument(Uri.file(`${p_path}.ts`));
 	}
 }

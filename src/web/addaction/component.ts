@@ -3,10 +3,11 @@ import { TextEditor, window } from 'vscode';
 import AddActionWebBase from './base';
 
 export default class AddActionWebComponent extends AddActionWebBase {
-	public act(): Promise<void> {
-		throw new Error('Method not implemented.');
+	public constructor(private editor: TextEditor) {
+		super();
 	}
-	public async do(editor: TextEditor): Promise<void> {
+	public async do(): Promise<void> {
+		const editor = this.editor;
 		const uri = editor.document.uri;
 		const folder = dirname(uri.fsPath);
 		// 如果当前目录不在某个组件中，则不允许操作
@@ -23,7 +24,7 @@ export default class AddActionWebComponent extends AddActionWebBase {
 	protected async update_b(path: string): Promise<void> {
 		const file_name = join(path, 'b.ts');
 		const eol = '\n';
-		const files = await this.readdirasync(path);
+		const files = await this.readdir(path);
 		const as = files.filter((f) => {
 			return /^a\d{3}\.ts$/.test(f);
 		}).map((f) => {
@@ -50,7 +51,7 @@ export default function ${a}(mm: aw1) {
 }
 `;
 		const af = `${path}.ts`;
-		await this.writefileasync(af, tpl);
+		await this.writefile(af, tpl);
 		return af;
 	}
 }

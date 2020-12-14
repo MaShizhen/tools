@@ -1,6 +1,7 @@
 import { dirname, join } from 'path';
 import { CompletionItem, CompletionItemKind, Disposable, languages, Position, QuickPickItem, SnippetString, TextDocument, TextEditor, window } from 'vscode';
 import Base from './base';
+import AddActionDesktopPage from './desktop/addaction/page';
 import AddComponentDesktop from './desktop/addcomponent';
 import AddPageDesktop from './desktop/addpage';
 import { IAtom, IAtomCatagory } from './interfaces';
@@ -82,11 +83,11 @@ export default class Desktop extends Base {
 		const dir = join(this.root(textEditor), 'node_modules', atom.no);
 		const snippet_use = join(dir, 'use.snippet');
 
-		if (!await this.existsasync(snippet_use)) {
+		if (!await this.exists(snippet_use)) {
 			window.showErrorMessage('无法自动添加脚本，请联系供应商');
 			return;
 		}
-		const use = await this.readfileasync(snippet_use);
+		const use = await this.readfile(snippet_use);
 
 		const context = textEditor.document.getText();
 		if (!context.includes(imp)) {
@@ -138,7 +139,7 @@ export default class Desktop extends Base {
 					const linePrefix = document.lineAt(position).text.substr(0, position.character);
 					if (linePrefix.includes(':')) {
 						const dir = dirname(document.fileName);
-						const files = await this.readdirasync(dir);
+						const files = await this.readdir(dir);
 						const reg = /[\\|/]ns\.ts$/.test(document.fileName) ? /^na\d+.ts$/ : /^a\d+.ts$/;
 						return files.filter((it) => {
 							return reg.test(it);
@@ -168,12 +169,12 @@ export default class Desktop extends Base {
 		return this.baseaddservice();
 	}
 	public addpage(): Promise<void> {
-		return new AddPageDesktop().act();
+		return new AddPageDesktop().do();
 	}
 	public addaction(editor: TextEditor): Promise<void> {
-		return this.baseaddaction(editor);
+		return new AddActionDesktopPage(editor).do();
 	}
 	public addcomponent(editor: TextEditor): Promise<void> {
-		return new AddComponentDesktop().do(editor);
+		return new AddComponentDesktop(editor).do();
 	}
 }

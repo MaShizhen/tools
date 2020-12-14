@@ -174,7 +174,7 @@ export default class MM extends Tools {
 				end: '',
 			});
 			conf.jobs = jobs;
-			await this.writefileasync(config_path, JSON.stringify(conf, null, '\t'));
+			await this.writefile(config_path, JSON.stringify(conf, null, '\t'));
 			await this.show_doc(config_path);
 		});
 	}
@@ -285,7 +285,7 @@ export default class MM extends Tools {
 			if (!uri) {
 				return;
 			}
-			if (await this.existsasync(uri.fsPath)) {
+			if (await this.exists(uri.fsPath)) {
 				window.showErrorMessage('路径非空');
 				return;
 			}
@@ -428,15 +428,15 @@ export default class MM extends Tools {
 		const root_path = this.root();
 		const src = join(root_path, 'src');
 		const pagesjson = join(src, 'pages.json');
-		if (this.exists(pagesjson) && this.exists(pagesjson)) {
+		if (this.existssync(pagesjson) && this.existssync(pagesjson)) {
 			return PrjType.uniapp;
 		}
 		const pages = join(root_path, 'pages');
-		if (this.exists(join(pages, '_app.tsx'))) {
+		if (this.existssync(join(pages, '_app.tsx'))) {
 			return PrjType.next;
 		}
 		const srcpages = join(root_path, 'src', 'pages');
-		if (this.exists(join(srcpages, '_app.tsx'))) {
+		if (this.existssync(join(srcpages, '_app.tsx'))) {
 			return PrjType.next;
 		}
 		return null;

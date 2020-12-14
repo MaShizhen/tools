@@ -1,16 +1,12 @@
 import { basename, join } from 'path';
-import { TextEditor } from 'vscode';
 import Actor from '../actor';
 
 export default class AddComponentWeixin extends Actor {
-	public do(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public async act(): Promise<void> {
+	public async do(): Promise<void> {
 		const rootPath = this.root();
 		const src = join(rootPath, 'src');
-		if (!await this.existsasync(src)) {
-			await this.mkdirasync(src);
+		if (!await this.exists(src)) {
+			await this.mkdir(src);
 		}
 		const p_path = await this.generate(src, 'pg', '', 3);
 		// 创建页面逻辑层目录
@@ -43,7 +39,7 @@ export default function ${a}(mm: awx2) {
 	// todo
 }
 `;
-		return this.writefileasync(path, tpl);
+		return this.writefile(path, tpl);
 	}
 
 	private create_s(dir: string) {
@@ -51,7 +47,7 @@ export default function ${a}(mm: awx2) {
 	'mm-events-init': 'a001'
 };
 `;
-		return this.writefileasync(join(dir, 's.ts'), tpl);
+		return this.writefile(join(dir, 's.ts'), tpl);
 	}
 
 	private create_p(dir: string) {
@@ -73,34 +69,34 @@ import a001 from './a001';
 	page(s, actions);
 })();
 `;
-		return this.writefileasync(join(dir, 'p.ts'), tpl);
+		return this.writefile(join(dir, 'p.ts'), tpl);
 	}
 
 	private create_json(dir: string, name: string) {
 		const tpl = '{}';
-		return this.writefileasync(join(dir, `${name}.json`), tpl);
+		return this.writefile(join(dir, `${name}.json`), tpl);
 	}
 
 	private create_wxml(dir: string, name: string) {
 		const tpl = `<!--pages/${name}.wxml-->
 <text>pages/${name}.wxml</text>
 `;
-		return this.writefileasync(join(dir, `${name}.wxml`), tpl);
+		return this.writefile(join(dir, `${name}.wxml`), tpl);
 	}
 
 	private create_wxss(dir: string, name: string) {
 		const tpl = `/* pages/${name}.wxss */`;
-		return this.writefileasync(join(dir, `${name}.wxss`), tpl);
+		return this.writefile(join(dir, `${name}.wxss`), tpl);
 	}
 
 	private async updata_app_json(dir: string, name: string) {
 		const app_json_path = join(dir, 'app.json');
-		const txt = await this.readfileasync(app_json_path);
+		const txt = await this.readfile(app_json_path);
 		const obj = JSON.parse(txt) as {
 			pages: string[]
 		};
 		obj.pages.push(`pages/${name}/${name}`);
 		const str = JSON.stringify(obj, null, '\t');
-		return this.writefileasync(app_json_path, str);
+		return this.writefile(app_json_path, str);
 	}
 }

@@ -1,14 +1,12 @@
 import { basename, dirname, join } from 'path';
-import { commands, TextEditor, Uri, window, workspace } from 'vscode';
+import { commands, Uri, window, workspace } from 'vscode';
 import { Package } from '../interfaces';
-import tplatomusage from '../util/tpl-atom-useage';
 import Actor from '../actor';
+import TplUtil from '../util/tpl';
 
 export default class AddAtomWx extends Actor {
-	public do(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public async act(): Promise<void> {
+	private tpl = new TplUtil();
+	public async do(): Promise<void> {
 		const def = dirname(this.workpath());
 		const container = await window.showOpenDialog({
 			defaultUri: Uri.file(def),
@@ -87,7 +85,7 @@ export default class AddAtomWx extends Actor {
 export default function ${no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3')}(${ps.join(', ')}) {
 }
 `;
-		await this.writefileasync(path, content);
+		await this.writefile(path, content);
 	}
 
 	private async update_usage(folder: string, description: string, no: string) {
@@ -110,8 +108,8 @@ export default function ${no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3')}(${ps.jo
 		});
 		if (s) {
 			const n = parseInt(s || '1', 10);
-			const content = tplatomusage(description, no, n);
-			await this.writefileasync(path, content);
+			const content = this.tpl.atomusage(description, no, n);
+			await this.writefile(path, content);
 			return n;
 		}
 		return 0;
@@ -119,13 +117,13 @@ export default function ${no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3')}(${ps.jo
 
 	private async update_readme(folder: string, description: string) {
 		const path = join(folder, 'readme.md');
-		await this.writefileasync(path, `# ${description}\n`);
+		await this.writefile(path, `# ${description}\n`);
 	}
 
 	private async update_pkg(folder: string, no: string, user: string, remote: string) {
 		const path = join(folder, 'package.json');
 		const email = await this.shellexec('git config user.email');
-		const content = await this.readfileasync(path);
+		const content = await this.readfile(path);
 		const pkg = JSON.parse(content) as Package;
 		pkg.name = `@mmstudio/${no}`;
 		pkg.scripts.up = 'git pull git@github.com:mm-tpl/atom-wxapp.git master';
@@ -147,7 +145,7 @@ export default function ${no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3')}(${ps.jo
 		if (d) {
 			pkg.description = d;
 		}
-		await this.writefileasync(path, JSON.stringify(pkg, null, '\t'));
+		await this.writefile(path, JSON.stringify(pkg, null, '\t'));
 		return pkg;
 	}
 }

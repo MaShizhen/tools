@@ -22,7 +22,7 @@ export default class Serve extends Base {
 		throw new Error('Method not implemented.');
 	}
 	public addatom(): Promise<void> {
-		return new AddAtomServe().act();
+		return new AddAtomServe().do();
 	}
 	public addtplwidget(_editor: TextEditor): Promise<void> {
 		throw new Error('Method not implemented.');
@@ -39,7 +39,7 @@ export default class Serve extends Base {
 		const mdfile = join(rt, '.mm.md');
 		const map = await this.md2map(mdfile);
 		const src = join(rt, 'src');
-		const all = await this.readdirasync(src);
+		const all = await this.readdir(src);
 		const pages = [] as Section[];
 		const atoms = { name: '项目自定义服务端原子操作', addr: '#项目自定义服务端原子操作', sub: [] } as Section;
 		function add(rs: Link[], name: string, l: string) {
@@ -54,7 +54,7 @@ export default class Serve extends Base {
 		await Promise.all(all.map(async (dir) => {
 			const d = join(src, dir);
 			if (dir.endsWith('atoms')) {
-				const subs = await this.readdirasync(d);
+				const subs = await this.readdir(d);
 				subs.forEach((it) => {
 					if (it.startsWith('anp')) {
 						add(atoms.sub, it, join(d, it, 'index.ts'));
@@ -63,7 +63,7 @@ export default class Serve extends Base {
 			} else if (/pg\d{3}/.test(dir)) {
 				try {
 					const d = join(src, dir);
-					const services = await this.readdirasync(d);
+					const services = await this.readdir(d);
 					const sub = await Promise.all(services.filter((it) => {
 						return /s\d{3}/.test(it);
 					}).map((it) => {
@@ -95,7 +95,7 @@ export default class Serve extends Base {
 				return pre;
 			}, [`## ${this.l2t(it)}`, '']).join('\n');
 		}).join('\n\n');
-		await this.writefileasync(mdfile, `# 页面地图
+		await this.writefile(mdfile, `# 页面地图
 
 页面/原子操作名称可以手动编辑，以获得更好的实用效果。更新操作不会修改名称，如果确实需要自动修改，可先删除需要修改的行，然后重新全部更新即可。
 
@@ -137,7 +137,7 @@ ${md}
 		return this.baseaddservice();
 	}
 	public addpage(): Promise<void> {
-		return new AddPageServe().act();
+		return new AddPageServe().do();
 	}
 	public addaction(editor: TextEditor): Promise<void> {
 		return this.baseaddaction(editor);
@@ -152,7 +152,7 @@ ${md}
 
 	private async md2map(mdfile: string) {
 		try {
-			const text = await this.readfileasync(mdfile);
+			const text = await this.readfile(mdfile);
 			const reg = /##[^#]/g;
 			let lastpos = -1;
 			const blocks = [];

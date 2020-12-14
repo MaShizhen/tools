@@ -3,10 +3,11 @@ import { TextEditor, Uri, window } from 'vscode';
 import Actor from '../actor';
 
 export default class AddPresentationWeb extends Actor {
-	public act(): Promise<void> {
-		throw new Error('Method not implemented.');
+	public constructor(private editor: TextEditor) {
+		super();
 	}
-	public async do(editor: TextEditor): Promise<void> {
+	public async do(): Promise<void> {
+		const editor = this.editor;
 		const uri = editor.document.uri;
 		const folder = dirname(uri.fsPath);
 		// 如果当前目录不在某个页面中，则不允许操作
@@ -20,7 +21,7 @@ export default class AddPresentationWeb extends Actor {
 			const content = doc.getText(editor.selection);
 
 			const tpl = Uri.file(`${p_path}.tpl`);
-			await this.writefileasync(`${p_path}.tpl`, content);
+			await this.writefile(`${p_path}.tpl`, content);
 			await editor.edit((eb) => {
 				eb.replace(editor.selection, `<div data-mm-tpl="${no}"></div>`);
 			});

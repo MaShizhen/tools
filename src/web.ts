@@ -25,17 +25,17 @@ interface Section extends Link {
 
 export default class Web extends Base {
 	public addwidgetlocal(): Promise<void> {
-		return new AddWidgetLocalWeb().act();
+		return new AddWidgetLocalWeb().do();
 	}
 	public addwidget(): Promise<void> {
-		return new AddWidgetWeb().act();
+		return new AddWidgetWeb().do();
 	}
 	public async addatom(): Promise<void> {
-		return new AddAtomWeb().act();
+		return new AddAtomWeb().do();
 	}
 	private tplwidgetadder = new AddTplWidgetWeb();
 	public addtplwidget(editor: TextEditor): Promise<void> {
-		return this.tplwidgetadder.do(editor);
+		return this.tplwidgetadder.set_editor(editor).do();
 	}
 	private remoteatoms = [] as IAtomCatagory[];
 	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
@@ -49,7 +49,7 @@ export default class Web extends Base {
 		const mdfile = join(rt, '.mm.md');
 		const map = await this.md2map(mdfile);
 		const src = join(rt, 'src');
-		const all = await this.readdirasync(src);
+		const all = await this.readdir(src);
 		const pages = [] as Section[];
 		const atoms1 = { name: '项目自定义服务端原子操作', addr: '#项目自定义服务端原子操作', sub: [] } as Section;
 		const atoms2 = { name: '项目自定义客户端原子操作', addr: '#项目自定义客户端原子操作', sub: [] } as Section;
@@ -66,7 +66,7 @@ export default class Web extends Base {
 		await Promise.all(all.map(async (dir) => {
 			const d = join(src, dir);
 			if (dir.endsWith('widgets')) {
-				const subs = await this.readdirasync(d);
+				const subs = await this.readdir(d);
 				widgets.sub = subs.reduce((pre, it) => {
 					const m = /pw(\d{3})/.exec(it);
 					if (m) {
@@ -76,7 +76,7 @@ export default class Web extends Base {
 					return pre;
 				}, [] as Link[]);
 			} else if (dir.endsWith('atoms')) {
-				const subs = await this.readdirasync(d);
+				const subs = await this.readdir(d);
 				subs.forEach((it) => {
 					if (it.startsWith('anp')) {
 						add(atoms1.sub, it, join(d, it, 'index.ts'));
@@ -87,9 +87,9 @@ export default class Web extends Base {
 			} else if (/pg\d{3}/.test(dir)) {
 				try {
 					const d = join(src, dir);
-					const n = await this.readfileasync(join(d, 'n.ts'));
+					const n = await this.readfile(join(d, 'n.ts'));
 					const [, name] = /<title>(.*)<\/title>/.exec(n)!;
-					const zjs = await this.readdirasync(d);
+					const zjs = await this.readdir(d);
 					const sub = await Promise.all(zjs.filter((it) => {
 						return /zj-\d{3}/.test(it);
 					}).map((it) => {
@@ -119,7 +119,7 @@ export default class Web extends Base {
 				return pre;
 			}, [`## ${this.l2t(it)}`, '']).join('\n');
 		}).join('\n\n');
-		await this.writefileasync(mdfile, `# 页面地图
+		await this.writefile(mdfile, `# 页面地图
 
 页面/组件/控件/原子操作名称可以手动编辑，以获得更好的实用效果。更新操作不会修改名称，如果确实需要自动修改，可先删除需要修改的行，然后重新全部更新即可。
 
@@ -151,7 +151,7 @@ ${md}
 					const linePrefix = document.lineAt(position).text.substr(0, position.character);
 					if (linePrefix.includes(':')) {
 						const dir = dirname(document.fileName);
-						const files = await this.readdirasync(dir);
+						const files = await this.readdir(dir);
 						const reg = /[\\|/]ns\.ts$/.test(document.fileName) ? /^na\d+.ts$/ : /^a\d+.ts$/;
 						return files.filter((it) => {
 							return reg.test(it);
@@ -177,7 +177,7 @@ ${md}
 					}
 					const dir = dirname(document.fileName);
 
-					const files = await this.readdirasync(dir);
+					const files = await this.readdir(dir);
 					return files.filter((it) => {
 						return /s\d+.ts$/.test(it);
 					}).map((it) => {
@@ -198,16 +198,16 @@ ${md}
 		return this.baseaddwebrouter('routers');
 	}
 	public addpresentation(editor: TextEditor): Promise<void> {
-		return new AddPresentationWeb().do(editor);
+		return new AddPresentationWeb(editor).do();
 	}
 	public addservice(): Promise<void> {
 		return this.baseaddservice();
 	}
 	public addpage(): Promise<void> {
-		return new AddPageWeb().act();
+		return new AddPageWeb().do();
 	}
 	public addcomponent(editor: TextEditor): Promise<void> {
-		return new AddComponentWeb().do(editor);
+		return new AddComponentWeb(editor).do();
 	}
 	public async addaction(editor: TextEditor): Promise<void> {
 		const path = editor.document.fileName;
@@ -216,18 +216,18 @@ ${md}
 		const r = this.reg_in_comment(path);
 		if (r) {
 			if (fileName === 'n.ts') {
-				const componentn = new AddActionWebComponentN();
-				await componentn.do(editor);
+				const componentn = new AddActionWebComponentN(editor);
+				await componentn.do();
 			} else {
-				const component = new AddActionWebComponent();
-				await component.do(editor);
+				const component = new AddActionWebComponent(editor);
+				await component.do();
 			}
 		} else if (fileName === 'n.ts') {
-			const pagena = new AddActionWebPageN();
-			await pagena.do(editor);
+			const pagena = new AddActionWebPageN(editor);
+			await pagena.do();
 		} else {
-			const page = new AddActionWebPage();
-			await page.do(editor);
+			const page = new AddActionWebPage(editor);
+			await page.do();
 		}
 	}
 	private l2t(link: Link) {
@@ -235,7 +235,7 @@ ${md}
 	}
 	private async md2map(mdfile: string) {
 		try {
-			const text = await this.readfileasync(mdfile);
+			const text = await this.readfile(mdfile);
 			const reg = /##[^#]/g;
 			let lastpos = -1;
 			const blocks = [];

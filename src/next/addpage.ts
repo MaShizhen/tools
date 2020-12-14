@@ -1,13 +1,10 @@
 import { basename, dirname } from 'path';
-import { TextEditor, window, workspace } from 'vscode';
+import { window, workspace } from 'vscode';
 import Actor from '../actor';
 import { get_pages } from './get-pages';
 
 export default class AddPageNext extends Actor {
-	public do(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implement_ed.');
-	}
-	public async act(): Promise<void> {
+	public async do(): Promise<void> {
 		const rootPath = this.root();
 		const pages = await get_pages(rootPath);
 		const page_dir = (() => {
@@ -59,6 +56,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default ${name};
 `;
-		return this.writefileasync(path, tpl);
+		return this.writefile(path, tpl);
 	}
 }

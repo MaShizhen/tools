@@ -1,21 +1,18 @@
 import { basename, extname, join } from 'path';
-import { FileType, TextEditor, Uri, window, workspace } from 'vscode';
+import { FileType, Uri, window, workspace } from 'vscode';
 import { NO_MODIFY } from '../util/blocks';
 import Actor from '../actor';
 
 export default class AddPageDesktop extends Actor {
-	public do(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public async act(): Promise<void> {
+	public async do(): Promise<void> {
 		const rootPath = this.root();
-		if (!await this.existsasync(join(rootPath, 'pages'))) {
+		if (!await this.exists(join(rootPath, 'pages'))) {
 			window.showErrorMessage('缺少pages文件夹');
 			return;
 		}
 		const src = join(rootPath, 'src');
-		if (!await this.existsasync(src)) {
-			await this.mkdirasync(src);
+		if (!await this.exists(src)) {
+			await this.mkdir(src);
 		}
 		const folder = join(rootPath, 'src');
 		const value = await (async () => {
@@ -56,7 +53,7 @@ export default class AddPageDesktop extends Actor {
 					ignoreFocusOut: true,
 					validateInput: async (val) => {
 						const p_path = join(folder, val);
-						if (await this.existsasync(p_path)) {
+						if (await this.exists(p_path)) {
 							return '页面文件已存在';
 						}
 						return null;
@@ -71,7 +68,7 @@ export default class AddPageDesktop extends Actor {
 				window.showErrorMessage('页面文件已存在');
 				return;
 			}
-			if (!await this.existsasync(folder)) {
+			if (!await this.exists(folder)) {
 				await workspace.fs.createDirectory(Uri.file(folder));
 			}
 			const p_path = join(folder, name);
@@ -116,7 +113,7 @@ import s from './s';
 })();
 
 `;
-		return this.writefileasync(join(path, 'b.ts'), tpl);
+		return this.writefile(join(path, 'b.ts'), tpl);
 	}
 
 	private create_s(path: string) {
@@ -124,7 +121,7 @@ import s from './s';
 };
 
 `;
-		return this.writefileasync(join(path, 's.ts'), tpl);
+		return this.writefile(join(path, 's.ts'), tpl);
 	}
 
 	private create_html(path: string) {
@@ -136,7 +133,7 @@ const html = \`
 export default parse(html);
 
 `;
-		return this.writefileasync(join(path, 'html.ts'), tpl);
+		return this.writefile(join(path, 'html.ts'), tpl);
 	}
 
 	private create_n(path: string, page: string) {
@@ -177,6 +174,6 @@ export default async function main() {
 	return html_str;
 }
 `;
-		return this.writefileasync(join(path, 'n.ts'), tpl);
+		return this.writefile(join(path, 'n.ts'), tpl);
 	}
 }

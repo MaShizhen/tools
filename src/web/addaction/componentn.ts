@@ -3,10 +3,11 @@ import { TextEditor, window } from 'vscode';
 import AddActionWebBase from './base';
 
 export default class AddActionWebComponentN extends AddActionWebBase {
-	public act(): Promise<void> {
-		throw new Error('Method not implemented.');
+	public constructor(private editor: TextEditor) {
+		super();
 	}
-	public async do(editor: TextEditor): Promise<void> {
+	public async do(): Promise<void> {
+		const editor = this.editor;
 		const path = editor.document.fileName;
 		const folder = dirname(path);
 		// 如果当前目录不在某个页面中，则不允许操作
@@ -35,14 +36,14 @@ export default function ${a}(mm: an2) {
 }
 `;
 		const af = `${path}.ts`;
-		await this.writefileasync(af, tpl);
+		await this.writefile(af, tpl);
 		return af;
 	}
 
 	protected async update_n(path: string) {
 		const file_name = join(path, 'n.ts');
 		const eol = '\n';
-		const files = await this.readdirasync(path);
+		const files = await this.readdir(path);
 		const as = files.filter((f) => {
 			return /^na\d{3}\.ts$/.test(f);
 		}).map((f) => {
@@ -65,6 +66,6 @@ export default function ${a}(mm: an2) {
 	'mm-events-init': 'na001'
 };
 `;
-		return this.writefileasync(join(path, 'ns.ts'), tpl);
+		return this.writefile(join(path, 'ns.ts'), tpl);
 	}
 }

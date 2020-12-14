@@ -2,11 +2,12 @@ import { basename, join } from 'path';
 import { TextEditor, window, workspace } from 'vscode';
 import Actor from '../../actor';
 
-export default class AddActionDesktopPage extends Actor {
-	public act(): Promise<void> {
-		throw new Error('Method not implemented.');
+export default class AddActionDesktopcomponent extends Actor {
+	public constructor(private editor: TextEditor) {
+		super();
 	}
-	public async do(editor: TextEditor): Promise<void> {
+	public async do(): Promise<void> {
+		const editor = this.editor;
 		const path = workspace.asRelativePath(editor.document.uri);
 		// 如果当前目录不在某个页面中，则不允许操作
 		const r = this.reg_in_comment(path);
@@ -25,7 +26,7 @@ export default class AddActionDesktopPage extends Actor {
 	private async update_b(path: string) {
 		const file_name = join(path, 'b.ts');
 		const eol = '\n';
-		const files = await this.readdirasync(path);
+		const files = await this.readdir(path);
 		const as = files.filter((f) => {
 			return /^a\d{3}\.ts$/.test(f);
 		}).map((f) => {
@@ -52,6 +53,6 @@ export default function ${a}(mm: IAiDesktopComponent) {
 	// todo
 }
 `;
-		return this.writefileasync(`${path}.ts`, tpl);
+		return this.writefile(`${path}.ts`, tpl);
 	}
 }

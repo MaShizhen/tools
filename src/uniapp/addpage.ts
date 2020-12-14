@@ -1,5 +1,5 @@
 import { basename, join } from 'path';
-import { TextEditor, workspace } from 'vscode';
+import { workspace } from 'vscode';
 import Actor from '../actor';
 
 interface IPageConfig {
@@ -12,21 +12,18 @@ interface IPageConfig {
 }
 
 export default class AddPageUniapp extends Actor {
-	public do(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public async act(): Promise<void> {
+	public async do(): Promise<void> {
 		const rootPath = this.root();
 		const src = join(rootPath, 'src');
 		const pagesjson = join(src, 'pages.json');
-		const pagesconfigstr = await this.readfileasync(pagesjson);
+		const pagesconfigstr = await this.readfile(pagesjson);
 		const pagesconfig = JSON.parse(pagesconfigstr.replace(/\/\/.*/g, '')) as IPageConfig;
 		if (!pagesconfig.pages) {
 			pagesconfig.pages = [];
 		}
 		const pages = join(src, 'pages');
-		if (!await this.existsasync(pages)) {
-			await this.mkdirasync(pages);
+		if (!await this.exists(pages)) {
+			await this.mkdir(pages);
 		}
 		const p_path = await this.generate(pages, 'pg', '', 3);
 		const name = basename(p_path);
@@ -36,14 +33,14 @@ export default class AddPageUniapp extends Actor {
 				navigationBarTitleText: name
 			}
 		});
-		if (!await this.existsasync(p_path)) {
-			await this.mkdirasync(p_path);
+		if (!await this.exists(p_path)) {
+			await this.mkdir(p_path);
 		}
 		const page = join(p_path, name);
 		// create vue file
 		const vue = `${page}.vue`;
 		await this.create_page(vue);
-		await this.writefileasync(pagesjson, JSON.stringify(pagesconfig, undefined, '\t'));
+		await this.writefile(pagesjson, JSON.stringify(pagesconfig, undefined, '\t'));
 		await workspace.saveAll();
 		this.set_status_bar_message('成功添加页面文件');
 		this.show_doc(vue);
@@ -64,6 +61,6 @@ export default vue.extend({
 </script>
 <style lang="css"></style>
 `;
-		return this.writefileasync(path, tpl);
+		return this.writefile(path, tpl);
 	}
 }

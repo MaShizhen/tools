@@ -1,23 +1,20 @@
 import { basename, join } from 'path';
-import { TextEditor, workspace } from 'vscode';
+import { workspace } from 'vscode';
 import Actor from '../actor';
 
 export default class AddPageServe extends Actor {
-	public do(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public async act(): Promise<void> {
+	public async do(): Promise<void> {
 		const rootPath = this.root();
 		const src = join(rootPath, 'src');
-		if (!await this.existsasync(src)) {
-			await this.mkdirasync(src);
+		if (!await this.exists(src)) {
+			await this.mkdir(src);
 		}
 		const folder = src;
 		const p_path = await this.generate(folder, 'pg', '', 3);
-		if (!await this.existsasync(folder)) {
-			await this.mkdirasync(folder);
+		if (!await this.exists(folder)) {
+			await this.mkdir(folder);
 		}
-		await this.mkdirasync(p_path);
+		await this.mkdir(p_path);
 		const s_path = join(p_path, 's001');
 		await this.create_s(s_path, s_path.replace(/.*src[/|\\]/, ''));
 
@@ -55,6 +52,6 @@ export default async function ${no}(msg: Message, actionid: string): Promise<an4
 	} as an4;
 }
 `;
-		return this.writefileasync(`${path}.ts`, tpl);
+		return this.writefile(`${path}.ts`, tpl);
 	}
 }

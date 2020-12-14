@@ -21,17 +21,17 @@ interface Section extends Link {
 
 export default class Mobile extends Base {
 	public addwidgetlocal(): Promise<void> {
-		return new AddWidgetLocalMobile().act();
+		return new AddWidgetLocalMobile().do();
 	}
 	public addwidget(): Promise<void> {
-		return new AddWidgetMobile().act();
+		return new AddWidgetMobile().do();
 	}
 	public addatom(): Promise<void> {
-		return new AddAtomMobile().act();
+		return new AddAtomMobile().do();
 	}
 	private tplwidgetadder = new AddTplWidgetMobile()
-	public async addtplwidget(editor: TextEditor): Promise<void> {
-		return this.tplwidgetadder.do(editor);
+	public addtplwidget(editor: TextEditor): Promise<void> {
+		return this.tplwidgetadder.set_editor(editor).do();
 	}
 	private remoteatoms = [] as IAtomCatagory[];
 	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
@@ -45,7 +45,7 @@ export default class Mobile extends Base {
 		const mdfile = join(rt, '.mm.md');
 		const map = await this.md2map(mdfile);
 		const src = join(rt, 'src');
-		const all = await this.readdirasync(src);
+		const all = await this.readdir(src);
 		const pages = [] as Section[];
 		const atoms1 = { name: '项目自定义服务端原子操作', addr: '#项目自定义服务端原子操作', sub: [] } as Section;
 		const atoms2 = { name: '项目自定义客户端原子操作', addr: '#项目自定义客户端原子操作', sub: [] } as Section;
@@ -63,7 +63,7 @@ export default class Mobile extends Base {
 		await Promise.all(all.map(async (pg) => {
 			const d = join(src, pg);
 			if (pg.endsWith('widgets')) {
-				const subs = await this.readdirasync(d);
+				const subs = await this.readdir(d);
 				widgets.sub = subs.reduce((pre, it) => {
 					const m = /pw(\d{3})/.exec(it);
 					if (m) {
@@ -73,14 +73,14 @@ export default class Mobile extends Base {
 					return pre;
 				}, [] as Link[]);
 			} else if (pg.endsWith('atoms')) {
-				const subs = await this.readdirasync(d);
+				const subs = await this.readdir(d);
 				await Promise.all(subs.map(async (it) => {
 					const p1 = join(d, it, 'index.ts');
 					const p2 = join(d, it, 'index.tsx');
 					let p = p1;
-					if (await this.existsasync(p1)) {
+					if (await this.exists(p1)) {
 						p = p1;
-					} else if (await this.existsasync(p2)) {
+					} else if (await this.exists(p2)) {
 						p = p2;
 					}
 					if (it.startsWith('anp')) {
@@ -115,7 +115,7 @@ export default class Mobile extends Base {
 				return pre;
 			}, [`## ${this.l2t(it)}`, '']).join('\n');
 		}).join('\n\n');
-		await this.writefileasync(mdfile, `# 页面地图
+		await this.writefile(mdfile, `# 页面地图
 
 页面/组件/控件/原子操作名称可以手动编辑，以获得更好的实用效果。更新操作不会修改名称，如果确实需要自动修改，可先删除需要修改的行，然后重新全部更新即可。
 
@@ -206,7 +206,7 @@ ${md}
 					const linePrefix = document.lineAt(position).text.substr(0, position.character);
 					if (linePrefix.includes(':')) {
 						const dir = dirname(document.fileName);
-						const files = await this.readdirasync(dir);
+						const files = await this.readdir(dir);
 						const reg = /[\\|/]ns\.ts$/.test(document.fileName) ? /^na\d+.ts$/ : /^a\d+.ts$/;
 						return files.filter((it) => {
 							return reg.test(it);
@@ -236,14 +236,13 @@ ${md}
 		return this.baseaddservice();
 	}
 	public addpage(): Promise<void> {
-		return new AddComponentMobile().act();
+		return new AddComponentMobile().do();
 	}
 	public addcomponent(_editor: TextEditor): Promise<void> {
 		return this.addpage();
 	}
 	public async addaction(editor: TextEditor): Promise<void> {
-		const addactionmobile = new AddActionMobile();
-		return addactionmobile.do(editor);
+		return new AddActionMobile(editor).do();
 	}
 	private isios() {
 		switch (platform()) {
@@ -272,7 +271,7 @@ ${md}
 	}
 
 	private async generate_container(d: string, rt: string, map: Map<string, string>, pg: string, pages: Section[], container: Section) {
-		const zjs = await this.readdirasync(d);
+		const zjs = await this.readdir(d);
 		const sub = await Promise.all(zjs.filter((it) => {
 			return /pg\d{3}/.test(it);
 		}).map((it) => {
@@ -313,7 +312,7 @@ ${md}
 
 	private async md2map(mdfile: string) {
 		try {
-			const text = await this.readfileasync(mdfile);
+			const text = await this.readfile(mdfile);
 			const reg = /##[^#]/g;
 			let lastpos = -1;
 			const blocks = [];

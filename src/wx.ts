@@ -20,17 +20,17 @@ interface Section extends Link {
 
 export default class WeiXin extends Base {
 	public addwidgetlocal(): Promise<void> {
-		return new AddWidgetLocalWx().act();
+		return new AddWidgetLocalWx().do();
 	}
 	public addwidget(): Promise<void> {
-		return new AddWidgetWx().act();
+		return new AddWidgetWx().do();
 	}
 	public addatom(): Promise<void> {
-		return new AddAtomWx().act();
+		return new AddAtomWx().do();
 	}
 	private tplwidgetadder = new AddTplWidgetWx();
 	public async addtplwidget(editor: TextEditor): Promise<void> {
-		return this.tplwidgetadder.do(editor);
+		return this.tplwidgetadder.set_editor(editor).do();
 	}
 
 	private remoteatoms = [] as IAtomCatagory[];
@@ -45,7 +45,7 @@ export default class WeiXin extends Base {
 		const mdfile = join(rt, '.mm.md');
 		const map = await this.md2map(mdfile);
 		const src = join(rt, 'src');
-		const all = await this.readdirasync(src);
+		const all = await this.readdir(src);
 		const atoms1 = { name: '项目自定义服务端原子操作', addr: '#项目自定义服务端原子操作', sub: [] } as Section;
 		const atoms2 = { name: '项目自定义客户端原子操作', addr: '#项目自定义客户端原子操作', sub: [] } as Section;
 		const widgets = { name: '项目自定义控件', addr: '#项目自定义控件', sub: [] } as Section;
@@ -62,7 +62,7 @@ export default class WeiXin extends Base {
 		await Promise.all(all.map(async (dir) => {
 			const d = join(src, dir);
 			if (dir.endsWith('widgets')) {
-				const subs = await this.readdirasync(d);
+				const subs = await this.readdir(d);
 				widgets.sub = subs.reduce((pre, it) => {
 					const m = /pw(\d{3})/.exec(it);
 					if (m) {
@@ -72,7 +72,7 @@ export default class WeiXin extends Base {
 					return pre;
 				}, [] as Link[]);
 			} else if (dir.endsWith('atoms')) {
-				const subs = await this.readdirasync(d);
+				const subs = await this.readdir(d);
 				subs.forEach((it) => {
 					if (it.startsWith('anp')) {
 						add(atoms1.sub, it, join(d, it, 'index.ts'));
@@ -101,7 +101,7 @@ export default class WeiXin extends Base {
 				return pre;
 			}, [`## ${this.l2t(it)}`, '']).join('\n');
 		}).join('\n\n');
-		await this.writefileasync(mdfile, `# 页面地图
+		await this.writefile(mdfile, `# 页面地图
 
 页面/组件/控件/原子操作名称可以手动编辑，以获得更好的实用效果。更新操作不会修改名称，如果确实需要自动修改，可先删除需要修改的行，然后重新全部更新即可。
 
@@ -133,7 +133,7 @@ ${md}
 					const linePrefix = document.lineAt(position).text.substr(0, position.character);
 					if (linePrefix.includes(':')) {
 						const dir = dirname(document.fileName);
-						const files = await this.readdirasync(dir);
+						const files = await this.readdir(dir);
 						const reg = /[\\|/]ns\.ts$/.test(document.fileName) ? /^na\d+.ts$/ : /^a\d+.ts$/;
 						return files.filter((it) => {
 							return reg.test(it);
@@ -163,13 +163,13 @@ ${md}
 		return this.baseaddservice();
 	}
 	public addpage(): Promise<void> {
-		return new AddComponentWeixin().act();
+		return new AddComponentWeixin().do();
 	}
 	public addcomponent(_editor: TextEditor): Promise<void> {
 		return this.addpage();
 	}
 	public addaction(editor: TextEditor): Promise<void> {
-		return new AddActionWeixinPage().do(editor);
+		return new AddActionWeixinPage(editor).do();
 	}
 	private l2t(link: Link) {
 		return `[${link.name}](${link.addr})`;
@@ -177,7 +177,7 @@ ${md}
 
 	private async md2map(mdfile: string) {
 		try {
-			const text = await this.readfileasync(mdfile);
+			const text = await this.readfile(mdfile);
 			const reg = /##[^#]/g;
 			let lastpos = -1;
 			const blocks = [];

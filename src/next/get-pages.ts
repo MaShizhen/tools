@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { existsasync } from '../util/fs';
+import { promises as fs } from 'fs';
 
 export async function get_pages(rootPath: string) {
 	const pages = join(rootPath, 'pages');
@@ -11,4 +11,13 @@ export async function get_pages(rootPath: string) {
 		return src;
 	}
 	throw new Error('Wrong type');
+}
+
+async function existsasync(path: string) {
+	try {
+		await fs.stat(path);
+		return true;
+	} catch (error) {
+		return false;
+	}
 }

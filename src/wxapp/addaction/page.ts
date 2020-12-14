@@ -3,10 +3,14 @@ import { TextEditor, window } from 'vscode';
 import Actor from '../../actor';
 
 export default class AddActionWeixinPage extends Actor {
+	public constructor(private editor: TextEditor) {
+		super();
+	}
 	public act(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	public async do(editor: TextEditor): Promise<void> {
+	public async do(): Promise<void> {
+		const editor = this.editor;
 		const path = editor.document.fileName;
 		const dir = dirname(path);
 		// 如果当前目录不在某个页面中，则不允许操作
@@ -22,7 +26,7 @@ export default class AddActionWeixinPage extends Actor {
 	private async update_p(path: string) {
 		const file_name = join(path, 'p.ts');
 		const eol = '\n';
-		const files = await this.readdirasync(path);
+		const files = await this.readdir(path);
 		const as = files.filter((f) => {
 			return /^a\d{3}\.ts$/.test(f);
 		}).map((f) => {
@@ -43,7 +47,7 @@ export default class AddActionWeixinPage extends Actor {
 
 	private async update_s(path: string, a: string) {
 		const page_s_path = join(path, 's.ts');
-		const txt = await this.readfileasync(page_s_path);
+		const txt = await this.readfile(page_s_path);
 		const res = txt.match(/{(.|\n)*}/g);
 		const str = (() => {
 			if (res) {
@@ -55,7 +59,7 @@ export default class AddActionWeixinPage extends Actor {
 		})();
 		const tpl = `export default ${str.replace(/"/g, "'")};
 `;
-		return this.writefileasync(page_s_path, tpl);
+		return this.writefile(page_s_path, tpl);
 	}
 
 	private async create_a(p_path: string) {
@@ -68,7 +72,7 @@ export default function ${a}(mm: awx2) {
 }
 `;
 		const af = `${path}.ts`;
-		await this.writefileasync(af, tpl);
+		await this.writefile(af, tpl);
 		await this.update_s(p_path, a);
 		return af;
 	}

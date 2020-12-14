@@ -5,10 +5,16 @@ import { IAtom, IAtomCatagory } from '../interfaces';
 
 export default class AddTplWidgetWeb extends Actor {
 	private remotewidgets = [] as IAtomCatagory[];
+	private editor: TextEditor;
 	public act(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	public async do(editor: TextEditor): Promise<void> {
+	public set_editor(editor: TextEditor) {
+		this.editor = editor;
+		return this;
+	}
+	public async do(): Promise<void> {
+		const editor = this.editor;
 		if (!this.remotewidgets) {
 			this.remotewidgets = await this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/widgets-web/index.json');
 		}

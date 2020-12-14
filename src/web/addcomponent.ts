@@ -4,10 +4,11 @@ import { NO_MODIFY } from '../util/blocks';
 import Actor from '../actor';
 
 export default class AddComponentWeb extends Actor {
-	public act(): Promise<void> {
-		throw new Error('Method not implemented.');
+	public constructor(private editor: TextEditor) {
+		super();
 	}
-	public async do(editor: TextEditor): Promise<void> {
+	public async do(): Promise<void> {
+		const editor = this.editor;
 		try {
 			const doc = editor.document;
 			const uri = doc.uri;
@@ -27,7 +28,7 @@ export default class AddComponentWeb extends Actor {
 			await this.create_b(id, component_dir);
 			await this.update_html(editor, no);
 			// update b.ts, n.ts
-			const files = await this.readdirasync(folder);
+			const files = await this.readdir(folder);
 			const cs = files.filter((f) => {
 				return /zj-\d{3,6}/.test(f);
 			});
@@ -108,7 +109,7 @@ export default function main(url: string, query: {}) {
 	return component('${id}', s, actions, url, query);
 }
 `;
-		return this.writefileasync(join(path, 'b.ts'), tpl);
+		return this.writefile(join(path, 'b.ts'), tpl);
 	}
 
 	private create_n(id: string, path: string) {
@@ -133,30 +134,30 @@ export default function main(html: HTMLElement, url: string, msg: unknown, heade
 }
 
 `;
-		return this.writefileasync(join(path, 'n.ts'), tpl);
+		return this.writefile(join(path, 'n.ts'), tpl);
 	}
 
 	private create_ns(path: string) {
 		const tpl = `export default {
 };
 `;
-		return this.writefileasync(join(path, 'ns.ts'), tpl);
+		return this.writefile(join(path, 'ns.ts'), tpl);
 	}
 
 	private create_s(path: string) {
 		const tpl = `export default {
 };
 `;
-		return this.writefileasync(join(path, 's.ts'), tpl);
+		return this.writefile(join(path, 's.ts'), tpl);
 	}
 
 	private create_tpl(path: string, content: string) {
-		return this.writefileasync(join(path, 'tpl.tpl'), content);
+		return this.writefile(join(path, 'tpl.tpl'), content);
 	}
 
 	private create_tplts(path: string, content: string) {
 		const tpl = `export default \`${content}\`;
 `;
-		return this.writefileasync(join(path, 'tpl.ts'), tpl);
+		return this.writefile(join(path, 'tpl.ts'), tpl);
 	}
 }

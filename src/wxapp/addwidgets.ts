@@ -1,15 +1,12 @@
 import { basename, dirname, join } from 'path';
-import { commands, TextEditor, Uri, window, workspace } from 'vscode';
+import { commands, Uri, window, workspace } from 'vscode';
 import { Package } from '../interfaces';
-import tplwidgetusage from './widget/tpl-widget-useage';
-import tplwidget from './widget/tpl-widget';
 import Actor from '../actor';
+import TplWX from './tpl';
 
 export default class AddWidgetWx extends Actor {
-	public do(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public async act(): Promise<void> {
+	private tpl = new TplWX();
+	public async do(): Promise<void> {
 		const def = dirname(this.workpath());
 		const container = await window.showOpenDialog({
 			defaultUri: Uri.file(def),
@@ -75,26 +72,26 @@ export default class AddWidgetWx extends Actor {
 	}
 
 	private async update_ts(folder: string, desc: string) {
-		const content = tplwidget(desc);
+		const content = this.tpl.widget(desc);
 		const path = join(folder, 'src', 'index.ts');
-		await this.writefileasync(path, content);
+		await this.writefile(path, content);
 	}
 
 	private async update_usage(folder: string, no: string) {
 		const path = join(folder, 'use.snippet');
-		const content = tplwidgetusage(no, false);
-		await this.writefileasync(path, content);
+		const content = this.tpl.widgetusage(no, false);
+		await this.writefile(path, content);
 	}
 
 	private async update_readme(folder: string, description: string) {
 		const path = join(folder, 'readme.md');
-		await this.writefileasync(path, `# ${description}\n`);
+		await this.writefile(path, `# ${description}\n`);
 	}
 
 	private async update_pkg(folder: string, no: string, user: string, remote: string) {
 		const path = join(folder, 'package.json');
 		const email = await this.shellexec('git config user.email');
-		const content = await this.readfileasync(path);
+		const content = await this.readfile(path);
 		const pkg = JSON.parse(content) as Package;
 		pkg.name = `@mmstudio/${no}`;
 		pkg.scripts.up = 'git pull git@github.com:mm-tpl/widgets-wxapp.git master';
@@ -116,7 +113,7 @@ export default class AddWidgetWx extends Actor {
 		if (d) {
 			pkg.description = d;
 		}
-		await this.writefileasync(path, JSON.stringify(pkg, null, '\t'));
+		await this.writefile(path, JSON.stringify(pkg, null, '\t'));
 		return pkg;
 	}
 }

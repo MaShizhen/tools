@@ -1,13 +1,10 @@
 import { dirname, join } from 'path';
-import { TextEditor, window, workspace } from 'vscode';
+import { window, workspace } from 'vscode';
 import { get_pages } from './get-pages';
 import Actor from '../actor';
 
 export default class AddServiceNext extends Actor {
-	public do(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public async act(): Promise<void> {
+	public async do(): Promise<void> {
 		const rootPath = this.root();
 		const pages = await get_pages(rootPath);
 
@@ -43,6 +40,6 @@ export const config = {} as PageConfig;
 
 export default handler;
 `;
-		return this.writefileasync(path, tpl);
+		return this.writefile(path, tpl);
 	}
 }
