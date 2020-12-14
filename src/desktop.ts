@@ -4,13 +4,15 @@ import Base from './base';
 import AddComponentDesktop from './desktop/addcomponent';
 import AddPageDesktop from './desktop/addpage';
 import { IAtom, IAtomCatagory } from './interfaces';
-import get from './util/get';
 
 export default class Desktop extends Base {
+	public addatom(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	private remotewidgets = [] as IAtomCatagory[];
 	public async addtplwidget(editor: TextEditor): Promise<void> {
 		if (!this.remotewidgets) {
-			this.remotewidgets = await get<IAtomCatagory[]>('https://mmstudio.gitee.io/widgets-desktop/index.json');
+			this.remotewidgets = await this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/widgets-desktop/index.json');
 		}
 		const atoms = this.remotewidgets;
 		const all = new Map<string, IAtom>();
@@ -74,9 +76,7 @@ export default class Desktop extends Base {
 		const dir = join(this.root(textEditor), 'node_modules', atom.no);
 		const snippet_use = join(dir, 'use.snippet');
 
-		try {
-			await this.existsasync(snippet_use);
-		} catch (error) {
+		if (!await this.existsasync(snippet_use)) {
 			window.showErrorMessage('无法自动添加脚本，请联系供应商');
 			return;
 		}
@@ -102,7 +102,7 @@ export default class Desktop extends Base {
 	private remoteatoms = [] as IAtomCatagory[];
 	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
 		if (!this.remoteatoms) {
-			this.remoteatoms = await get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-desktop/index.json');
+			this.remoteatoms = await this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-desktop/index.json');
 		}
 		return this.remoteatoms;
 	}

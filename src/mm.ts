@@ -20,6 +20,57 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public addatom() {
+		return commands.registerCommand('mm.atom.add', async () => {
+			const pickitems = [
+				{
+					detail: '1.Next原子操作',
+					label: 'next',
+					type: PrjType.next
+				},
+				{
+					detail: '1.服务端原子操作',
+					label: 'serve',
+					type: PrjType.serve
+				},
+				{
+					detail: '1.uniapp原子操作',
+					label: 'uniapp',
+					type: PrjType.uniapp
+				},
+				{
+					detail: '1.服务端原子操作',
+					label: 'nodejs',
+					type: PrjType.serve
+				},
+				{
+					detail: '2.web/h5原子操作',
+					label: 'web/h5',
+					type: PrjType.web
+				},
+				{
+					detail: '3.移动端app原子操作',
+					label: 'mobile',
+					type: PrjType.mobile
+				},
+				{
+					detail: '4.微信小程序原子操作',
+					label: 'wxapp',
+					type: PrjType.wxapp
+				}
+			];
+			const pickoption = this.getdefaultpickoption();
+			const p1 = await window.showQuickPick(pickitems, {
+				...pickoption,
+				placeHolder: '请选择项目端点类型'
+			});
+			if (!p1) {
+				return;
+			}
+			const tool = this.getinstancebytype(p1.type);
+			await tool.addatom();
+		});
+	}
 	public addschedule() {
 		return commands.registerCommand('mm.service.schedule', async () => {
 			const rootPath = this.root();

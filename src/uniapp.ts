@@ -3,16 +3,18 @@ import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
 import AddPageUniapp from './uniapp/addpage';
-import get from './util/get';
 
 export default class UniApp extends Base {
+	public addatom(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addtplwidget(_editor: TextEditor): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 	private remoteatoms = [] as IAtomCatagory[];
 	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
 		if (!this.remoteatoms) {
-			this.remoteatoms = await get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-uniapp/index.json');
+			this.remoteatoms = await this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-uniapp/index.json');
 		}
 		return this.remoteatoms;
 	}

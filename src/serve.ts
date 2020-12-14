@@ -2,8 +2,8 @@ import { join, relative } from 'path';
 import { Disposable, languages, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
+import AddAtomServe from './nodejs/addatom';
 import AddPageServe from './serve/addpage';
-import get from './util/get';
 
 interface Link {
 	name: string;
@@ -15,13 +15,16 @@ interface Section extends Link {
 }
 
 export default class Serve extends Base {
+	public addatom(): Promise<void> {
+		return new AddAtomServe().act();
+	}
 	public addtplwidget(_editor: TextEditor): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 	private remoteatoms = [] as IAtomCatagory[];
 	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
 		if (!this.remoteatoms) {
-			this.remoteatoms = await get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-nodejs/index.json');
+			this.remoteatoms = await this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-nodejs/index.json');
 		}
 		return this.remoteatoms;
 	}

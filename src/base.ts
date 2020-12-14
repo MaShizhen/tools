@@ -3,9 +3,10 @@ import { Disposable, FileType, QuickPickItem, TextEditor, Uri, window, workspace
 import generate from './util/generate';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
-import get from './util/get';
 
 export default abstract class Base extends Tools {
+	public abstract addatom(): Promise<void>;
+
 	public abstract addtplwidget(editor: TextEditor): Promise<void>;
 	public async addtplatom(editor: TextEditor) {
 		const servertype = (() => {
@@ -24,9 +25,9 @@ export default abstract class Base extends Tools {
 		const all_remote = new Map<string, IAtom>();
 		const remote_atoms = await (() => {
 			if (servertype === 'nodejs-na') {
-				return get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-nodejs/index-a.json');
+				return this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-nodejs/index-a.json');
 			} else if (servertype === 'nodejs-s') {
-				return get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-nodejs/index.json');
+				return this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-nodejs/index.json');
 			}
 			return this.getremoteatoms();
 		})();
