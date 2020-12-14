@@ -58,7 +58,6 @@ export default class AddAtomUniapp extends Actor {
 		// amd.json
 		await this.update_amd(cwd, no);
 
-		debugger;
 		await this.shellexec('git add .', cwd);
 		await this.shellexec(`git commit -m "init atom ${no}"`, cwd);
 		await this.shellexec('git branch -M main', cwd);
