@@ -1,5 +1,5 @@
-import { dirname, join } from 'path';
-import { commands, Uri, window, workspace } from 'vscode';
+import { dirname, join, sep } from 'path';
+import { commands, FileType, Uri, window, workspace } from 'vscode';
 import Web from './web';
 import Tools from './tools';
 import Mobile from './mobile';
@@ -20,6 +20,69 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public addschedule() {
+		return commands.registerCommand('mm.service.schedule', async () => {
+			const rootPath = this.root();
+			const config_path = join(rootPath, 'mm.json');
+			const doc = await workspace.openTextDocument(Uri.file(config_path));
+			const raw = doc.getText();
+			const conf = JSON.parse(raw);
+			const jobs = (conf.jobs || []) as Array<{
+				description: string;
+				rule: string;
+				start: string;
+				end: string;
+				service: string;
+				data: {}
+			}>;
+			const src = join(rootPath, 'src');
+			async function get_all_s(cwd: string, root: string): Promise<string[]> {
+				const files = await workspace.fs.readDirectory(Uri.file(cwd));
+				const ss = await Promise.all(files.map(async ([path, type]) => {
+					const fullpath = join(cwd, path);
+					if (type === FileType.Directory) {
+						return get_all_s(fullpath, root);
+					} else if (type === FileType.File) {
+						if (/^s\d{3}\.ts/.test(path)) {
+							return [fullpath.replace(`${root}${sep}`, '').replace(/\\/g, '/').replace(/\.ts/, '')];
+						}
+					}
+					return [];
+				}));
+				return ss.reduce((pre, cur) => {
+					return pre.concat(cur);
+				}, []);
+			}
+
+			const ss = await get_all_s(src, src);
+			const pickoption = this.getdefaultpickoption();
+			const service = await window.showQuickPick(ss, {
+				...pickoption,
+				placeHolder: '请选择服务'
+			});
+			if (!service) {
+				return;
+			}
+			const description = await window.showInputBox({
+				ignoreFocusOut: true,
+				prompt: '定时任务描述'
+			});
+			if (!description) {
+				return;
+			}
+			jobs.push({
+				data: {},
+				service,
+				description,
+				rule: '* * * * * *',
+				start: '',
+				end: '',
+			});
+			conf.jobs = jobs;
+			await this.writefileasync(config_path, JSON.stringify(conf, null, '\t'));
+			await this.show_doc(config_path);
+		});
+	}
 	public addtplwidget() {
 		return commands.registerTextEditorCommand('mm.tpl.widget', (textEditor) => {
 			const tool = this.getinstance();

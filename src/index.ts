@@ -3,7 +3,6 @@ import addatom from './mm/add-atom';
 import addlocalatom from './mm/add-local-atom';
 import addwidget from './mm/add-widget';
 import addlocalwidget from './mm/add-local-widget';
-import addschedule from './mm/add-schedule';
 import MM from './mm';
 
 export function activate({ subscriptions }: ExtensionContext) {
@@ -24,10 +23,10 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.refreshsitemap(),
 		mm.addtplatom(),
 		mm.addtplwidget(),
+		mm.addschedule(),
 		addatom(),
 		addlocalatom(),
 		addwidget(),
-		addlocalwidget(),
-		addschedule()
+		addlocalwidget()
 	);
 }
