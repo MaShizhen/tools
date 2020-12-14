@@ -45,7 +45,7 @@ export default class AddAtomUniapp extends Actor {
 		await workspace.fs.createDirectory(uri);
 		// 进入目录并且拉取代码
 		await this.shellexec('git init', cwd);
-		// 从码云拉取代码模板
+		// 从github拉取代码模板
 		await this.downloadandextractrepo(cwd, {
 			name: 'atom-uniapp'
 		});
