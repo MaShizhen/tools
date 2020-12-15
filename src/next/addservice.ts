@@ -30,6 +30,7 @@ export default class AddServiceNext extends Actor {
 		const tpl = `import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse, PageConfig } from 'next';
 import anylogger from 'anylogger';
+import '../../atoms/a001';
 
 const logger = anylogger('${no}');
 
