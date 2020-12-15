@@ -26,6 +26,9 @@ export default class AddPageNext extends Actor {
 
 	private create_page(path: string, name: string) {
 		const tpl = `import { GetServerSideProps, GetStaticPaths, GetStaticProps, NextPage } from 'next';
+import anylogger from 'anylogger';
+
+const logger = anylogger('${name}');
 
 interface IProps {
 }
