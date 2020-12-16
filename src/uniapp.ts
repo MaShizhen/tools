@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { Disposable, languages, TextEditor } from 'vscode';
+import { Disposable, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
 import AddAtomUniapp from './uniapp/addatom';
@@ -41,14 +41,7 @@ export default class UniApp extends Base {
 		this.shellrun(command, 'debug');
 	}
 	public completion(): Disposable {
-		return languages.registerCompletionItemProvider(
-			'typescript',
-			{
-				provideCompletionItems() {
-					return undefined;
-				}
-			}
-		);
+		return Disposable.from();
 	}
 	public addwebfilter(): Promise<void> {
 		throw new Error('Method not implemented.');

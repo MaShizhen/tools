@@ -294,30 +294,12 @@
 							"wxapp",
 							"desktop",
 							"mobile",
-							"serve"
+							"serve",
+							"next",
+							"uniapp",
+							"taro"
 						],
 						"description": "%mm.proj.type%"
-					},
-					"mm.atom.type": {
-						"type": "string",
-						"enum": [
-							"nodejs",
-							"web/h5",
-							"wxapp",
-							"desktop",
-							"mobile"
-						],
-						"description": "%mm.atom.type%"
-					},
-					"mm.widget.type": {
-						"type": "string",
-						"enum": [
-							"web/h5",
-							"wxapp",
-							"desktop",
-							"mobile"
-						],
-						"description": "%mm.widget.type%"
 					}
 				}
 			}

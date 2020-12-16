@@ -1,5 +1,5 @@
 import { join, relative } from 'path';
-import { Disposable, languages, TextEditor } from 'vscode';
+import { Disposable, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
 import AddAtomServe from './serve/addatom';
@@ -115,14 +115,7 @@ ${md}
 		this.shellrun(command, 'debug');
 	}
 	public completion(): Disposable {
-		return languages.registerCompletionItemProvider(
-			'typescript',
-			{
-				provideCompletionItems() {
-					return undefined;
-				}
-			}
-		);
+		return Disposable.from();
 	}
 	public addwebfilter(): Promise<void> {
 		return this.baseaddwebrouter('filters');

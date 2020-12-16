@@ -8,6 +8,7 @@ import Desktop from './desktop';
 import Next from './next';
 import UniApp from './uniapp';
 import Serve from './serve';
+import Taro from './taro';
 
 enum PrjType {
 	web = 'web/h5',
@@ -16,7 +17,8 @@ enum PrjType {
 	mobile = 'mobile',
 	serve = 'serve',
 	uniapp = 'uniapp',
-	next = 'next'
+	next = 'next',
+	taro = 'taro'
 }
 
 export default class MM extends Tools {
@@ -207,31 +209,36 @@ export default class MM extends Tools {
 			const picked = await this.pick([
 				{
 					description: '1.next.js',
-					label: 'next.js',
+					label: 'web',
 					type: PrjType.next
 				},
 				{
-					description: '2.uniapp',
+					description: '2.taro',
+					label: 'app',
+					type: PrjType.taro
+				},
+				{
+					description: '3.uniapp',
 					label: 'app',
 					type: PrjType.uniapp
 				},
 				{
-					description: '3.web/h5网站应用',
+					description: '4.web/h5网站应用',
 					label: 'web/h5',
 					type: PrjType.web
 				},
 				{
-					description: '4.移动端app',
+					description: '5.移动端app',
 					label: 'mobile',
 					type: PrjType.mobile
 				},
 				{
-					description: '5.微信小程序',
+					description: '6.微信小程序',
 					label: 'wxapp',
 					type: PrjType.wxapp
 				},
 				{
-					description: '6.桌面应用程序',
+					description: '7.桌面应用程序',
 					label: 'desktop',
 					type: PrjType.desktop
 				}
@@ -384,6 +391,7 @@ export default class MM extends Tools {
 	private next = new Next();
 	private uniapp = new UniApp();
 	private serve = new Serve();
+	private taro = new Taro();
 	private getinstance() {
 		const type = this.prj_type();
 		if (!type) {
@@ -409,6 +417,8 @@ export default class MM extends Tools {
 				return this.next;
 			case PrjType.serve:
 				return this.serve;
+			case PrjType.taro:
+				return this.taro;
 			default:
 				throw new Error('unknown project type');
 		}
@@ -432,6 +442,9 @@ export default class MM extends Tools {
 		const srcpages = join(root_path, 'src', 'pages');
 		if (this.existssync(join(srcpages, '_app.tsx'))) {
 			return PrjType.next;
+		}
+		if (this.existssync(join(srcpages, 'app.config.ts'))) {
+			return PrjType.taro;
 		}
 		return null;
 	}

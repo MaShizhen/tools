@@ -2,10 +2,8 @@ import { join } from 'path';
 import { Disposable, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
-import AddPageNext from './next/addpage';
-import AddServiceNext from './next/addservice';
 
-export default class Next extends Base {
+export default class Taro extends Base {
 	public addwidgetlocal(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
@@ -18,50 +16,44 @@ export default class Next extends Base {
 	public addtplwidget(_editor: TextEditor): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	private remoteatoms = [] as IAtomCatagory[];
-	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
-		if (!this.remoteatoms) {
-			this.remoteatoms = await this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-next/index.json');
-		}
-		return this.remoteatoms;
+	protected getremoteatoms(): Promise<IAtomCatagory[]> {
+		throw new Error('Method not implemented.');
 	}
 	public refreshsitemap(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 	public async shellcreate(cwd: string, no: string, desc: string): Promise<void> {
-		await this.downloadandextractrepo(cwd, { name: 'next' });
+		await this.downloadandextractrepo(cwd, { name: 'taro' });
 		await this.replacefile(join(cwd, 'package.json'), [/p000000/, /\$desc/], [no, desc]);
 	}
 	public shellbuild(): void {
-		const command = 'yarn build';
-		this.shellrun(command, 'build');
+		throw new Error('Method not implemented.');
 	}
 	public shelldebug(): void {
-		const command = 'yarn dev';
-		this.shellrun(command, 'debug');
+		throw new Error('Method not implemented.');
 	}
 	public completion(): Disposable {
 		return Disposable.from();
+	}
+	public addpage(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public addcomponent(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public addservice(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public addaction(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public addpresentation(_editor: TextEditor): Promise<void> {
+		throw new Error('Method not implemented.');
 	}
 	public addwebfilter(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
 	public addwebrouter(): Promise<void> {
 		throw new Error('Method not implemented.');
-	}
-	public addpresentation(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public addservice(): Promise<void> {
-		return new AddServiceNext().do();
-	}
-	public addpage(): Promise<void> {
-		return new AddPageNext().do();
-	}
-	public addcomponent(_editor: TextEditor): Promise<void> {
-		return this.addpage();
-	}
-	public addaction(editor: TextEditor): Promise<void> {
-		return this.baseaddaction(editor);
 	}
 }
