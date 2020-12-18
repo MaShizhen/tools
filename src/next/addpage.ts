@@ -45,16 +45,23 @@ ${name}.getInitialProps = async (context) => {
 	});
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
-	// ...
+export const getStaticProps: GetStaticProps<IProps> = async (context) => {
+	return Promise.resolve({
+		props: {}
+	});
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-	// ...
+	return {
+		fallback: true,
+		paths: []
+	};
 };
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-	// ...
+export const getServerSideProps: GetServerSideProps<IProps> = async (context) => {
+	return Promise.resolve({
+		props: {}
+	});
 };
 
 export default ${name};
