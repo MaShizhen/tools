@@ -37,8 +37,7 @@ const logger = anylogger('${no}');
 const handler = nextConnect<NextApiRequest, NextApiResponse<Record<string, unknown>>>();
 
 handler.get((req, res) => {
-	res.statusCode = 200;
-	res.json({ name: 'mmstudio' });
+	res.status(200).json({ name: 'mmstudio' });
 });
 
 export const config = {} as PageConfig;
