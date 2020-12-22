@@ -17,9 +17,6 @@
 		"up": "git pull git@github.com:mm-core/base.git cjs",
 		"vscode:prepublish": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && yarn build"
 	},
-	"engines": {
-		"vscode": "^1.37.0"
-	},
 	"categories": [
 		"Other",
 		"Snippets"
