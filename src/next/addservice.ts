@@ -34,10 +34,10 @@ import '@mmstudio/an000042';
 
 const logger = anylogger('${no}');
 
-const handler = nextConnect<NextApiRequest, NextApiResponse<Record<string, unknown>>>();
+const handler = nextConnect<NextApiRequest, NextApiResponse<{ ok: boolean; message: string; }>>();
 
 handler.get((req, res) => {
-	res.status(200).json({ name: 'mmstudio' });
+	res.status(200).json({ ok: true, message: 'ok' });
 });
 
 export const config = {} as PageConfig;
