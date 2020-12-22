@@ -1,4 +1,4 @@
-import { basename, dirname, join } from 'path';
+import { dirname, join } from 'path';
 import { commands, Uri, window, workspace } from 'vscode';
 import { Package } from '../interfaces';
 import Actor from '../actor';
@@ -21,8 +21,8 @@ export default class AddAtomMobile extends Actor {
 		const user = await this.shellexec('git config user.name');
 
 		const folder = container[0];
-		let cwd = await this.generate(folder.fsPath, 'am', '', 6);
-		let no = basename(cwd);
+		let no = await this.generate(folder.fsPath, 'am', 6);
+		let cwd = join(folder.fsPath, no);
 		const remote = await window.showInputBox({
 			value: `git@github.com:mm-atom/${no}.git`,
 			ignoreFocusOut: true,

@@ -278,13 +278,14 @@ export default abstract class Base extends Tools {
 			folder = join(folder, 'src');
 			await this.mkdir(folder);
 		}
-		const p_path = await this.generate(folder, 's', '\\.ts', 3);
-		await this.create_s(p_path, p_path.replace(/.*src[/|\\]/, ''));
+		const name = await this.generate(folder, 's', 3);
+		const p_path = await this.create_s(folder, name);
 		await workspace.saveAll();
-		this.show_doc(`${p_path}.ts`);
+		this.show_doc(p_path);
 	}
-	private create_s(path: string, dir: string) {
-		const no = basename(path, '.ts');
+	private async create_s(folder: string, no: string) {
+		const path = join(folder, `${no}.ts`);
+		const dir = path.replace(/.*src[/|\\]/, '');
 		const tpl = `import an1 from '@mmstudio/an000001';
 import an4 from '@mmstudio/an000004';
 
@@ -313,19 +314,20 @@ export default async function ${no}(msg: Message, actionid: string): Promise<an4
 	} as an4;
 }
 `;
-		return this.writefile(`${path}.ts`, tpl);
+		await this.writefile(path, tpl);
+		return path;
 	}
 	protected async baseaddaction(editor: TextEditor) {
 		const uri = editor.document.uri;
 		const folder = dirname(uri.fsPath);
-		const p_path = await this.generate(folder, 'a', '\\.ts', 3);
-		const a = basename(p_path);
+		const a = await this.generate(folder, 'a', 3);
+		const p_path = basename(folder, `${a}.ts`);
 		const tpl = `
 export default function ${a}() {
 	// todo
 }
 `;
-		await this.writefile(`${p_path}.ts`, tpl);
-		window.showTextDocument(Uri.file(`${p_path}.ts`));
+		await this.writefile(p_path, tpl);
+		window.showTextDocument(Uri.file(p_path));
 	}
 }

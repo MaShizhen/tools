@@ -1,4 +1,4 @@
-import { basename, join } from 'path';
+import { join } from 'path';
 import { workspace } from 'vscode';
 import Actor from '../actor';
 
@@ -25,8 +25,8 @@ export default class AddPageUniapp extends Actor {
 		if (!await this.exists(pages)) {
 			await this.mkdir(pages);
 		}
-		const p_path = await this.generate(pages, 'pg', '', 3);
-		const name = basename(p_path);
+		const name = await this.generate(pages, 'pg', 3);
+		const p_path = join(pages, name);
 		pagesconfig.pages.push({
 			path: `pages/${name}/${name}`,
 			style: {

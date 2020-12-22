@@ -24,20 +24,19 @@ export default class AddActionWebComponentN extends AddActionWebBase {
 		throw new Error('Method not implemented.');
 	}
 	protected async create_a(p_path: string): Promise<string> {
-		const path = await this.generate(p_path, 'na', '\\.ts', 3);
-		const a = basename(path);
-		if (a === 'na001') {
+		const no = await this.generate(p_path, 'na', 3);
+		if (no === 'na001') {
 			await this.update_ns(p_path);
 		}
+		const path = join(p_path, `${no}.ts`);
 		const tpl = `import an2 from '@mmstudio/an000002';
 
-export default function ${a}(mm: an2) {
+export default function ${no}(mm: an2) {
 	// todo
 }
 `;
-		const af = `${path}.ts`;
-		await this.writefile(af, tpl);
-		return af;
+		await this.writefile(path, tpl);
+		return path;
 	}
 
 	protected async update_n(path: string) {

@@ -46,16 +46,15 @@ export default class AddActionMobile extends Actor {
 	}
 
 	protected async create_a(p_path: string) {
-		const path = await this.generate(p_path, 'a', '\\.ts', 3);
-		const a = basename(path);
+		const name = await this.generate(p_path, 'a', 3);
+		const path = join(p_path, `${name}.ts`);
 		const tpl = `import am1 from '@mmstudio/am000001';
 
-export default function ${a}(mm: am1) {
+export default function ${name}(mm: am1) {
 }
 `;
-		const af = `${path}.ts`;
-		await this.writefile(af, tpl);
-		return af;
+		await this.writefile(path, tpl);
+		return path;
 	}
 
 }

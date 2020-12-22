@@ -15,7 +15,8 @@ export default class AddActionWebPage extends AddActionWebBase {
 		if (r === null) {
 			window.showErrorMessage('请在页面b.ts中进行该操作!');
 		} else {
-			const p_path = await this.generate(folder, 'a', '\\.ts', 3);
+			const no = await this.generate(folder, 'a', 3);
+			const p_path = join(folder, no);
 			const a = await this.create_a(p_path);
 			await this.update_b(folder);
 			this.set_status_bar_message('成功');

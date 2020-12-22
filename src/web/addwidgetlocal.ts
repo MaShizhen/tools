@@ -1,4 +1,4 @@
-import { basename, join } from 'path';
+import { join } from 'path';
 import { window } from 'vscode';
 import Actor from '../actor';
 import TplWeb from './tpl';
@@ -10,8 +10,8 @@ export default class AddWidgetLocalWeb extends Actor {
 		const prefix = 'pw';	// not wc, we wish local wigets list before remote when searching. cw means client widget
 		const dir = join(rt, 'src', 'widgets');
 		await this.mkdir(dir);
-		const atom_dir = await this.generate(dir, prefix, '', 3);
-		const no = basename(atom_dir);
+		const no = await this.generate(dir, prefix, 3);
+		const atom_dir = join(dir, no);
 		const postfix = 'ts';
 		const ts = join(atom_dir, `index.${postfix}`);
 		const tscontent = this.tpl.widget(no, true);

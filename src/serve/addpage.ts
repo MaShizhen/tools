@@ -10,7 +10,8 @@ export default class AddPageServe extends Actor {
 			await this.mkdir(src);
 		}
 		const folder = src;
-		const p_path = await this.generate(folder, 'pg', '', 3);
+		const name = await this.generate(folder, 'pg', 3);
+		const p_path = join(folder, name);
 		if (!await this.exists(folder)) {
 			await this.mkdir(folder);
 		}

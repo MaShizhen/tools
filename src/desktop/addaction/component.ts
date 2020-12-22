@@ -16,7 +16,8 @@ export default class AddActionDesktopcomponent extends Actor {
 		} else {
 			const folder = basename(path);
 			const dir = join(this.root(editor), folder);
-			const p_path = await this.generate(dir, 'a', '\\.ts', 3);
+			const name = await this.generate(dir, 'a', 3);
+			const p_path = join(dir, name);
 			await this.create_a(p_path);
 			await this.update_b(dir);
 			this.show_doc(`${p_path}.ts`);

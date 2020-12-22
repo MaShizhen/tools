@@ -38,7 +38,8 @@ export default class AddPageWeb extends Actor {
 			return;
 		}
 		const page = picked.label;
-		const p_path = await this.generate(folder, 'pg', '', 3);
+		const no = await this.generate(folder, 'pg', 3);
+		const p_path = join(folder, no);
 		if (!await this.exists(folder)) {
 			await this.mkdir(folder);
 		}

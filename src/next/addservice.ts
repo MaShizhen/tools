@@ -16,9 +16,9 @@ export default class AddServiceNext extends Actor {
 			return dirname(editor.document.fileName);
 		})();
 
-		const path = await this.generate(api, 's', '.ts', 3);
+		const name = await this.generate(api, 's', 3);
 		// create service file
-		const servicefile = `${path}.ts`;
+		const servicefile = join(api, `${name}.ts`);
 		await this.create_api(servicefile);
 		await workspace.saveAll();
 		this.set_status_bar_message('成功添加服务文件');

@@ -8,7 +8,8 @@ export default class AddComponentWeixin extends Actor {
 		if (!await this.exists(src)) {
 			await this.mkdir(src);
 		}
-		const p_path = await this.generate(src, 'pg', '', 3);
+		const no = await this.generate(src, 'pg', 3);
+		const p_path = join(src, no);
 		// 创建页面逻辑层目录
 		await this.create_a(p_path);		// 创建事件
 		await this.create_s(p_path);		// 创建响应

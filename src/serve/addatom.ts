@@ -1,4 +1,4 @@
-import { basename, dirname, join } from 'path';
+import { dirname, join } from 'path';
 import { commands, Uri, window, workspace } from 'vscode';
 import { Package } from '../interfaces';
 import Actor from '../actor';
@@ -17,9 +17,9 @@ export default class AddAtomServe extends Actor {
 		}
 
 		const folder = container[0];
-		const autono = await this.generate(folder.fsPath, 'an', '', 6);
+		const autono = await this.generate(folder.fsPath, 'an', 6);
 		const no = await window.showInputBox({
-			value: basename(autono),
+			value: autono,
 			placeHolder: 'type project name'
 		});
 		if (!no) {

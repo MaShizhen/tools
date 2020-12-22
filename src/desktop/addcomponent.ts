@@ -1,4 +1,4 @@
-import { basename, dirname, join } from 'path';
+import { dirname, join } from 'path';
 import { TextEditor, window } from 'vscode';
 import { NO_MODIFY } from '../util/blocks';
 import Actor from '../actor';
@@ -17,13 +17,13 @@ export default class AddComponentDesktop extends Actor {
 			if (r === null) {
 				window.showErrorMessage('您必须在某个页面文件夹下进行该操作！');
 			} else {
-				const c = await this.generate(folder, 'zj-', '', 3);
+				const name = await this.generate(folder, 'zj-', 3);
+				const c = join(folder, name);
 				// create
 				await this.create_tpl(c);
 				await this.create_s(c);
-				const id = basename(c);
-				await this.create_n(id, c);
-				await this.create_b(id, c);
+				await this.create_n(name, c);
+				await this.create_b(name, c);
 				// update b.ts, n.ts
 				const files = await this.readdir(folder);
 				const cs = files.filter((f) => {

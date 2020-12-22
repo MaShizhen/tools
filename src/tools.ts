@@ -247,9 +247,9 @@ export default abstract class Tools {
 	protected prefix(pre: string, num: number, len: number) {
 		return pre + num.toString().padStart(len, '0');
 	}
-	protected async generate(path: string, prefix: string, postfix: string, len: number) {
+	protected async generate(path: string, prefix: string, len: number) {
 		const files = await this.readdir(path);
-		const reg = new RegExp(`^${prefix}\\d{${len}}${postfix}$`);
+		const reg = new RegExp(`^${prefix}\\d*(\\.\\w+)?$`);
 		const l = prefix.length;
 		const as = files.filter((f) => {
 			return reg.test(f);
@@ -260,8 +260,7 @@ export default abstract class Tools {
 			as.push(0);
 		}
 		const num = Math.max(...as) + 1;
-		const new_file = prefix + num.toString().padStart(len, '0');
-		return join(path, new_file);
+		return prefix + num.toString().padStart(len, '0');
 	}
 	protected async replace(path: string, flag: string, str: string) {
 		const content = await this.readfile(path);

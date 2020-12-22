@@ -15,7 +15,8 @@ export default class AddActionDesktopPage extends Actor {
 		if (r === null) {
 			window.showErrorMessage('警示');
 		} else {
-			const p_path = await this.generate(dir, 'a', '\\.ts', 3);
+			const name = await this.generate(dir, 'a', 3);
+			const p_path = join(dir, name);
 			await this.create_a(p_path);
 			await this.update_b(dir);
 			this.set_status_bar_message('成功');

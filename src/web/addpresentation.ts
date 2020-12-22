@@ -1,4 +1,4 @@
-import { basename, dirname } from 'path';
+import { dirname, join } from 'path';
 import { TextEditor, Uri, window } from 'vscode';
 import Actor from '../actor';
 
@@ -16,8 +16,8 @@ export default class AddPresentationWeb extends Actor {
 			window.showErrorMessage('请在组件中进行该操作!');
 		} else {
 			const doc = editor.document;
-			const p_path = await this.generate(folder, 'p', '\\.tpl', 2);
-			const no = basename(p_path);
+			const no = await this.generate(folder, 'p', 2);
+			const p_path = join(folder, no);
 			const content = doc.getText(editor.selection);
 
 			const tpl = Uri.file(`${p_path}.tpl`);

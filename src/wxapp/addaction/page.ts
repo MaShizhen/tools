@@ -63,8 +63,8 @@ export default class AddActionWeixinPage extends Actor {
 	}
 
 	private async create_a(p_path: string) {
-		const path = await this.generate(p_path, 'a', '\\.ts', 3);
-		const a = basename(path);
+		const a = await this.generate(p_path, 'a', 3);
+		const path = join(p_path, a);
 		const tpl = `import awx2 from '@mmstudio/awx000002';
 
 export default function ${a}(mm: awx2) {

@@ -16,8 +16,8 @@ export default class AddComponentWeb extends Actor {
 			const folder = dirname(uri.path);
 			const content = doc.getText(editor.selection);
 
-			const component_dir = await this.generate(folder, 'zj-', '', 3);
-			const no = component_dir.replace(/.*(zj-\d*)/, '$1');
+			const no = await this.generate(folder, 'zj-', 3);
+			const component_dir = join(folder, no);
 
 			await this.create_tpl(component_dir, content);
 			await this.create_tplts(component_dir, content);
