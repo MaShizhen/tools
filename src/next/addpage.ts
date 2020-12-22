@@ -74,7 +74,7 @@ export default class AddPageNext extends Actor {
 			return null;
 		}
 
-		const file = join(dir, `[...${slug}].tsx`);
+		const file = join(path, `[...${slug}].tsx`);
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import anylogger from 'anylogger';
 
@@ -128,7 +128,7 @@ export default ${name};
 			return null;
 		}
 
-		const file = join(dir, `[${query}].tsx`);
+		const file = join(path, `[${query}].tsx`);
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
 import anylogger from 'anylogger';
 
