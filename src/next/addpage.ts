@@ -75,7 +75,7 @@ export default class AddPageNext extends Actor {
 		}
 
 		const file = join(path, `[...${slug}].tsx`);
-		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
 
 const logger = anylogger('${name}');
@@ -110,6 +110,8 @@ export const getStaticPaths: GetStaticPaths<{ ${slug}: string[]; }> = async () =
 	};
 };
 
+export const config = {} as PageConfig;
+
 export default ${name};
 `;
 		await this.writefile(file, tpl);
@@ -129,7 +131,7 @@ export default ${name};
 		}
 
 		const file = join(path, `[${query}].tsx`);
-		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage } from 'next';
+		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
 
 const logger = anylogger('${name}');
@@ -164,6 +166,8 @@ export const getStaticPaths: GetStaticPaths<{ ${query}: string; }> = async () =>
 	};
 };
 
+export const config = {} as PageConfig;
+
 export default ${name};
 `;
 		await this.writefile(file, tpl);
@@ -172,7 +176,7 @@ export default ${name};
 
 	private async createpageserverside(dir: string, name: string) {
 		const path = join(dir, `${name}.tsx`);
-		const tpl = `import { NextPage } from 'next';
+		const tpl = `import { NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
 
 const logger = anylogger('${name}');
@@ -193,6 +197,8 @@ ${name}.getInitialProps = async (context) => {
 	};
 };
 
+export const config = {} as PageConfig;
+
 export default ${name};
 `;
 		await this.writefile(path, tpl);
@@ -200,7 +206,7 @@ export default ${name};
 	}
 	private async createpageclientside(dir: string, name: string) {
 		const path = join(dir, `${name}.tsx`);
-		const tpl = `import { GetServerSideProps, NextPage } from 'next';
+		const tpl = `import { GetServerSideProps, NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
 
 const logger = anylogger('${name}');
@@ -221,6 +227,8 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
 		props: {}
 	});
 };
+
+export const config = {} as PageConfig;
 
 export default ${name};
 `;
