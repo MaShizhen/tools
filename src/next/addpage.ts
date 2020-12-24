@@ -75,10 +75,11 @@ export default class AddPageNext extends Actor {
 		}
 
 		const file = join(path, `[...${slug}].tsx`);
+		const relativepath = this.getrelativepath('src', file);
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
 
-const logger = anylogger('${name}');
+const logger = anylogger('${relativepath}');
 
 interface IProps {
 }
@@ -135,10 +136,11 @@ export default ${name};
 		}
 
 		const file = join(path, `[${query}].tsx`);
+		const relativepath = this.getrelativepath('src', file);
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
 
-const logger = anylogger('${name}');
+const logger = anylogger('${relativepath}');
 
 interface IProps {
 }
@@ -182,10 +184,11 @@ export default ${name};
 
 	private async createpageserverside(dir: string, name: string) {
 		const path = join(dir, `${name}.tsx`);
+		const relativepath = this.getrelativepath('src', path);
 		const tpl = `import { NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
 
-const logger = anylogger('${name}');
+const logger = anylogger('${relativepath}');
 
 interface IProps {
 }
@@ -214,10 +217,11 @@ export default ${name};
 	}
 	private async createpageclientside(dir: string, name: string) {
 		const path = join(dir, `${name}.tsx`);
+		const relativepath = this.getrelativepath('src', path);
 		const tpl = `import { GetServerSideProps, NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
 
-const logger = anylogger('${name}');
+const logger = anylogger('${relativepath}');
 
 interface IProps {
 }

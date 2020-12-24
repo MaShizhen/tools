@@ -26,13 +26,13 @@ export default class AddServiceNext extends Actor {
 	}
 
 	private create_api(path: string) {
-		const no = basename(path, '.ts');
+		const relativepath = this.getrelativepath('src', path);
 		const tpl = `import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse, PageConfig } from 'next';
 import anylogger from 'anylogger';
 import '@mmstudio/an000042';
 
-const logger = anylogger('${no}');
+const logger = anylogger('${relativepath}');
 
 const handler = nextConnect<NextApiRequest, NextApiResponse<{ ok: boolean; message: string; }>>();
 

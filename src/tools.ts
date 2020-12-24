@@ -1,5 +1,5 @@
 import { promises as fs, statSync } from 'fs';
-import { dirname, join } from 'path';
+import { dirname, isAbsolute, join, relative } from 'path';
 import { exec as node_exec } from 'child_process';
 import { homedir, platform } from 'os';
 import { Stream } from 'stream';
@@ -240,6 +240,16 @@ export default abstract class Tools {
 	}
 	protected show_doc(path: string) {
 		return window.showTextDocument(Uri.file(path));
+	}
+	protected getrelativepath(from: string, to: string) {
+		const root = this.root();
+		if (!isAbsolute(from)) {
+			from = join(root, from);
+		}
+		if (!isAbsolute(to)) {
+			to = join(root, to);
+		}
+		return relative(from, to);
 	}
 	//#endregion
 
