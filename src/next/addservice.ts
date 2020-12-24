@@ -1,4 +1,4 @@
-import { basename, dirname, join } from 'path';
+import { dirname, join } from 'path';
 import { window, workspace } from 'vscode';
 import { get_pages } from './get-pages';
 import Actor from '../actor';
