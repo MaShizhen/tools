@@ -443,7 +443,7 @@ export default class MM extends Tools {
 		if (this.existssync(join(srcpages, '_app.tsx'))) {
 			return PrjType.next;
 		}
-		if (this.existssync(join(srcpages, 'app.config.ts'))) {
+		if (this.existssync(join(src, 'app.config.ts'))) {
 			return PrjType.taro;
 		}
 		return null;
