@@ -68,7 +68,7 @@ export default class AddPageTaro extends Actor {
 import { View, Text } from '@tarojs/components'
 import { } from 'taro-ui'
 
-// import "taro-ui/dist/style/components/button.scss" // 按需引入
+// import 'taro-ui/dist/style/components/button.scss' // 按需引入
 import './${name}.scss'
 
 export default function ${name}() {
