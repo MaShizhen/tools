@@ -64,12 +64,12 @@ export default class AddPageTaro extends Actor {
 
 	private async createts(dir: string, name: string) {
 		const file = join(dir, `${name}.tsx`);
-		const tpl = `import React from 'react'
-import { View, Text } from '@tarojs/components'
-import { } from 'taro-ui'
+		const tpl = `import React from 'react';
+import { View, Text } from '@tarojs/components';
+import { } from 'taro-ui';
 
-// import 'taro-ui/dist/style/components/button.scss' // 按需引入
-import './${name}.scss'
+// import 'taro-ui/dist/style/components/button.scss'; // 按需引入
+import './${name}.scss';
 
 export default function ${name}() {
 	return (
