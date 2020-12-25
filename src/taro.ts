@@ -45,8 +45,8 @@ export default class Taro extends Base {
 	public addservice(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	public addaction(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
+	public addaction(editor: TextEditor): Promise<void> {
+		return this.baseaddaction(editor);
 	}
 	public addpresentation(_editor: TextEditor): Promise<void> {
 		throw new Error('Method not implemented.');

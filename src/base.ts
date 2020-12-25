@@ -1,4 +1,4 @@
-import { basename, dirname, join, relative, sep } from 'path';
+import { dirname, join, relative, sep } from 'path';
 import { Disposable, FileType, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
@@ -321,7 +321,7 @@ export default async function ${no}(msg: Message, actionid: string): Promise<an4
 		const uri = editor.document.uri;
 		const folder = dirname(uri.fsPath);
 		const a = await this.generate(folder, 'a', 3);
-		const p_path = basename(folder, `${a}.ts`);
+		const p_path = join(folder, `${a}.ts`);
 		const tpl = `
 export default function ${a}() {
 	// todo
