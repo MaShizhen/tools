@@ -55,7 +55,7 @@ export default class AddPageTaro extends Actor {
 	private async createconfig(dir: string, name: string) {
 		const file = join(dir, `${name}.config.ts`);
 		const tpl = `export default {
-  navigationBarTitleText: '首页'
+	// navigationBarTitleText: ''
 }
 `;
 		await this.writefile(file, tpl);
