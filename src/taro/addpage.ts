@@ -57,6 +57,7 @@ export default class AddPageTaro extends Actor {
 		const tpl = `import { PageConfig } from '@tarojs/taro';
 
 export default {
+	navigationBarTitleText: 'mmstudio'
 } as PageConfig;
 `;
 		await this.writefile(file, tpl);
