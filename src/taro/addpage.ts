@@ -54,9 +54,10 @@ export default class AddPageTaro extends Actor {
 
 	private async createconfig(dir: string, name: string) {
 		const file = join(dir, `${name}.config.ts`);
-		const tpl = `export default {
-	// navigationBarTitleText: ''
-}
+		const tpl = `import { PageConfig } from '@tarojs/taro';
+
+export default {
+} as PageConfig;
 `;
 		await this.writefile(file, tpl);
 		return file;
@@ -64,11 +65,10 @@ export default class AddPageTaro extends Actor {
 
 	private async createts(dir: string, name: string) {
 		const file = join(dir, `${name}.tsx`);
-		const tpl = `import React from 'react';
+		const tpl = `import React, { useState, useEffect } from 'react';
 import { View, Text } from '@tarojs/components';
+import { } from '@tarojs/taro';
 import { } from 'taro-ui';
-
-// import 'taro-ui/dist/style/components/button.scss'; // 按需引入
 import './${name}.scss';
 
 export default function ${name}() {
