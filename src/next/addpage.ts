@@ -111,11 +111,9 @@ export const getStaticPaths: GetStaticPaths<{ ${slug}: string[]; }> = async () =
 	};
 };
 
-export const config = {
+export const config: PageConfig = {
 	amp: true
-} as PageConfig;
-	amp: true
-} as PageConfig;
+};
 
 export default ${name};
 `;
@@ -172,9 +170,9 @@ export const getStaticPaths: GetStaticPaths<{ ${query}: string; }> = async () =>
 	};
 };
 
-export const config = {
+export const config: PageConfig = {
 	amp: true
-} as PageConfig;
+};
 
 export default ${name};
 `;
@@ -206,9 +204,9 @@ ${name}.getInitialProps = async (context) => {
 	};
 };
 
-export const config = {
+export const config: PageConfig = {
 	amp: true
-} as PageConfig;
+};
 
 export default ${name};
 `;
@@ -240,9 +238,9 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
 	});
 };
 
-export const config = {
+export const config: PageConfig = {
 	amp: true
-} as PageConfig;
+};
 
 export default ${name};
 `;
