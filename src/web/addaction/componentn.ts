@@ -17,7 +17,7 @@ export default class AddActionWebComponentN extends AddActionWebBase {
 		} else {
 			const a = await this.create_a(folder);
 			await this.update_n(folder);
-			this.show_doc(a);
+			await this.show_doc(a);
 		}
 	}
 	protected update_b(_path: string): Promise<void> {

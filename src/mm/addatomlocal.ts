@@ -52,7 +52,7 @@ export default class AddAtomLocal extends Actor {
 		// if (p1.type === 'web/h5') {
 		// 	await writefileasync(join(atom_dir, 'amd.json'), '[]');
 		// }
-		window.showInformationMessage('原子操作模板已生成');
-		this.show_doc(ts);
+		void window.showInformationMessage('原子操作模板已生成');
+		await this.show_doc(ts);
 	}
 }

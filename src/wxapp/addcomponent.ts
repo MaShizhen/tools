@@ -28,7 +28,7 @@ export default class AddComponentWeixin extends Actor {
 		// updata_app_debug_json(folder, name);
 
 		this.set_status_bar_message('成功添加页面文件');
-		this.show_doc(join(p_path, 'p.ts'));
+		await this.show_doc(join(p_path, 'p.ts'));
 	}
 
 	private create_a(dir: string) {

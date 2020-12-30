@@ -16,7 +16,7 @@ export default class AddPageTaro extends Actor {
 		await this.updateappconfig(root, name);
 		await workspace.saveAll();
 		this.set_status_bar_message('成功添加页面文件');
-		this.show_doc(path);
+		await this.show_doc(path);
 	}
 
 	private async updateappconfig(root: string, name: string) {
@@ -24,7 +24,7 @@ export default class AddPageTaro extends Actor {
 		const content = await this.readfile(configfile);
 		const regarr = /pages:\s*\[([\s\S]*?)\]/.exec(content);
 		if (!regarr) {
-			window.showErrorMessage('Coult not get pages in src/app.config.ts');
+			await window.showErrorMessage('Coult not get pages in src/app.config.ts');
 			return;
 		}
 		const [, pagestext] = regarr;

@@ -18,7 +18,7 @@ export default class AddActionMobile extends Actor {
 		const folder = dirname(path);
 		const p_path = await this.create_a(folder);
 		await this.update_p(folder);
-		this.show_doc(p_path);
+		await this.show_doc(p_path);
 	}
 	protected async update_p(path: string) {
 		let file_name = join(path, 'p.ts');

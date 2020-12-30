@@ -112,7 +112,7 @@ export default class AddTplWidgetMobile extends Actor {
 		const name = atom.no.replace(/(.+\/)?/, '').toUpperCase();
 		const imp = `import ${name} from '${atom.no}';`;
 		if (!await this.exists(snippet_use)) {
-			window.showErrorMessage('无法自动添加脚本，请联系供应商');
+			await window.showErrorMessage('无法自动添加脚本，请联系供应商');
 			return;
 		}
 		const use = await this.readfile(snippet_use);

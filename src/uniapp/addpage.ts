@@ -43,7 +43,7 @@ export default class AddPageUniapp extends Actor {
 		await this.writefile(pagesjson, JSON.stringify(pagesconfig, undefined, '\t'));
 		await workspace.saveAll();
 		this.set_status_bar_message('成功添加页面文件');
-		this.show_doc(vue);
+		await this.show_doc(vue);
 	}
 
 	private create_page(path: string) {

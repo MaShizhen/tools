@@ -19,7 +19,7 @@ export default class AddWidgetLocalWeb extends Actor {
 		const usecontent = this.tpl.widgetusage(no, true);
 		await this.writefile(join(atom_dir, 'use.snippet'), usecontent);
 		await this.writefile(join(atom_dir, 'amd.json'), '[]');
-		window.showInformationMessage('控件模板已生成');
-		this.show_doc(ts);
+		void window.showInformationMessage('控件模板已生成');
+		await this.show_doc(ts);
 	}
 }

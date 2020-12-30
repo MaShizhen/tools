@@ -170,7 +170,7 @@ export default class MM extends Tools {
 			});
 			conf.jobs = jobs;
 			await this.writefile(config_path, JSON.stringify(conf, null, '\t'));
-			await this.show_doc(config_path);
+			await await this.show_doc(config_path);
 		});
 	}
 	public addtplwidget() {
@@ -205,7 +205,7 @@ export default class MM extends Tools {
 	}
 	public shellcreate() {
 		return commands.registerCommand('mm.shell.create', async () => {
-			window.showInformationMessage('进行此操作之前,请确保git已安装并配置好权限,且有一个可用的没有任何提交的git仓库');
+			void window.showInformationMessage('进行此操作之前,请确保git已安装并配置好权限,且有一个可用的没有任何提交的git仓库');
 			const picked = await this.pick([
 				{
 					description: '1.next.js',
@@ -308,7 +308,7 @@ export default class MM extends Tools {
 				await this.shellexec(`git remote add origin ${remote}`, cwd);
 				await this.shellexec('git push -u origin main', cwd);
 			}
-			window.showInformationMessage('项目初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
+			void window.showInformationMessage('项目初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
 			await this.shellexec('yarn', cwd);
 			await commands.executeCommand('vscode.openFolder', uri);
 		});

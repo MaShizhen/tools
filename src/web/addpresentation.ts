@@ -13,7 +13,7 @@ export default class AddPresentationWeb extends Actor {
 		// 如果当前目录不在某个页面中，则不允许操作
 		const r = this.reg_in_comment(folder);
 		if (r === null) {
-			window.showErrorMessage('请在组件中进行该操作!');
+			await window.showErrorMessage('请在组件中进行该操作!');
 		} else {
 			const doc = editor.document;
 			const no = await this.generate(folder, 'p', 2);

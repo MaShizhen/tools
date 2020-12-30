@@ -21,7 +21,7 @@ export default class AddWidgetLocalWx extends Actor {
 		await this.writefile(join(atom_dir, 'index.json'), '{}');
 		await this.writefile(join(atom_dir, 'index.wxml'), '');
 		await this.writefile(join(atom_dir, 'index.wxss'), '');
-		window.showInformationMessage('控件模板已生成');
-		this.show_doc(ts);
+		void window.showInformationMessage('控件模板已生成');
+		await this.show_doc(ts);
 	}
 }

@@ -36,7 +36,7 @@ export default class AddComponentWeb extends Actor {
 			await this.update_n(folder, cs);
 			await this.update_b(folder, cs);
 			window.setStatusBarMessage('创建成功');
-			window.showTextDocument(Uri.file(join(component_dir, 'tpl.tpl')));
+			await window.showTextDocument(Uri.file(join(component_dir, 'tpl.tpl')));
 		} catch (error) {
 			console.trace(error);
 		}

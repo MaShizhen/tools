@@ -44,7 +44,7 @@ export default class AddAtomWx extends Actor {
 		} catch (e) {
 			// 目录不存在
 		}
-		window.showInformationMessage('正在初始化项目，请耐心等待');
+		void window.showInformationMessage('正在初始化项目，请耐心等待');
 		// 创建目录
 		await workspace.fs.createDirectory(uri);
 		// 进入目录并且拉取代码
@@ -68,7 +68,7 @@ export default class AddAtomWx extends Actor {
 		await this.shellexec(`git remote add origin ${remote}`, cwd);
 		await this.shellexec('git branch -M main', cwd);
 		await this.shellexec('git push -u origin main', cwd);
-		window.showInformationMessage('原子操作初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
+		void window.showInformationMessage('原子操作初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
 		await this.shellexec('yarn', cwd);
 		await commands.executeCommand('vscode.openFolder', uri);
 	}

@@ -20,7 +20,7 @@ export default class AddActionWebPageN extends AddActionWebBase {
 			const a = await this.create_a(p_path);
 			await this.update_b(folder);
 			this.set_status_bar_message('成功');
-			this.show_doc(a);
+			await this.show_doc(a);
 		}
 	}
 

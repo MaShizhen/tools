@@ -20,7 +20,7 @@ export default class AddActionDesktopPage extends Actor {
 			await this.create_a(p_path);
 			await this.update_b(dir);
 			this.set_status_bar_message('成功');
-			this.show_doc(`${p_path}.ts`);
+			await this.show_doc(`${p_path}.ts`);
 		}
 	}
 

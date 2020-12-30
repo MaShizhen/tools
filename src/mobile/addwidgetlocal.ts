@@ -18,7 +18,7 @@ export default class AddWidgetLocalMobile extends Actor {
 		await this.writefile(ts, tscontent);
 		const usecontent = this.tpl.widgetusage(no);
 		await this.writefile(join(atom_dir, 'use.snippet'), usecontent);
-		window.showInformationMessage('控件模板已生成');
-		this.show_doc(ts);
+		void window.showInformationMessage('控件模板已生成');
+		await this.show_doc(ts);
 	}
 }

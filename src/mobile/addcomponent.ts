@@ -16,7 +16,7 @@ export default class AddComponentMobile extends Actor {
 		}
 		// 1. 查看是否存在app/app.js
 		if (await this.isapp(src)) {
-			window.showInformationMessage('该操作会在当前打开的页面中添加子页面');
+			void window.showInformationMessage('该操作会在当前打开的页面中添加子页面');
 			// 2. 当前是否位于app下
 			const editor = window.activeTextEditor;
 			if (!editor) {

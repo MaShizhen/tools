@@ -19,7 +19,7 @@ export default class AddActionWebComponent extends AddActionWebBase {
 			const p_path = join(folder, no);
 			const a = await this.create_a(p_path);
 			await this.update_b(folder);
-			this.show_doc(a);
+			await this.show_doc(a);
 		}
 	}
 	protected async update_b(path: string): Promise<void> {

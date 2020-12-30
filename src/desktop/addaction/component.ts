@@ -20,7 +20,7 @@ export default class AddActionDesktopcomponent extends Actor {
 			const p_path = join(dir, name);
 			await this.create_a(p_path);
 			await this.update_b(dir);
-			this.show_doc(`${p_path}.ts`);
+			await this.show_doc(`${p_path}.ts`);
 		}
 	}
 

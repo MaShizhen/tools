@@ -59,7 +59,7 @@ export default class AddPageNext extends Actor {
 		}
 		await workspace.saveAll();
 		this.set_status_bar_message('成功添加页面文件');
-		this.show_doc(path);
+		await this.show_doc(path);
 	}
 
 	private async createpagessrslug(dir: string, name: string) {

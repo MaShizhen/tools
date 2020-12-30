@@ -15,7 +15,7 @@ export default class AddComponentDesktop extends Actor {
 			// 如果当前目录不在某个页面中，则不允许操作
 			const r = /[/\\](src[/\\]\w[\w\d-]*)[/\\]?/.exec(path);
 			if (r === null) {
-				window.showErrorMessage('您必须在某个页面文件夹下进行该操作！');
+				await window.showErrorMessage('您必须在某个页面文件夹下进行该操作！');
 			} else {
 				const name = await this.generate(folder, 'zj-', 3);
 				const c = join(folder, name);
@@ -32,7 +32,7 @@ export default class AddComponentDesktop extends Actor {
 				await this.update_n(folder, cs);
 				await this.update_b(folder, cs);
 				this.set_status_bar_message('创建成功');
-				this.show_doc(join(c, 'b.ts'));
+				await this.show_doc(join(c, 'b.ts'));
 			}
 		} catch (error) {
 			console.trace(error);

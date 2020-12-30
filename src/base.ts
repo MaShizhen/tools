@@ -227,7 +227,7 @@ export default abstract class Base extends Tools {
 		});
 		conf[name] = routers;
 		await this.writefile(config_path, JSON.stringify(conf, null, '\t'));
-		await this.show_doc(config_path);
+		await await this.show_doc(config_path);
 	}
 	private async get_all_service(editor?: TextEditor) {
 		const root_dir = this.root(editor);
@@ -281,7 +281,7 @@ export default abstract class Base extends Tools {
 		const name = await this.generate(folder, 's', 3);
 		const p_path = await this.create_s(folder, name);
 		await workspace.saveAll();
-		this.show_doc(p_path);
+		await this.show_doc(p_path);
 	}
 	private async create_s(folder: string, no: string) {
 		const path = join(folder, `${no}.ts`);

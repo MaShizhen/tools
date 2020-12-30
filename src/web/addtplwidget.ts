@@ -113,7 +113,7 @@ export default class AddTplWidgetWeb extends Actor {
 		try {
 			await workspace.fs.stat(snippet_use);
 		} catch (error) {
-			window.showErrorMessage('无法自动添加脚本，请联系供应商');
+			await window.showErrorMessage('无法自动添加脚本，请联系供应商');
 			return;
 		}
 		const folder = dirname(editor.document.fileName);

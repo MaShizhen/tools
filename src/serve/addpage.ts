@@ -20,7 +20,7 @@ export default class AddPageServe extends Actor {
 		await this.create_s(s_path, s_path.replace(/.*src[/|\\]/, ''));
 
 		await workspace.saveAll();
-		this.show_doc(join(p_path, 's001.ts'));
+		await this.show_doc(join(p_path, 's001.ts'));
 	}
 
 	private create_s(path: string, dir: string) {

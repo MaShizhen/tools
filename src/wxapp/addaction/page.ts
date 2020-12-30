@@ -20,7 +20,7 @@ export default class AddActionWeixinPage extends Actor {
 		} else {
 			const p_path = await this.create_a(dir);
 			await this.update_p(dir);
-			this.show_doc(p_path);
+			await this.show_doc(p_path);
 		}
 	}
 	private async update_p(path: string) {

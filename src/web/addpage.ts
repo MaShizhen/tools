@@ -7,7 +7,7 @@ export default class AddPageWeb extends Actor {
 	public async do(): Promise<void> {
 		const rootPath = this.root();
 		if (!await this.exists(join(rootPath, 'pages'))) {
-			window.showErrorMessage('缺少pages文件夹');
+			await window.showErrorMessage('缺少pages文件夹');
 			return;
 		}
 		const src = join(rootPath, 'src');
@@ -60,7 +60,7 @@ export default class AddPageWeb extends Actor {
 		await this.create_b(p_path);
 		await workspace.saveAll();
 		this.set_status_bar_message('成功添加页面文件');
-		this.show_doc(join(p_path, 'html.ts'));
+		await this.show_doc(join(p_path, 'html.ts'));
 	}
 
 	private create_b(path: string) {

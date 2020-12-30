@@ -66,7 +66,7 @@ export default class AddWidgetWx extends Actor {
 		await this.shellexec(`git remote add origin ${remote}`, cwd);
 		await this.shellexec('git branch -M main', cwd);
 		await this.shellexec('git push -u origin main', cwd);
-		window.showInformationMessage('控件初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
+		void window.showInformationMessage('控件初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
 		await this.shellexec('yarn', cwd);
 		await commands.executeCommand('vscode.openFolder', uri);
 	}
