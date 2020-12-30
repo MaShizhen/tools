@@ -301,10 +301,10 @@ export default abstract class Tools {
 		}
 		const dir = wf.uri.fsPath;
 		// !!! we should not use async operation here
-		if (!this.existssync(join(dir, 'package.json'))) {
-			window.showErrorMessage('错误的目录');
-			throw new Error('错误的目录');
-		}
+		// if (!this.existssync(join(dir, 'package.json'))) {
+		// 	window.showErrorMessage('错误的目录');
+		// 	throw new Error('错误的目录');
+		// }
 		return dir;
 	}
 	//#endregion
