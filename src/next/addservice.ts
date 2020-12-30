@@ -1,32 +1,60 @@
-import { dirname, join } from 'path';
-import { window, workspace } from 'vscode';
+import { basename, dirname, extname, join } from 'path';
+import { Position, window, workspace, WorkspaceEdit } from 'vscode';
 import { get_pages } from './get-pages';
 import Actor from '../actor';
 
 export default class AddServiceNext extends Actor {
 	public async do(): Promise<void> {
-		const rootPath = this.root();
-		const pages = await get_pages(rootPath);
-
-		const api = (() => {
-			const editor = window.activeTextEditor;
-			if (!editor) {
-				return join(pages, 'api');
-			}
-			return dirname(editor.document.fileName);
-		})();
+		// get api path
+		const { api, page } = await this.getapipath();
 
 		const name = await this.generate(api, 's', 3);
 		// create service file
 		const servicefile = join(api, `${name}.ts`);
-		await this.create_api(servicefile);
+		await this.create_api(servicefile, name);
+		if (page) {
+			// update page file
+			await this.updatepage(page, servicefile);
+		}
 		await workspace.saveAll();
 		this.set_status_bar_message('成功添加服务文件');
 		this.show_doc(servicefile);
 	}
 
-	private create_api(path: string) {
+	private async updatepage(pagefile: string, servicefile: string) {
+		// api/xxx/yyy/s001
+		const pathwithoutext = servicefile.replace(/\..*/, '');
+		const no = pathwithoutext.replace(/.*s(\d+)/, '$1');
+		const relativepath = this.getrelativepath(join(pagefile, '..'), pathwithoutext);
+		const imppath = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
+		const imp = `import { r${no} } from '${imppath}';`;
+		const doc = await workspace.openTextDocument(pagefile);
+		const max = doc.lineCount;
+		let hasimport = false;
+		let pos = -1;
+		for (let i = 0; i < max; i++) {
+			const line = doc.lineAt(i);
+			const text = line.text;
+			if (/^import\s+.+/.test(text)) {
+				if (text === imp) {
+					hasimport = true;
+					break;
+				}
+				pos = i;
+			}
+		}
+		if (!hasimport) {
+			const we = new WorkspaceEdit();
+			const uri = doc.uri;
+			const imppos = new Position(pos + 1, 0);
+			we.insert(uri, imppos, `${imp}\n`);
+			await workspace.applyEdit(we);
+		}
+	}
+
+	private create_api(path: string, name: string) {
 		const relativepath = this.getrelativepath('src', path);
+		const rname = name.replace('s', 'r');
 		const tpl = `import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse, PageConfig } from 'next';
 import anylogger from 'anylogger';
@@ -34,10 +62,17 @@ import '@mmstudio/an000042';
 
 const logger = anylogger('${relativepath}');
 
-const handler = nextConnect<NextApiRequest, NextApiResponse<{ ok: boolean; message: string; }>>();
+export type ${rname} = {
+	ok: true;
+} | {
+	ok: false;
+	message: string;
+};
+
+const handler = nextConnect<NextApiRequest, NextApiResponse<${rname}>>();
 
 handler.get((req, res) => {
-	res.status(200).json({ ok: true, message: 'ok' });
+	res.status(200).json({ ok: true });
 });
 
 export const config = {} as PageConfig;
@@ -45,5 +80,59 @@ export const config = {} as PageConfig;
 export default handler;
 `;
 		return this.writefile(path, tpl);
+	}
+
+	private async getapipath() {
+		const rootPath = this.root();
+		const editor = window.activeTextEditor;
+		if (!editor) {
+			// 当前未打开任何文件
+			const pages = await get_pages(rootPath);
+			const api = join(pages, 'api');
+			return { api, page: null };
+		}
+		const curdir = dirname(editor.document.fileName);
+		if (curdir.includes('api')) {
+			// 当前打开文件在api中，这属于新增服务的情况
+			return { api: curdir, page: null };
+		}
+		if (!/.+[/\\]pages([/\\].+)?$/.test(curdir)) {
+			// 当前打开文件不在pages中，这种情况下也不能在当前文件位置新增服务
+			const pages = await get_pages(rootPath);
+			const api = join(pages, 'api');
+			return { api, page: null };
+		}
+		const curfile = editor.document.fileName;
+		const curname = basename(curfile);
+		const pages = await get_pages(rootPath);
+		const api = join(pages, 'api');
+		if (/^\[.+\]\.[tj]sx?$/.test(curname)) {
+			// absolutedir/src/pages/xxx/[yyy].tsx
+			// absolutedir/src/pages/xxx
+			// xxx
+			const relativepath = curdir.replace(/.*pages[/\\]/, '');
+			// 当前打开了页面文件,含匹配路由的情况, page名称为上级目录名称,而不是当前文件名
+			if (!relativepath) {
+				// absolutedir/src/pages/[xxx].tsx
+				return { api: api, page: curfile };
+			}
+			// api/xxx
+			const apipath = join(api, relativepath);
+			await this.mkdir(apipath);
+			// absolutedir/src/pages/pgxxx/[xxx].tsx
+			return { api: apipath, page: curfile };
+		}
+		// 当前打开了页面文件,不含匹配路由的情况
+		// absolutedir/src/pages/xxx/yyy.tsx
+		const ext = extname(curfile);
+		// absolutedir/src/pages/xxx/yyy
+		const pgpath = basename(curfile, ext);
+		// xxx/yyy
+		const relativepath = pgpath.replace(/.*pages[/\\]/, '');
+		// api/xxx/yyy
+		const apipath = join(api, relativepath);
+		await this.mkdir(apipath);
+		// absolutedir/src/pages/pgxxx/[xxx].tsx
+		return { api: apipath, page: curfile };
 	}
 }
