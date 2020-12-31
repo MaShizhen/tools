@@ -46,9 +46,6 @@ export default class Next extends Base {
 	public addwebrouter(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	public addpresentation(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
 	public addservice(): Promise<void> {
 		return new AddServiceNext().do();
 	}

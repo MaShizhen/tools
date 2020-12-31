@@ -232,13 +232,6 @@ export default class MM extends Tools {
 			return this.refreshexplorer();
 		});
 	}
-	public addpresentation() {
-		return commands.registerTextEditorCommand('mm.presentation.add', async (editor) => {
-			const tool = this.getinstance();
-			await tool.addpresentation(editor);
-			return this.refreshexplorer();
-		});
-	}
 	public addservice() {
 		return commands.registerCommand('mm.service.add', async () => {
 			const tool = this.getinstance();

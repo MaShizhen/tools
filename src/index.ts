@@ -8,7 +8,6 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.addcomponent(),
 		mm.addpage(),
 		mm.addservice(),
-		mm.addpresentation(),
 		mm.addwebrouter(),
 		mm.addwebfilter(),
 		mm.completion(),

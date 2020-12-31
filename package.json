@@ -46,11 +46,6 @@
 				"title": "%mm.action.add%"
 			},
 			{
-				"command": "mm.presentation.add",
-				"category": "mmstudio",
-				"title": "%mm.presentation.add%"
-			},
-			{
 				"command": "mm.service.add",
 				"category": "mmstudio",
 				"title": "%mm.service.add%"
@@ -130,11 +125,6 @@
 				{
 					"command": "mm.action.add",
 					"when": "editorIsOpen",
-					"group": "mmstudio"
-				},
-				{
-					"command": "mm.presentation.add",
-					"when": "resourceFilename == tpl.tpl || resourceFilename =~ /p\\d+\\.tpl/",
 					"group": "mmstudio"
 				},
 				{
@@ -224,11 +214,6 @@
 					"group": "mmstudio"
 				},
 				{
-					"command": "mm.presentation.add",
-					"when": "resourceFilename == tpl.tpl || resourceFilename =~ /p\\d+\\.tpl/",
-					"group": "mmstudio"
-				},
-				{
 					"command": "mm.tpl.atom",
 					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/ || resourceFilename == index.ts",
 					"group": "mmstudio"
@@ -295,11 +280,6 @@
 			{
 				"command": "mm.service.router",
 				"key": "alt+r"
-			},
-			{
-				"command": "mm.presentation.add",
-				"when": "resourceFilename == tpl.tpl || resourceFilename =~ /p\\d+\\.tpl/",
-				"key": "alt+x"
 			},
 			{
 				"command": "mm.tpl.atom",

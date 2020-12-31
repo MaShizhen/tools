@@ -163,7 +163,6 @@ export default abstract class Base extends Tools {
 	public abstract addcomponent(editor: TextEditor): Promise<void>;
 	public abstract addservice(): Promise<void>;
 	public abstract addaction(editor: TextEditor): Promise<void>;
-	public abstract addpresentation(editor: TextEditor): Promise<void>;
 
 	public abstract addwebfilter(): Promise<void>;
 	public abstract addwebrouter(): Promise<void>;

@@ -1,7 +1,6 @@
 {
 	"mm.proj.type": "Type of your project.",
 	"mm.page.add": "Add new page",
-	"mm.presentation.add": "Add new presentation",
 	"mm.action.add": "Add action",
 	"mm.component.add": "Add component",
 	"mm.service.add": "Add service",
