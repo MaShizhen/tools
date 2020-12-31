@@ -1,4 +1,4 @@
-import { dirname, join, relative, sep } from 'path';
+import { dirname, join, relative } from 'path';
 import { Disposable, FileType, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
@@ -164,9 +164,6 @@ export default abstract class Base extends Tools {
 	public abstract addservice(): Promise<void>;
 	public abstract addaction(editor: TextEditor): Promise<void>;
 
-	public abstract addwebfilter(): Promise<void>;
-	public abstract addwebrouter(): Promise<void>;
-
 	protected async replacefile(path: string, src: Array<{ [Symbol.replace](src: string, rep: string): string; }>, rep: string[]) {
 		const uri = Uri.file(path);
 		const content = Buffer.from(await workspace.fs.readFile(uri)).toString('utf8');
@@ -176,86 +173,6 @@ export default abstract class Base extends Tools {
 		if (content !== result) {
 			await workspace.fs.writeFile(uri, Buffer.from(result, 'utf-8'));
 		}
-	}
-
-	protected async baseaddwebrouter(name: 'routers' | 'filters') {
-		const rootPath = this.root();
-		const config_path = join(rootPath, 'mm.json');
-		const doc = await workspace.openTextDocument(Uri.file(config_path));
-		const raw = doc.getText();
-		const conf = JSON.parse(raw);
-		const routers = (conf[name] || []) as Array<{
-			method: 'get' | 'post' | 'all' | string;
-			service: string;
-			url: string;
-			data: {}
-		}>;
-		const service = await this.get_all_service();
-		if (!service) {
-			return;
-		}
-		const picked = await this.pick(['get', 'post', 'put', 'delete', 'all'].map((it) => {
-			return {
-				label: it
-			};
-		}));
-		if (!picked) {
-			return;
-		}
-		const url = (() => {
-			if (name === 'routers') {
-				const rs = routers.map((r) => {
-					return parseInt(r.url.replace(/[^\d]/g, ''), 10);
-				}).filter((v) => {
-					return v > 0;
-				});
-				if (rs.length === 0) {
-					rs.push(0);
-				}
-				return this.prefix('/r', Math.max(...rs) + 1, 3);
-			}
-			return '/*';
-		})();
-		routers.push({
-			data: {},
-			method: picked.label,
-			service,
-			url
-		});
-		conf[name] = routers;
-		await this.writefile(config_path, JSON.stringify(conf, null, '\t'));
-		await await this.show_doc(config_path);
-	}
-	private async get_all_service(editor?: TextEditor) {
-		const root_dir = this.root(editor);
-		const src = join(root_dir, 'src');
-		const ss = await this.get_all_s(src, src);
-		const picked = await this.pick(ss.map((it) => {
-			return {
-				label: it
-			};
-		}), '请选择服务');
-		if (!picked) {
-			return undefined;
-		}
-		return picked.label;
-	}
-	private async get_all_s(cwd: string, root: string): Promise<string[]> {
-		const files = await workspace.fs.readDirectory(Uri.file(cwd));
-		const ss = await Promise.all(files.map(async ([path, type]) => {
-			const fullpath = join(cwd, path);
-			if (type === FileType.Directory) {
-				return this.get_all_s(fullpath, root);
-			} else if (type === FileType.File) {
-				if (/^s\d{3}\.ts/.test(path)) {
-					return [fullpath.replace(`${root}${sep}`, '').replace(/\\/g, '/').replace(/\.ts/, '')];
-				}
-			}
-			return [];
-		}));
-		return ss.reduce((pre, cur) => {
-			return pre.concat(cur);
-		}, []);
 	}
 
 	protected async baseaddservice() {

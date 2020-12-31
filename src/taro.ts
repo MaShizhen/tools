@@ -45,10 +45,4 @@ export default class Taro extends Base {
 	public addaction(editor: TextEditor): Promise<void> {
 		return this.baseaddaction(editor);
 	}
-	public addwebfilter(): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public addwebrouter(): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
 }

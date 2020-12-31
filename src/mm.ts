@@ -218,20 +218,6 @@ export default class MM extends Tools {
 		const tool = this.getinstance();
 		return tool.completion();
 	}
-	public addwebfilter() {
-		return commands.registerCommand('mm.service.filter', async () => {
-			const tool = this.getinstance();
-			await tool.addwebfilter();
-			return this.refreshexplorer();
-		});
-	}
-	public addwebrouter() {
-		return commands.registerCommand('mm.service.router', async () => {
-			const tool = this.getinstance();
-			await tool.addwebrouter();
-			return this.refreshexplorer();
-		});
-	}
 	public addservice() {
 		return commands.registerCommand('mm.service.add', async () => {
 			const tool = this.getinstance();

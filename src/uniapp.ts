@@ -40,12 +40,6 @@ export default class UniApp extends Base {
 	public completion(): Disposable {
 		return Disposable.from();
 	}
-	public addwebfilter(): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
-	public addwebrouter(): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
 	public addservice(): Promise<void> {
 		return this.baseaddservice();
 	}

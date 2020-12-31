@@ -4,8 +4,6 @@
 	"mm.action.add": "添加响应",
 	"mm.component.add": "添加组件",
 	"mm.service.add": "添加服务",
-	"mm.service.router": "添加路由",
-	"mm.service.filter": "添加前置路由过滤器",
 	"mm.service.schedule": "添加定时任务",
 	"mm.tpl.atom": "插入原子操作",
 	"mm.tpl.tpl": "插入代码模板",

@@ -4,8 +4,6 @@
 	"mm.action.add": "Add action",
 	"mm.component.add": "Add component",
 	"mm.service.add": "Add service",
-	"mm.service.router": "Add router",
-	"mm.service.filter": "Add filter",
 	"mm.service.schedule": "Add schedule",
 	"mm.tpl.atom": "Insert atom",
 	"mm.tpl.tpl": "Insert code template",

@@ -51,16 +51,6 @@
 				"title": "%mm.service.add%"
 			},
 			{
-				"command": "mm.service.router",
-				"category": "mmstudio",
-				"title": "%mm.service.router%"
-			},
-			{
-				"command": "mm.service.filter",
-				"category": "mmstudio",
-				"title": "%mm.service.filter%"
-			},
-			{
 				"command": "mm.service.schedule",
 				"category": "mmstudio",
 				"title": "%mm.service.schedule%"
@@ -132,14 +122,6 @@
 					"group": "mmstudio"
 				},
 				{
-					"command": "mm.service.router",
-					"group": "mmstudio"
-				},
-				{
-					"command": "mm.service.filter",
-					"group": "mmstudio"
-				},
-				{
 					"command": "mm.service.schedule",
 					"group": "mmstudio"
 				},
@@ -199,14 +181,6 @@
 				{
 					"command": "mm.service.add",
 					"when": "editorIsOpen",
-					"group": "mmstudio"
-				},
-				{
-					"command": "mm.service.router",
-					"group": "mmstudio"
-				},
-				{
-					"command": "mm.service.filter",
 					"group": "mmstudio"
 				},
 				{
@@ -278,10 +252,6 @@
 				"key": "alt+s"
 			},
 			{
-				"command": "mm.service.router",
-				"key": "alt+r"
-			},
-			{
 				"command": "mm.tpl.atom",
 				"when": "resourceFilename =~ /\\.ts/",
 				"key": "alt+t a"
@@ -294,10 +264,6 @@
 				"command": "mm.tpl.widget",
 				"when": "resourceFilename =~ /(index|tpl|p\\d+)\\.(tsx?|tpl)/ || resourceFilename =~ /\\w*\\.wxml/",
 				"key": "alt+t w"
-			},
-			{
-				"command": "mm.service.filter",
-				"key": "alt+m f"
 			},
 			{
 				"command": "mm.service.schedule",

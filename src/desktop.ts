@@ -146,12 +146,6 @@ export default class Desktop extends Base {
 			'"'
 		);
 	}
-	public addwebfilter(): Promise<void> {
-		return this.baseaddwebrouter('filters');
-	}
-	public addwebrouter(): Promise<void> {
-		return this.baseaddwebrouter('routers');
-	}
 	public addservice(): Promise<void> {
 		return this.baseaddservice();
 	}
