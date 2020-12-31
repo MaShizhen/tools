@@ -15,8 +15,6 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.shellbuild(),
 		mm.shelldebug(),
 		mm.shellcreate(),
-		mm.showsitemap(),
-		mm.refreshsitemap(),
 		mm.addtplatom(),
 		mm.addtplwidget(),
 		mm.addschedule(),

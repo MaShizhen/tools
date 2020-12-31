@@ -25,9 +25,6 @@ export default class Next extends Base {
 		}
 		return this.remoteatoms;
 	}
-	public refreshsitemap(): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
 	public async shellcreate(cwd: string, no: string, desc: string): Promise<void> {
 		await this.downloadandextractrepo(cwd, { name: 'next' });
 		await this.replacefile(join(cwd, 'package.json'), [/p000000/, /\$desc/], [no, desc]);

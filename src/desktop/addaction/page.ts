@@ -1,5 +1,5 @@
 import { basename, dirname, join } from 'path';
-import { TextEditor, window } from 'vscode';
+import { TextEditor } from 'vscode';
 import Actor from '../../actor';
 
 export default class AddActionDesktopPage extends Actor {
@@ -13,7 +13,7 @@ export default class AddActionDesktopPage extends Actor {
 		// 如果当前目录不在某个页面中，则不允许操作
 		const r = /[/\\](src[/\\]\w[\w\d-]*)[/\\]?/.exec(dir);
 		if (r === null) {
-			window.showErrorMessage('警示');
+			this.showerror('警示');
 		} else {
 			const name = await this.generate(dir, 'a', 3);
 			const p_path = join(dir, name);

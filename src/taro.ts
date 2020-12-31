@@ -20,9 +20,6 @@ export default class Taro extends Base {
 	protected getremoteatoms(): Promise<IAtomCatagory[]> {
 		throw new Error('Method not implemented.');
 	}
-	public refreshsitemap(): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
 	public async shellcreate(cwd: string, no: string, desc: string): Promise<void> {
 		await this.downloadandextractrepo(cwd, { name: 'taro' });
 		await this.replacefile(join(cwd, 'package.json'), [/p000000/, /\$desc/], [no, desc]);

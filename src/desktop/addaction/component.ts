@@ -1,5 +1,5 @@
 import { basename, join } from 'path';
-import { TextEditor, window, workspace } from 'vscode';
+import { TextEditor, workspace } from 'vscode';
 import Actor from '../../actor';
 
 export default class AddActionDesktopcomponent extends Actor {
@@ -12,7 +12,7 @@ export default class AddActionDesktopcomponent extends Actor {
 		// 如果当前目录不在某个页面中，则不允许操作
 		const r = this.reg_in_comment(path);
 		if (r === null) {
-			window.showErrorMessage('请在组件中进行该操作!');
+			this.showerror('请在组件中进行该操作!');
 		} else {
 			const folder = basename(path);
 			const dir = join(this.root(editor), folder);

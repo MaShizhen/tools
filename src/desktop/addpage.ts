@@ -7,7 +7,7 @@ export default class AddPageDesktop extends Actor {
 	public async do(): Promise<void> {
 		const rootPath = this.root();
 		if (!await this.exists(join(rootPath, 'pages'))) {
-			await window.showErrorMessage('缺少pages文件夹');
+			this.showerror('缺少pages文件夹');
 			return;
 		}
 		const src = join(rootPath, 'src');
@@ -66,7 +66,7 @@ export default class AddPageDesktop extends Actor {
 		})();
 		if (name) {
 			if (has_pages.includes(name)) {
-				await window.showErrorMessage('页面文件已存在');
+				this.showerror('页面文件已存在');
 				return;
 			}
 			if (!await this.exists(folder)) {

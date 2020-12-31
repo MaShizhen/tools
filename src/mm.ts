@@ -1,24 +1,16 @@
 import { dirname, join, sep } from 'path';
 import { commands, Disposable, FileType, Uri, window, workspace } from 'vscode';
-import Web from './web';
 import Tools from './tools';
-import Mobile from './mobile';
-import WeiXin from './wx';
 import Desktop from './desktop';
 import Next from './next';
 import UniApp from './uniapp';
-import Serve from './serve';
 import Taro from './taro';
 
 enum PrjType {
-	web = 'web/h5',
-	wxapp = 'wxapp',
-	desktop = 'desktop',
-	mobile = 'mobile',
-	serve = 'serve',
-	uniapp = 'uniapp',
 	next = 'next',
-	taro = 'taro'
+	taro = 'taro',
+	uniapp = 'uniapp',
+	desktop = 'desktop',
 }
 
 export default class MM extends Tools {
@@ -36,76 +28,21 @@ export default class MM extends Tools {
 	}
 	public addwidget() {
 		return commands.registerCommand('mm.widget.add', async () => {
-			const items = [
-				{
-					detail: '1.web/h5控件',
-					label: 'web/h5',
-					type: PrjType.web
-				},
-				{
-					detail: '2.移动端app控件',
-					label: 'mobile',
-					type: PrjType.mobile
-				},
-				{
-					detail: '3.微信小程序控件',
-					label: 'wxapp',
-					type: PrjType.wxapp
-				}
-			];
-			const picked = await this.pick(items, '请选择项目端点类型');
-			if (!picked) {
+			const type = await this.selectplatform();
+			if (!type) {
 				return;
 			}
-			const type = picked.type;
 			const instance = this.getinstancebytype(type);
-			instance.addwidget();
+			await instance.addwidget();
 		});
 	}
 	public addatom() {
 		return commands.registerCommand('mm.atom.add', async () => {
-			const pickitems = [
-				{
-					detail: '1.Next原子操作',
-					label: 'next',
-					type: PrjType.next
-				},
-				{
-					detail: '2.服务端原子操作',
-					label: 'serve',
-					type: PrjType.serve
-				},
-				{
-					detail: '3.uniapp原子操作',
-					label: 'uniapp',
-					type: PrjType.uniapp
-				},
-				{
-					detail: '4.服务端原子操作',
-					label: 'nodejs',
-					type: PrjType.serve
-				},
-				{
-					detail: '5.web/h5原子操作',
-					label: 'web/h5',
-					type: PrjType.web
-				},
-				{
-					detail: '6.移动端app原子操作',
-					label: 'mobile',
-					type: PrjType.mobile
-				},
-				{
-					detail: '7.微信小程序原子操作',
-					label: 'wxapp',
-					type: PrjType.wxapp
-				}
-			];
-			const p1 = await this.pick(pickitems, '请选择项目端点类型');
-			if (!p1) {
+			const type = await this.selectplatform();
+			if (!type) {
 				return;
 			}
-			const tool = this.getinstancebytype(p1.type);
+			const tool = this.getinstancebytype(type);
 			await tool.addatom();
 		});
 	}
@@ -115,15 +52,17 @@ export default class MM extends Tools {
 			const config_path = join(rootPath, 'mm.json');
 			const doc = await workspace.openTextDocument(Uri.file(config_path));
 			const raw = doc.getText();
-			const conf = JSON.parse(raw);
-			const jobs = (conf.jobs || []) as Array<{
-				description: string;
-				rule: string;
-				start: string;
-				end: string;
-				service: string;
-				data: {}
-			}>;
+			const conf = JSON.parse(raw) as {
+				jobs?: Array<{
+					description: string;
+					rule: string;
+					start: string;
+					end: string;
+					service: string;
+					data: unknown
+				}>;
+			};
+			const jobs = conf.jobs || [];
 			const src = join(rootPath, 'src');
 			async function get_all_s(cwd: string, root: string): Promise<string[]> {
 				const files = await workspace.fs.readDirectory(Uri.file(cwd));
@@ -170,7 +109,7 @@ export default class MM extends Tools {
 			});
 			conf.jobs = jobs;
 			await this.writefile(config_path, JSON.stringify(conf, null, '\t'));
-			await await this.show_doc(config_path);
+			await this.show_doc(config_path);
 		});
 	}
 	public addtplwidget() {
@@ -185,68 +124,13 @@ export default class MM extends Tools {
 			return tool.addtplatom(textEditor);
 		});
 	}
-	public refreshsitemap() {
-		return commands.registerCommand('mm.refreshmap', async () => {
-			const tool = this.getinstance();
-			tool.refreshsitemap();
-			await commands.executeCommand('mm.showmap');
-		});
-	}
-	public showsitemap() {
-		return commands.registerCommand('mm.showmap', async () => {
-			try {
-				const file = join(this.root(), '.mm.md');
-				await window.showTextDocument(Uri.file(file));
-				// await commands.executeCommand('markdown.showPreview');
-			} catch {
-				await commands.executeCommand('mm.refreshmap');
-			}
-		});
-	}
 	public shellcreate() {
 		return commands.registerCommand('mm.shell.create', async () => {
 			void window.showInformationMessage('进行此操作之前,请确保git已安装并配置好权限,且有一个可用的没有任何提交的git仓库');
-			const picked = await this.pick([
-				{
-					description: '1.next.js',
-					label: 'web',
-					type: PrjType.next
-				},
-				{
-					description: '2.taro',
-					label: 'app',
-					type: PrjType.taro
-				},
-				{
-					description: '3.uniapp',
-					label: 'app',
-					type: PrjType.uniapp
-				},
-				{
-					description: '4.web/h5网站应用',
-					label: 'web/h5',
-					type: PrjType.web
-				},
-				{
-					description: '5.移动端app',
-					label: 'mobile',
-					type: PrjType.mobile
-				},
-				{
-					description: '6.微信小程序',
-					label: 'wxapp',
-					type: PrjType.wxapp
-				},
-				{
-					description: '7.桌面应用程序',
-					label: 'desktop',
-					type: PrjType.desktop
-				}
-			], '请选择项目端点类型');
-			if (!picked) {
+			const type = await this.selectplatform();
+			if (!type) {
 				return;
 			}
-			const type = picked.type;
 			const desc = await window.showInputBox({
 				placeHolder: '请用简单语言描述一下这个项目',
 				ignoreFocusOut: true,
@@ -282,7 +166,7 @@ export default class MM extends Tools {
 				return;
 			}
 			if (await this.exists(uri.fsPath)) {
-				window.showErrorMessage('路径非空');
+				this.showerror('路径非空');
 				return;
 			}
 			const remote = await window.showInputBox({
@@ -380,17 +264,13 @@ export default class MM extends Tools {
 		return commands.registerTextEditorCommand('mm.component.add', async (editor) => {
 			const tool = this.getinstance();
 			await tool.addcomponent(editor);
-			this.refreshexplorer();
+			return this.refreshexplorer();
 		});
 	}
 
-	private web = new Web();
-	private mobile = new Mobile();
-	private wx = new WeiXin();
 	private desktop = new Desktop();
 	private next = new Next();
 	private uniapp = new UniApp();
-	private serve = new Serve();
 	private taro = new Taro();
 	private getinstance() {
 		const type = this.prj_type();
@@ -403,20 +283,12 @@ export default class MM extends Tools {
 	private getinstancebytype(type: PrjType) {
 		// 如果当前目录不在某个页面中，则不允许操作
 		switch (type) {
-			case PrjType.web:
-				return this.web;
-			case PrjType.mobile:
-				return this.mobile;
-			case PrjType.wxapp:
-				return this.wx;
 			case PrjType.desktop:
 				return this.desktop;
 			case PrjType.uniapp:
 				return this.uniapp;
 			case PrjType.next:
 				return this.next;
-			case PrjType.serve:
-				return this.serve;
 			case PrjType.taro:
 				return this.taro;
 			default:
@@ -447,5 +319,31 @@ export default class MM extends Tools {
 			return PrjType.taro;
 		}
 		return null;
+	}
+
+	private async selectplatform() {
+		const picked = await this.pick([
+			{
+				description: '1.next.js',
+				label: 'web',
+				type: PrjType.next
+			},
+			{
+				description: '2.taro',
+				label: 'app',
+				type: PrjType.taro
+			},
+			{
+				description: '3.uniapp',
+				label: 'app',
+				type: PrjType.uniapp
+			},
+			{
+				description: '7.electron',
+				label: 'desktop',
+				type: PrjType.desktop
+			}
+		], '请选择项目端点类型');
+		return picked && picked.type;
 	}
 }

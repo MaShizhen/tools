@@ -1,5 +1,5 @@
 import { dirname, join } from 'path';
-import { CompletionItem, CompletionItemKind, Disposable, languages, Position, QuickPickItem, SnippetString, TextDocument, TextEditor, window } from 'vscode';
+import { CompletionItem, CompletionItemKind, Disposable, languages, Position, QuickPickItem, SnippetString, TextDocument, TextEditor } from 'vscode';
 import Base from './base';
 import AddActionDesktopPage from './desktop/addaction/page';
 import AddComponentDesktop from './desktop/addcomponent';
@@ -77,7 +77,7 @@ export default class Desktop extends Base {
 		const snippet_use = join(dir, 'use.snippet');
 
 		if (!await this.exists(snippet_use)) {
-			window.showErrorMessage('无法自动添加脚本，请联系供应商');
+			this.showerror('无法自动添加脚本，请联系供应商');
 			return;
 		}
 		const use = await this.readfile(snippet_use);
@@ -105,9 +105,6 @@ export default class Desktop extends Base {
 			this.remoteatoms = await this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-desktop/index.json');
 		}
 		return this.remoteatoms;
-	}
-	public refreshsitemap(): Promise<void> {
-		throw new Error('Method not implemented.');
 	}
 	public shellcreate(_cwd: string, _no: string, _desc: string): Promise<void> {
 		throw new Error('Method not implemented.');

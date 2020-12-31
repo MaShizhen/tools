@@ -119,16 +119,6 @@
 				"command": "mm.widget.addlocal",
 				"category": "mmstudio",
 				"title": "%mm.widget.addlocal%"
-			},
-			{
-				"command": "mm.showmap",
-				"category": "mmstudio",
-				"title": "%mm.showmap%"
-			},
-			{
-				"command": "mm.refreshmap",
-				"category": "mmstudio",
-				"title": "%mm.refreshmap%"
 			}
 		],
 		"menus": {
@@ -255,32 +245,16 @@
 			],
 			"explorer/context": [
 				{
-					"command": "mm.refreshmap",
-					"group": "mmstudio",
-					"when": "resourceFilename == .mm.md && editorTextFocus"
-				},
-				{
 					"command": "mm.service.add",
 					"group": "mmstudio",
 					"key": "alt+s"
-				}
-			],
-			"editor/title": [
-				{
-					"command": "mm.refreshmap",
-					"group": "mmstudio",
-					"when": "resourceFilename == .mm.md"
 				}
 			]
 		},
 		"snippets": [
 			{
-				"language": "typescript",
-				"path": "./snippets/html.json"
-			},
-			{
-				"language": "html",
-				"path": "./snippets/html.json"
+				"language": "typescriptreact",
+				"path": "./snippets/tsx.json"
 			}
 		],
 		"configuration": [
@@ -290,14 +264,10 @@
 					"mm.proj.type": {
 						"type": "string",
 						"enum": [
-							"web/h5",
-							"wxapp",
-							"desktop",
-							"mobile",
-							"serve",
 							"next",
+							"taro",
 							"uniapp",
-							"taro"
+							"desktop"
 						],
 						"description": "%mm.proj.type%"
 					}

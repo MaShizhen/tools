@@ -26,7 +26,7 @@ export default abstract class Tools {
 				let error;
 				if (statusCode !== 200) {
 					error = new Error('Request Failed.\n' +
-						`Status Code: ${statusCode}`);
+						`Status Code: ${statusCode!}`);
 				} else if (!contentType.startsWith('application/json')) {
 					error = new Error('Invalid content-type.\n' +
 						`Expected application/json but received ${contentType}`);
@@ -50,10 +50,9 @@ export default abstract class Tools {
 				res.on('end', () => {
 					d.dispose();
 					try {
-						const parsedData = JSON.parse(rawData);
+						const parsedData = JSON.parse(rawData) as T;
 						resolve(parsedData);
 					} catch (e) {
-						console.error(e.message);
 						reject(e);
 					}
 				});
@@ -192,6 +191,9 @@ export default abstract class Tools {
 	}
 	//#endregion
 	//#region vs
+	protected showerror(message: string) {
+		void window.showErrorMessage(message);
+	}
 	protected pick<T extends QuickPickItem>(items: T[] | Thenable<T[]>, placeHolder = '') {
 		return window.showQuickPick(items, {
 			placeHolder,
@@ -302,7 +304,7 @@ export default abstract class Tools {
 		const dir = wf.uri.fsPath;
 		// !!! we should not use async operation here
 		// if (!this.existssync(join(dir, 'package.json'))) {
-		// 	window.showErrorMessage('错误的目录');
+		// 	this.showerror('错误的目录');
 		// 	throw new Error('错误的目录');
 		// }
 		return dir;

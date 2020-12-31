@@ -1,0 +1,20 @@
+{
+	"useState": {
+		"prefix": "us",
+		"body": "const [$2, set$2] = useState($1);"
+	},
+	"useState with type": {
+		"prefix": "ust",
+		"body": "const [$2, set$2] = useState<$3>($1);"
+	},
+	"useEffect": {
+		"prefix": "ue",
+		"body": [
+			"useEffect(() => {",
+			"(async () => {",
+			"$1",
+			"})();",
+			"},[]);"
+		]
+	}
+}

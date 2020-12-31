@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { window, workspace } from 'vscode';
+import { workspace } from 'vscode';
 import Actor from '../actor';
 
 export default class AddPageTaro extends Actor {
@@ -24,7 +24,7 @@ export default class AddPageTaro extends Actor {
 		const content = await this.readfile(configfile);
 		const regarr = /pages:\s*\[([\s\S]*?)\]/.exec(content);
 		if (!regarr) {
-			await window.showErrorMessage('Coult not get pages in src/app.config.ts');
+			this.showerror('Coult not get pages in src/app.config.ts');
 			return;
 		}
 		const [, pagestext] = regarr;

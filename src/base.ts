@@ -126,7 +126,7 @@ export default abstract class Base extends Tools {
 			try {
 				await workspace.fs.stat(snippet_use);
 			} catch (error) {
-				window.showErrorMessage(`请先编辑'src/atom/${atom.no}/use.snippet'`);
+				this.showerror(`请先编辑'src/atom/${atom.no}/use.snippet'`);
 				return;
 			}
 			const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');
@@ -144,7 +144,7 @@ export default abstract class Base extends Tools {
 		try {
 			await workspace.fs.stat(snippet_use);
 		} catch (error) {
-			window.showErrorMessage('无法自动添加脚本，请联系供应商');
+			this.showerror('无法自动添加脚本，请联系供应商');
 			return;
 		}
 		const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');
@@ -152,8 +152,6 @@ export default abstract class Base extends Tools {
 		await this.insetSnippet(editor, use, imp);
 	}
 	protected abstract getremoteatoms(): Promise<IAtomCatagory[]>;
-
-	public abstract refreshsitemap(): Promise<void>;
 
 	public abstract shellcreate(cwd: string, no: string, desc: string): Promise<void>;
 	public abstract shellbuild(): void;

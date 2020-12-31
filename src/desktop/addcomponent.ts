@@ -1,5 +1,5 @@
 import { dirname, join } from 'path';
-import { TextEditor, window } from 'vscode';
+import { TextEditor } from 'vscode';
 import { NO_MODIFY } from '../util/blocks';
 import Actor from '../actor';
 
@@ -15,7 +15,7 @@ export default class AddComponentDesktop extends Actor {
 			// 如果当前目录不在某个页面中，则不允许操作
 			const r = /[/\\](src[/\\]\w[\w\d-]*)[/\\]?/.exec(path);
 			if (r === null) {
-				await window.showErrorMessage('您必须在某个页面文件夹下进行该操作！');
+				this.showerror('您必须在某个页面文件夹下进行该操作！');
 			} else {
 				const name = await this.generate(folder, 'zj-', 3);
 				const c = join(folder, name);
