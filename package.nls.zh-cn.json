@@ -1,7 +1,6 @@
 {
 	"mm.proj.type": "项目类型",
 	"mm.page.add": "添加新页面",
-	"mm.action.add": "添加响应",
 	"mm.component.add": "添加组件",
 	"mm.service.add": "添加服务",
 	"mm.service.schedule": "添加定时任务",

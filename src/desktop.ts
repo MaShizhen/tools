@@ -1,7 +1,7 @@
 import { dirname, join } from 'path';
 import { CompletionItem, CompletionItemKind, Disposable, languages, Position, QuickPickItem, SnippetString, TextDocument, TextEditor } from 'vscode';
 import Base from './base';
-import AddActionDesktopPage from './desktop/addaction/page';
+import AddAtomDesktopPage from './desktop/addatom/page';
 import AddComponentDesktop from './desktop/addcomponent';
 import AddPageDesktop from './desktop/addpage';
 import { IAtom, IAtomCatagory } from './interfaces';
@@ -152,8 +152,8 @@ export default class Desktop extends Base {
 	public addpage(): Promise<void> {
 		return new AddPageDesktop().do();
 	}
-	public addaction(editor: TextEditor): Promise<void> {
-		return new AddActionDesktopPage(editor).do();
+	public addatomlocal(editor: TextEditor): Promise<void> {
+		return new AddAtomDesktopPage(editor).do();
 	}
 	public addcomponent(editor: TextEditor): Promise<void> {
 		return new AddComponentDesktop(editor).do();

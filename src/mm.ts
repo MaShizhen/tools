@@ -20,12 +20,6 @@ export default class MM extends Tools {
 			return tool.addwidgetlocal();
 		});
 	}
-	public addatomlocal() {
-		return commands.registerCommand('mm.atom.addlocal', async () => {
-			const tool = this.getinstance();
-			return tool.addatomlocal();
-		});
-	}
 	public addwidget() {
 		return commands.registerCommand('mm.widget.add', async () => {
 			const type = await this.selectplatform();
@@ -232,10 +226,10 @@ export default class MM extends Tools {
 			return this.refreshexplorer();
 		});
 	}
-	public addaction() {
-		return commands.registerTextEditorCommand('mm.action.add', async (editor) => {
+	public addatomlocal() {
+		return commands.registerTextEditorCommand('mm.atom.addlocal', async (editor) => {
 			const tool = this.getinstance();
-			await tool.addaction(editor);
+			await tool.addatomlocal(editor);
 			return this.refreshexplorer();
 		});
 	}

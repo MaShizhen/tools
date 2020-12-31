@@ -2,13 +2,9 @@ import { dirname, join, relative } from 'path';
 import { Disposable, FileType, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
-import AddAtomLocal from './mm/addatomlocal';
 
 export default abstract class Base extends Tools {
 	public abstract addwidgetlocal(): Promise<void>;
-	public addatomlocal(): Promise<void> {
-		return new AddAtomLocal().do();
-	}
 	public abstract addwidget(): Promise<void>;
 	public abstract addatom(): Promise<void>;
 
@@ -162,7 +158,7 @@ export default abstract class Base extends Tools {
 	public abstract addpage(): Promise<void>;
 	public abstract addcomponent(editor: TextEditor): Promise<void>;
 	public abstract addservice(): Promise<void>;
-	public abstract addaction(editor: TextEditor): Promise<void>;
+	public abstract addatomlocal(editor: TextEditor): Promise<void>;
 
 	protected async replacefile(path: string, src: Array<{ [Symbol.replace](src: string, rep: string): string; }>, rep: string[]) {
 		const uri = Uri.file(path);
@@ -231,7 +227,7 @@ export default async function ${no}(msg: Message, actionid: string): Promise<an4
 		await this.writefile(path, tpl);
 		return path;
 	}
-	protected async baseaddaction(editor: TextEditor) {
+	protected async baseaddatomlocal(editor: TextEditor) {
 		const uri = editor.document.uri;
 		const folder = dirname(uri.fsPath);
 		const a = await this.generate(folder, 'a', 3);

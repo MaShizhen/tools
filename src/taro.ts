@@ -42,7 +42,7 @@ export default class Taro extends Base {
 	public addservice(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	public addaction(editor: TextEditor): Promise<void> {
-		return this.baseaddaction(editor);
+	public addatomlocal(editor: TextEditor): Promise<void> {
+		return this.baseaddatomlocal(editor);
 	}
 }

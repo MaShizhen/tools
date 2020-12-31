@@ -49,7 +49,7 @@ export default class Next extends Base {
 	public addcomponent(_editor: TextEditor): Promise<void> {
 		return this.addpage();
 	}
-	public addaction(editor: TextEditor): Promise<void> {
-		return this.baseaddaction(editor);
+	public addatomlocal(editor: TextEditor): Promise<void> {
+		return this.baseaddatomlocal(editor);
 	}
 }

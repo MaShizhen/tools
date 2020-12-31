@@ -4,7 +4,7 @@ import MM from './mm';
 export function activate({ subscriptions }: ExtensionContext) {
 	const mm = new MM();
 	subscriptions.push(
-		mm.addaction(),
+		mm.addatomlocal(),
 		mm.addcomponent(),
 		mm.addpage(),
 		mm.addservice(),
@@ -17,7 +17,6 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.addschedule(),
 		mm.addatom(),
 		mm.addwidget(),
-		mm.addatomlocal(),
 		mm.addwidgetlocal()
 	);
 }

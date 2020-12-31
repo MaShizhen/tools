@@ -1,25 +1,25 @@
-import { basename, join } from 'path';
-import { TextEditor, workspace } from 'vscode';
+import { basename, dirname, join } from 'path';
+import { TextEditor } from 'vscode';
 import Actor from '../../actor';
 
-export default class AddActionDesktopcomponent extends Actor {
+export default class AddAtomDesktopPage extends Actor {
 	public constructor(private editor: TextEditor) {
 		super();
 	}
 	public async do(): Promise<void> {
 		const editor = this.editor;
-		const path = workspace.asRelativePath(editor.document.uri);
+		const path = editor.document.fileName;
+		const dir = dirname(path);
 		// 如果当前目录不在某个页面中，则不允许操作
-		const r = this.reg_in_comment(path);
+		const r = /[/\\](src[/\\]\w[\w\d-]*)[/\\]?/.exec(dir);
 		if (r === null) {
-			this.showerror('请在组件中进行该操作!');
+			this.showerror('警示');
 		} else {
-			const folder = basename(path);
-			const dir = join(this.root(editor), folder);
 			const name = await this.generate(dir, 'a', 3);
 			const p_path = join(dir, name);
 			await this.create_a(p_path);
 			await this.update_b(dir);
+			this.set_status_bar_message('成功');
 			await this.show_doc(`${p_path}.ts`);
 		}
 	}
