@@ -242,6 +242,6 @@ export default function ${a}() {
 }
 `;
 		await this.writefile(p_path, tpl);
-		window.showTextDocument(Uri.file(p_path));
+		await this.show_doc(p_path);
 	}
 }
