@@ -275,6 +275,9 @@ export default class MM extends Tools {
 			return type;
 		}
 		const root_path = this.root();
+		if (!root_path) {
+			return null;
+		}
 		const src = join(root_path, 'src');
 		const pagesjson = join(src, 'pages.json');
 		if (this.existssync(pagesjson) && this.existssync(pagesjson)) {

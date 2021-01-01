@@ -299,7 +299,7 @@ export default abstract class Tools {
 			return wfs[0];
 		})();
 		if (!wf) {
-			throw new Error('请打开工程进行操作');
+			return '';
 		}
 		const dir = wf.uri.fsPath;
 		// !!! we should not use async operation here
