@@ -90,7 +90,6 @@ const ${name}: NextPage<IProps> = ({ }) => {
 		<>
 			<Head>
 				<title>mmstudio</title>
-				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Head>
 		</>
 	);
@@ -154,7 +153,6 @@ const ${name}: NextPage<IProps> = ({ }) => {
 		<>
 			<Head>
 				<title>mmstudio</title>
-				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Head>
 		</>
 	);
@@ -207,7 +205,6 @@ const ${name}: NextPage<IProps> = ({ }) => {
 		<>
 			<Head>
 				<title>mmstudio</title>
-				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Head>
 		</>
 	);
@@ -245,7 +242,6 @@ const ${name}: NextPage<IProps> = ({ }) => {
 		<>
 			<Head>
 				<title>mmstudio</title>
-				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Head>
 		</>
 	);
