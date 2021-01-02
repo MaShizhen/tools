@@ -116,7 +116,7 @@ export const getStaticPaths: GetStaticPaths<{ ${slug}: string[]; }> = async () =
 };
 
 export const config: PageConfig = {
-	amp: true
+	amp: false
 };
 
 export default ${name};
@@ -179,7 +179,7 @@ export const getStaticPaths: GetStaticPaths<{ ${query}: string; }> = async () =>
 };
 
 export const config: PageConfig = {
-	amp: true
+	amp: false
 };
 
 export default ${name};
@@ -217,7 +217,7 @@ ${name}.getInitialProps = async (context) => {
 };
 
 export const config: PageConfig = {
-	amp: true
+	amp: false
 };
 
 export default ${name};
@@ -255,7 +255,7 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
 };
 
 export const config: PageConfig = {
-	amp: true
+	amp: false
 };
 
 export default ${name};
