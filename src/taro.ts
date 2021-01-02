@@ -25,10 +25,12 @@ export default class Taro extends Base {
 		await this.replacefile(join(cwd, 'package.json'), [/p000000/, /\$desc/], [no, desc]);
 	}
 	public shellbuild(): void {
-		throw new Error('Method not implemented.');
+		const command = 'yarn build';
+		this.shellrun(command, 'build');
 	}
 	public shelldebug(): void {
-		throw new Error('Method not implemented.');
+		const command = 'yarn dev';
+		this.shellrun(command, 'debug');
 	}
 	public completion(): Disposable {
 		return Disposable.from();
