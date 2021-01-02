@@ -78,6 +78,7 @@ export default class AddPageNext extends Actor {
 		const relativepath = this.getrelativepath('src', file);
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
+import Head from 'next/head';
 
 const logger = anylogger('${relativepath}');
 
@@ -87,6 +88,10 @@ interface IProps {
 const ${name}: NextPage<IProps> = ({ }) => {
 	return (
 		<>
+			<Head>
+				<title>mmstudio</title>
+				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+			</Head>
 		</>
 	);
 };
@@ -137,6 +142,7 @@ export default ${name};
 		const relativepath = this.getrelativepath('src', file);
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
+import Head from 'next/head';
 
 const logger = anylogger('${relativepath}');
 
@@ -146,6 +152,10 @@ interface IProps {
 const ${name}: NextPage<IProps> = ({ }) => {
 	return (
 		<>
+			<Head>
+				<title>mmstudio</title>
+				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+			</Head>
 		</>
 	);
 };
@@ -185,6 +195,7 @@ export default ${name};
 		const relativepath = this.getrelativepath('src', path);
 		const tpl = `import { NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
+import Head from 'next/head';
 
 const logger = anylogger('${relativepath}');
 
@@ -194,6 +205,10 @@ interface IProps {
 const ${name}: NextPage<IProps> = ({ }) => {
 	return (
 		<>
+			<Head>
+				<title>mmstudio</title>
+				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+			</Head>
 		</>
 	);
 };
@@ -218,6 +233,7 @@ export default ${name};
 		const relativepath = this.getrelativepath('src', path);
 		const tpl = `import { GetServerSideProps, NextPage, PageConfig } from 'next';
 import anylogger from 'anylogger';
+import Head from 'next/head';
 
 const logger = anylogger('${relativepath}');
 
@@ -227,6 +243,10 @@ interface IProps {
 const ${name}: NextPage<IProps> = ({ }) => {
 	return (
 		<>
+			<Head>
+				<title>mmstudio</title>
+				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+			</Head>
 		</>
 	);
 };
