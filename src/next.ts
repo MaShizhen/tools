@@ -2,6 +2,7 @@ import { join } from 'path';
 import { Disposable, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
+import AddAtomNext from './next/addatom';
 import AddPageNext from './next/addpage';
 import AddServiceNext from './next/addservice';
 
@@ -13,7 +14,7 @@ export default class Next extends Base {
 		throw new Error('Method not implemented.');
 	}
 	public addatom(): Promise<void> {
-		throw new Error('Method not implemented.');
+		return new AddAtomNext().do();
 	}
 	public addtplwidget(_editor: TextEditor): Promise<void> {
 		throw new Error('Method not implemented.');

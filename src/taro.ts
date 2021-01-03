@@ -2,6 +2,7 @@ import { join } from 'path';
 import { Disposable, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
+import AddAtomTaro from './taro/addatom';
 import AddPageTaro from './taro/addpage';
 
 export default class Taro extends Base {
@@ -12,7 +13,7 @@ export default class Taro extends Base {
 		throw new Error('Method not implemented.');
 	}
 	public addatom(): Promise<void> {
-		throw new Error('Method not implemented.');
+		return new AddAtomTaro().do();
 	}
 	public addtplwidget(_editor: TextEditor): Promise<void> {
 		throw new Error('Method not implemented.');

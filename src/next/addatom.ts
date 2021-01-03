@@ -3,7 +3,7 @@ import { commands, Uri, window, workspace } from 'vscode';
 import { Package } from '../interfaces';
 import Actor from '../actor';
 
-export default class AddAtomUniapp extends Actor {
+export default class AddAtomNext extends Actor {
 	public async do(): Promise<void> {
 		const def = dirname(this.workpath());
 		const container = await window.showOpenDialog({
@@ -17,7 +17,7 @@ export default class AddAtomUniapp extends Actor {
 		}
 
 		const folder = container[0];
-		const autono = await this.generate(folder.fsPath, 'at', 6);
+		const autono = await this.generate(folder.fsPath, 'an', 6);
 		const no = await window.showInputBox({
 			value: autono,
 			placeHolder: 'type project name'
@@ -47,7 +47,7 @@ export default class AddAtomUniapp extends Actor {
 		await this.shellexec('git init', cwd);
 		// 从github拉取代码模板
 		await this.downloadandextractrepo(cwd, {
-			name: 'atom-uniapp'
+			name: 'atom-next'
 		});
 
 		// package.json
@@ -64,6 +64,7 @@ export default class AddAtomUniapp extends Actor {
 			await this.shellexec(`git remote add origin ${remote}`, cwd);
 			await this.shellexec('git push -u origin main', cwd);
 		}
+
 		void window.showInformationMessage('原子操作初始化已完成，即将安装必要依赖，请耐心等待，安装成功后即将自动重启vscode');
 		await this.shellexec('yarn', cwd);
 		await commands.executeCommand('vscode.openFolder', uri);
