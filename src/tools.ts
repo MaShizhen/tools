@@ -88,7 +88,7 @@ export default abstract class Tools {
 	//#endregion
 
 	//#region Shell
-	protected async shellinstall(editor: TextEditor, atom: string, version: string, isdev: boolean) {
+	protected async shellinstall(editor: TextEditor, atom: string, version: string) {
 		if (!atom) {
 			return;
 		}
@@ -98,12 +98,12 @@ export default abstract class Tools {
 		const cwd = this.root(editor);
 		const dir = join(cwd, 'node_modules', atom);
 		if (await this.exists(dir)) {
+			// keep old version
 			return;
 		}
-		const yarn = isdev ? 'yarn add --dev' : 'yarn add';
 		const package_name = `${atom}@${version}`;
 		const msg_install = `正在安装依赖: ${package_name}`;
-		const command = `${yarn} ${package_name}`;
+		const command = `yarn add ${package_name}`;
 		const p = this.shellexec(command, cwd);
 		window.setStatusBarMessage(msg_install, p);
 		await p;
@@ -116,7 +116,7 @@ export default abstract class Tools {
 		if (dep) {
 			await Promise.all(Object.keys(dep).map(async (name) => {
 				const ver = dep[name];
-				await this.shellinstall(editor, name, ver, isdev);
+				await this.shellinstall(editor, name, ver);
 			}));
 		}
 	}

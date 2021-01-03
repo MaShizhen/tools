@@ -10,38 +10,18 @@ export default abstract class Base extends Tools {
 
 	public abstract addtplwidget(editor: TextEditor): Promise<void>;
 	public async addtplatom(editor: TextEditor) {
-		const servertype = (() => {
-			const doc = editor.document;
-			const uri = doc.uri;
-			const path = uri.path;
-			// s001 na001 atom/anp001/index.ts
-			if (/s\d+\.ts$/.test(path) || /atoms[/|\\]anp\d+[/|\\]index\.ts/.test(path)) {
-				return 'nodejs-s';
-			} else if (/na\d+\.ts$/.test(path)) {
-				return 'nodejs-na';
-			}
-			return false;
-		})();
 		const catagories_remote = new Map<string, IAtom[]>();
 		const all_remote = new Map<string, IAtom>();
-		const remote_atoms = await (() => {
-			if (servertype === 'nodejs-na') {
-				return this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-nodejs/index-a.json');
-			} else if (servertype === 'nodejs-s') {
-				return this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-nodejs/index.json');
-			}
-			return this.getremoteatoms();
-		})();
+		const remote_atoms = await this.getremoteatoms();
 		remote_atoms.forEach((it) => {
 			catagories_remote.set(it.catagory, it.atoms);
 			it.atoms.forEach((atom) => {
 				all_remote.set(atom.no, atom);
 			});
 		});
-		const client = !servertype;
 		const root_path = this.root(editor);
 
-		const local_atoms = await (async (root, client) => {
+		const local_atoms = await (async (root) => {
 			try {
 				const atom_dir = join(root, 'src', 'atoms');
 				const atoms_dirs = await workspace.fs.readDirectory(Uri.file(atom_dir));
@@ -49,7 +29,7 @@ export default abstract class Base extends Tools {
 					if (type !== FileType.Directory) {
 						return false;
 					}
-					return ad.startsWith(client ? 'ap' : 'anp');
+					return ad.startsWith('a');
 				}).map(([p]) => {
 					return {
 						name: `项目级原子操作:${p}`,
@@ -60,7 +40,7 @@ export default abstract class Base extends Tools {
 			} catch {
 				return [];
 			}
-		})(root_path, client);
+		})(root_path);
 
 		const catagories = new Map<string, IAtom[]>();
 		catagories.set('本地', local_atoms);
@@ -130,7 +110,7 @@ export default abstract class Base extends Tools {
 			await this.insetSnippet(editor, use, imp);
 			return;
 		}
-		await this.shellinstall(editor, atom.no, atom.version, client);
+		await this.shellinstall(editor, atom.no, atom.version);
 
 		const name = atom.no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3');
 		const imp = `import ${name} from '${atom.no}';`;
