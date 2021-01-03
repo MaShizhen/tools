@@ -12,9 +12,15 @@ export default class AddPageNext extends Actor {
 			if (!editor) {
 				return pages;
 			}
-			return dirname(editor.document.fileName);
+			const dir = dirname(editor.document.fileName);
+			if (!/pages/.test(dir)) {
+				return pages;
+			}
+			if (/pg\d{3,}/.test(dir)) {
+				return join(dir, '..');
+			}
+			return dir;
 		})();
-		const name = await this.generate(dir, 'pg', 3);
 		const picked = await this.pick([{
 			label: '1. ssr',
 			detail: 'Server side render page',
@@ -39,6 +45,7 @@ export default class AddPageNext extends Actor {
 		if (!picked) {
 			return;
 		}
+		const name = await this.generate(dir, 'pg', 3);
 		// create page file
 		const path = await (async () => {
 			switch (picked.type) {
