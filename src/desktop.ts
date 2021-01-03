@@ -70,7 +70,7 @@ export default class Desktop extends Base {
 	}
 
 	private async add_snippet(atom: IAtom, textEditor: TextEditor) {
-		await this.shellinstall(textEditor, atom.no, atom.version, true);
+		await this.shellinstall(textEditor, atom.no, atom.version);
 
 		const imp = `import '${atom.no}';`;
 		const dir = join(this.root(textEditor), 'node_modules', atom.no);
