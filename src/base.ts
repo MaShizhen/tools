@@ -10,7 +10,6 @@ export default abstract class Base extends Tools {
 
 	public abstract addtplwidget(editor: TextEditor): Promise<void>;
 	public async addtplatom(editor: TextEditor) {
-		debugger;
 		const catagories_remote = new Map<string, IAtom[]>();
 		const all_remote = new Map<string, IAtom>();
 		const remote_atoms = await this.getremoteatoms();
@@ -98,15 +97,8 @@ export default abstract class Base extends Tools {
 			const imp_path = relative(cur, dir);
 			const name = atom.no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3');
 			const imp = `import ${name} from '${imp_path}/index';`;
-			const snippet_use = Uri.file(join(dir, 'use.snippet'));
 
-			try {
-				await workspace.fs.stat(snippet_use);
-			} catch (error) {
-				this.showerror(`请先编辑'src/atom/${atom.no}/use.snippet'`);
-				return;
-			}
-			const use = Buffer.from(await workspace.fs.readFile(snippet_use)).toString('utf8');
+			const use = `${name}($1)`;
 
 			await this.insetSnippet(editor, use, imp);
 			return;
