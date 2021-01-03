@@ -101,7 +101,7 @@ export default class Desktop extends Base {
 	}
 	private remoteatoms = [] as IAtomCatagory[];
 	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
-		if (!this.remoteatoms) {
+		if (this.remoteatoms.length === 0) {
 			this.remoteatoms = await this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-desktop/index.json');
 		}
 		return this.remoteatoms;

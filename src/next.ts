@@ -21,7 +21,7 @@ export default class Next extends Base {
 	}
 	private remoteatoms = [] as IAtomCatagory[];
 	protected async getremoteatoms(): Promise<IAtomCatagory[]> {
-		if (!this.remoteatoms) {
+		if (this.remoteatoms.length === 0) {
 			this.remoteatoms = await this.get<IAtomCatagory[]>('https://mmstudio.gitee.io/atom-next/index.json');
 		}
 		return this.remoteatoms;

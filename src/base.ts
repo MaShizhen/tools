@@ -10,6 +10,7 @@ export default abstract class Base extends Tools {
 
 	public abstract addtplwidget(editor: TextEditor): Promise<void>;
 	public async addtplatom(editor: TextEditor) {
+		debugger;
 		const catagories_remote = new Map<string, IAtom[]>();
 		const all_remote = new Map<string, IAtom>();
 		const remote_atoms = await this.getremoteatoms();
