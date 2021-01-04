@@ -71,9 +71,9 @@
 				"title": "%mm.shell.create%"
 			},
 			{
-				"command": "mm.shell.debug",
+				"command": "mm.shell.dev",
 				"category": "mmstudio",
-				"title": "%mm.shell.debug%"
+				"title": "%mm.shell.dev%"
 			},
 			{
 				"command": "mm.shell.build",
@@ -84,6 +84,11 @@
 				"command": "mm.atom.add",
 				"category": "mmstudio",
 				"title": "%mm.atom.add%"
+			},
+			{
+				"command": "mm.doc.find",
+				"category": "mmstudio",
+				"title": "%mm.doc.find%"
 			},
 			{
 				"command": "mm.atom.addlocal",
@@ -117,7 +122,6 @@
 				},
 				{
 					"command": "mm.tpl.atom",
-					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/ || resourceFilename == index.ts",
 					"group": "mmstudio"
 				},
 				{
@@ -126,7 +130,6 @@
 				},
 				{
 					"command": "mm.tpl.widget",
-					"when": "resourceFilename =~ /(index|tpl|p\\d+)\\.(tsx?|tpl)/ || resourceFilename =~ /\\w*\\.wxml/",
 					"group": "mmstudio"
 				},
 				{
@@ -138,7 +141,7 @@
 					"group": "mmstudio"
 				},
 				{
-					"command": "mm.shell.debug",
+					"command": "mm.shell.dev",
 					"group": "mmstudio"
 				},
 				{
@@ -151,6 +154,10 @@
 				},
 				{
 					"command": "mm.atom.addlocal",
+					"group": "mmstudio"
+				},
+				{
+					"command": "mm.doc.find",
 					"group": "mmstudio"
 				},
 				{
@@ -174,7 +181,6 @@
 				},
 				{
 					"command": "mm.tpl.atom",
-					"when": "resourceFilename =~ /a\\d+\\.ts/ || resourceFilename =~ /s\\d+\\.ts/ || resourceFilename == index.ts",
 					"group": "mmstudio"
 				},
 				{
@@ -183,7 +189,6 @@
 				},
 				{
 					"command": "mm.tpl.widget",
-					"when": "resourceFilename =~ /(index|tpl|p\\d+)\\.(tsx?|tpl)/ || resourceFilename =~ /\\w*\\.wxml/",
 					"group": "mmstudio"
 				}
 			],
@@ -233,7 +238,6 @@
 			},
 			{
 				"command": "mm.tpl.atom",
-				"when": "resourceFilename =~ /\\.ts/",
 				"key": "alt+t a"
 			},
 			{
@@ -242,7 +246,6 @@
 			},
 			{
 				"command": "mm.tpl.widget",
-				"when": "resourceFilename =~ /(index|tpl|p\\d+)\\.(tsx?|tpl)/ || resourceFilename =~ /\\w*\\.wxml/",
 				"key": "alt+t w"
 			},
 			{
@@ -254,7 +257,7 @@
 				"key": "alt+m p"
 			},
 			{
-				"command": "mm.shell.debug",
+				"command": "mm.shell.dev",
 				"key": "alt+m d"
 			},
 			{
@@ -268,6 +271,10 @@
 			{
 				"command": "mm.atom.addlocal",
 				"key": "alt+a"
+			},
+			{
+				"command": "mm.doc.find",
+				"key": "alt+m f"
 			},
 			{
 				"command": "mm.widget.add",

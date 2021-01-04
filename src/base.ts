@@ -4,6 +4,32 @@ import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
 
 export default abstract class Base extends Tools {
+	public async finddoc() {
+		const root = this.root();
+		// if (!root) {
+		// 	return;
+		// }
+		const src = join(root, 'src');
+		const files = await this.getallfiles(src);
+		const tsfiles = files.filter((file) => {
+			return /\.tsx?$/i.test(file);
+		});
+		const options = Promise.all(tsfiles.map(async (file) => {
+			const doc = await this.readdoc(file);
+			const path = this.getrelativepath(src, file);
+			return {
+				label: doc,
+				detail: path,
+				path: file
+			};
+		}));
+		const picked = await this.pick(options);
+		if (!picked) {
+			return;
+		}
+		await this.show_doc(picked.path);
+	}
+
 	public abstract addwidgetlocal(): Promise<void>;
 	public abstract addwidget(): Promise<void>;
 	public abstract addatom(): Promise<void>;

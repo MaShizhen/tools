@@ -192,7 +192,7 @@ export default class MM extends Tools {
 		});
 	}
 	public shelldebug() {
-		return commands.registerCommand('mm.shell.debug', () => {
+		return commands.registerCommand('mm.shell.dev', () => {
 			const tool = this.getinstance();
 			return tool.shelldebug();
 		});
@@ -231,6 +231,12 @@ export default class MM extends Tools {
 			const tool = this.getinstance();
 			await tool.addatomlocal(editor);
 			return this.refreshexplorer();
+		});
+	}
+	public finddoc() {
+		return commands.registerCommand('mm.doc.find', async () => {
+			const tool = this.getinstance();
+			await tool.finddoc();
 		});
 	}
 	public addcomponent() {

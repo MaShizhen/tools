@@ -8,10 +8,11 @@
 	"mm.tpl.tpl": "Insert code template",
 	"mm.tpl.widget": "Insert widget",
 	"mm.shell.create": "Create Project",
-	"mm.shell.debug": "Debug",
+	"mm.shell.dev": "Develop",
 	"mm.shell.build": "Build",
 	"mm.atom.add": "Add new atom",
 	"mm.atom.addlocal": "Add new project atom",
+	"mm.doc.find": "Find doc and open file",
 	"mm.widget.add": "Add new widget",
 	"mm.widget.addlocal": "Add new project widget"
 }

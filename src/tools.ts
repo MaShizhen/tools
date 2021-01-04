@@ -4,7 +4,7 @@ import { exec as node_exec } from 'child_process';
 import { homedir, platform } from 'os';
 import { Stream } from 'stream';
 import { get as base } from 'https';
-import { commands, Position, QuickPickItem, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
+import { commands, FileType, Position, QuickPickItem, SnippetString, TextEditor, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import got from 'got';
 import tar from 'tar';
 import { NO_MODIFY } from './util/blocks';
@@ -244,11 +244,12 @@ export default abstract class Tools {
 		return window.showTextDocument(Uri.file(path));
 	}
 	protected getrelativepath(from: string, to: string) {
-		const root = this.root();
 		if (!isAbsolute(from)) {
+			const root = this.root();
 			from = join(root, from);
 		}
 		if (!isAbsolute(to)) {
+			const root = this.root();
 			to = join(root, to);
 		}
 		return relative(from, to);
@@ -256,6 +257,26 @@ export default abstract class Tools {
 	//#endregion
 
 	//#region File(name) operate
+	protected async getallfiles(dir: string): Promise<string[]> {
+		const subs = await workspace.fs.readDirectory(Uri.file(dir));
+		const files = subs.filter(([_d, type]) => {
+			return type === FileType.File;
+		}).map(([d]) => {
+			return join(dir, d);
+		});
+		const subdirs = subs.filter(([_d, type]) => {
+			return type === FileType.Directory;
+		}).map(([d]) => {
+			return join(dir, d);
+		});
+		const ps = subdirs.map((d) => {
+			return this.getallfiles(d);
+		});
+		const allsubdirfiles = await Promise.all(ps);
+		return allsubdirfiles.reduce((pre, cur) => {
+			return pre.concat(cur);
+		}, files);
+	}
 	/**
 	 * Read default export function doc
 	 */

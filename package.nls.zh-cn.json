@@ -8,10 +8,11 @@
 	"mm.tpl.tpl": "插入代码模板",
 	"mm.tpl.widget": "插入控件",
 	"mm.shell.create": "创建项目",
-	"mm.shell.debug": "调试",
+	"mm.shell.dev": "开发模式",
 	"mm.shell.build": "打包",
 	"mm.atom.add": "新增原子操作",
 	"mm.atom.addlocal": "新增项目原子操作",
+	"mm.doc.find": "根据注释查找文件",
 	"mm.widget.add": "新增控件",
 	"mm.widget.addlocal": "新增项目控件"
 }
