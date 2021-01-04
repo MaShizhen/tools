@@ -1,4 +1,4 @@
-import { dirname, join, relative } from 'path';
+import { basename, dirname, extname, join, relative } from 'path';
 import { Disposable, FileType, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
@@ -11,8 +11,22 @@ export default abstract class Base extends Tools {
 		// }
 		const src = join(root, 'src');
 		const files = await this.getallfiles(src);
-		const tsfiles = files.filter((file) => {
-			return /\.tsx?$/i.test(file);
+		const tsfiles = files.sort((a, b) => {
+			// return a - b;
+			if (a > b) {
+				return 1;
+			}
+			if (a < b) {
+				return -1;
+			}
+			return 0;
+		}).filter((file) => {
+			const ext = extname(file);
+			if (!/^\.tsx?$/.test(ext)) {
+				return false;
+			}
+			const name = basename(file, ext);
+			return /^((a|pg|s|c|)\d{3,}|\[.+])$/.test(name);
 		});
 		const options = Promise.all(tsfiles.map(async (file) => {
 			const doc = await this.readdoc(file);

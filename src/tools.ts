@@ -283,12 +283,32 @@ export default abstract class Tools {
 	protected async readdoc(path: string) {
 		const content = await this.readfile(path);
 		const ext = extname(path);
-		const regexparr = /(?<=\/\*\*\s*\n)(\s*\*\s*(.*)\s*\n)(\s*\*.*\n)*(?=\s*\*\/\s*\n\s*export\s* default\s*)/.exec(content);
-		if (!regexparr || !regexparr[2]) {
-			const name = basename(path, ext);
-			return name;
+		const name = basename(path, ext);
+		// a001 c001
+		if (/^a|c\d{3,}$/.test(name)) {
+			const regexparr = /(?<=\/\*\*\s*\n)(\s*\*\s*(.*)\s*\n)(\s*\*.*\n)*(?=\s*\*\/\s*\n\s*export\s*default\s*)/.exec(content);
+			if (!regexparr || !regexparr[2]) {
+				return name;
+			}
+			return regexparr[2];
 		}
-		return regexparr[2];
+		// s001
+		if (/^s\d{3,}$/.test(name)) {
+			const regexparr = /(?<=\/\*\*\s*\n)(\s*\*\s*(.*)\s*\n)(\s*\*.*\n)*\s*\*\/\s*\n(?=(\s*const\s*handler\s*=)|(\s*handler\.))/.exec(content);
+			if (!regexparr || !regexparr[2]) {
+				return name;
+			}
+			return regexparr[2];
+		}
+		// pg001 or [xxx]
+		if (/^pg\d{3,}$/.test(name) || /^\[.+]$/.test(name)) {
+			const regexparr = /(?<=\/\*\*\s*\n)(\s*\*\s*(.*)\s*\n)(\s*\*.*\n)*\s*\*\/\s*\n(?=\s*const\s*pg\d{3,}\s*)/.exec(content);
+			if (!regexparr || !regexparr[2]) {
+				return name;
+			}
+			return regexparr[2];
+		}
+		return name;
 	}
 	protected prefix(pre: string, num: number, len: number) {
 		return pre + num.toString().padStart(len, '0');
