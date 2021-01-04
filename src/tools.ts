@@ -1,5 +1,5 @@
 import { promises as fs, statSync } from 'fs';
-import { dirname, isAbsolute, join, relative } from 'path';
+import { basename, dirname, extname, isAbsolute, join, relative } from 'path';
 import { exec as node_exec } from 'child_process';
 import { homedir, platform } from 'os';
 import { Stream } from 'stream';
@@ -256,6 +256,19 @@ export default abstract class Tools {
 	//#endregion
 
 	//#region File(name) operate
+	/**
+	 * Read default export function doc
+	 */
+	protected async readdoc(path: string) {
+		const content = await this.readfile(path);
+		const ext = extname(path);
+		const regexparr = /(?<=\/\*\*\s*\n)(\s*\*\s*(.*)\s*\n)(\s*\*.*\n)*(?=\s*\*\/\s*\n\s*export\s* default\s*)/.exec(content);
+		if (!regexparr || !regexparr[2]) {
+			const name = basename(path, ext);
+			return name;
+		}
+		return regexparr[2];
+	}
 	protected prefix(pre: string, num: number, len: number) {
 		return pre + num.toString().padStart(len, '0');
 	}

@@ -25,18 +25,22 @@ export default abstract class Base extends Tools {
 			try {
 				const atom_dir = join(root, 'src', 'atoms');
 				const atoms_dirs = await workspace.fs.readDirectory(Uri.file(atom_dir));
-				return atoms_dirs.filter(([ad, type]) => {
-					if (type !== FileType.Directory) {
+				const ps = atoms_dirs.filter(([ad, type]) => {
+					if (type === FileType.Directory) {
 						return false;
 					}
 					return ad.startsWith('a');
-				}).map(([p]) => {
+				}).map(async ([p]) => {
+					const path = join(atom_dir, p);
+					const doc = await this.readdoc(path);
+					const no = p.replace(/\.tsx?/, '');
 					return {
-						name: `项目级原子操作:${p}`,
-						no: p,
+						name: doc,
+						no,
 						local: true
 					} as IAtom;
 				});
+				return Promise.all(ps);
 			} catch {
 				return [];
 			}
@@ -92,11 +96,11 @@ export default abstract class Base extends Tools {
 			return;
 		}
 		if (atom.local) {
-			const dir = join(root_path, 'src', 'atoms', atom.no);
+			const atomfile = join(root_path, 'src', 'atoms', atom.no);
 			const cur = dirname(editor.document.uri.fsPath);
-			const imp_path = relative(cur, dir);
+			const imp_path = relative(cur, atomfile);
 			const name = atom.no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3');
-			const imp = `import ${name} from '${imp_path}/index';`;
+			const imp = `import ${name} from '${imp_path}';`;
 
 			const use = `${name}($1)`;
 
