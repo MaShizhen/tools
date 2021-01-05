@@ -11,7 +11,7 @@
 		"prefix": "ue",
 		"body": [
 			"useEffect(() => {",
-			"(async () => {",
+			"void (async () => {",
 			"$1",
 			"})();",
 			"},[]);"
