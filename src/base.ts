@@ -1,5 +1,5 @@
 import { basename, dirname, extname, join } from 'path';
-import { Disposable, FileType, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
+import { Disposable, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
 
@@ -11,22 +11,13 @@ export default abstract class Base extends Tools {
 		// }
 		const src = join(root, 'src');
 		const files = await this.getallfiles(src);
-		const tsfiles = files.sort((a, b) => {
-			// return a - b;
-			if (a > b) {
-				return 1;
-			}
-			if (a < b) {
-				return -1;
-			}
-			return 0;
-		}).filter((file) => {
+		const tsfiles = files.filter((file) => {
 			const ext = extname(file);
 			if (!/^\.tsx?$/.test(ext)) {
 				return false;
 			}
 			const name = basename(file, ext);
-			return /^((a|pg|s|c|)\d{3,}|\[.+])$/.test(name);
+			return /^((a|pg|s|c|)\d{3,}|\[.+])$/.test(name);	// a001 pg001 s001 c001 [id]
 		});
 		const options = Promise.all(tsfiles.map(async (file) => {
 			const doc = await this.readdoc(file);
@@ -60,20 +51,22 @@ export default abstract class Base extends Tools {
 			});
 		});
 		const root_path = this.root(editor);
+		const atom_dir = join(root_path, 'src', 'atoms');
 
-		const local_atoms = await (async (root) => {
+		const local_atoms = await (async () => {
 			try {
-				const atom_dir = join(root, 'src', 'atoms');
-				const atoms_dirs = await workspace.fs.readDirectory(Uri.file(atom_dir));
-				const ps = atoms_dirs.filter(([ad, type]) => {
-					if (type === FileType.Directory) {
+				const allfiles = await this.getallfiles(atom_dir);
+				const tsfiles = allfiles.filter((file) => {
+					const ext = extname(file);
+					if (!/^\.tsx?$/.test(ext)) {
 						return false;
 					}
-					return ad.startsWith('a');
-				}).map(async ([p]) => {
-					const path = join(atom_dir, p);
+					const name = basename(file, ext);
+					return /^a\d{3,}$/.test(name);
+				});
+				const ps = tsfiles.map(async (path) => {
 					const doc = await this.readdoc(path);
-					const no = p.replace(/\.tsx?/, '');
+					const no = this.getrelativepath(atom_dir, path.replace(/\.tsx?/, ''));
 					return {
 						name: doc,
 						no,
@@ -84,7 +77,7 @@ export default abstract class Base extends Tools {
 			} catch {
 				return [];
 			}
-		})(root_path);
+		})();
 
 		const catagories = new Map<string, IAtom[]>();
 		catagories.set('本地', local_atoms);
@@ -136,12 +129,12 @@ export default abstract class Base extends Tools {
 			return;
 		}
 		if (atom.local) {
-			const atomfile = join(root_path, 'src', 'atoms', atom.no);
+			const atomfile = join(atom_dir, atom.no);
 			const cur = dirname(editor.document.uri.fsPath);
 			const relativepath = this.getrelativepath(cur, atomfile);
 			const imp_path = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
 			// const name = atom.no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3');
-			const name = atom.no;
+			const name = atom.no.replace(/[/\\]/g, '_');
 			const imp = `import ${name} from '${imp_path}';`;
 
 			const use = `${name}($1)`;

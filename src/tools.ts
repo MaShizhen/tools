@@ -273,7 +273,16 @@ export default abstract class Tools {
 		const allsubdirfiles = await Promise.all(ps);
 		return allsubdirfiles.reduce((pre, cur) => {
 			return pre.concat(cur);
-		}, files);
+		}, files).sort((a, b) => {
+			// return a - b;
+			if (a > b) {
+				return 1;
+			}
+			if (a < b) {
+				return -1;
+			}
+			return 0;
+		});
 	}
 	/**
 	 * Read default export function doc
