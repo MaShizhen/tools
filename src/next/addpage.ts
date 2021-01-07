@@ -82,26 +82,9 @@ export default class AddPageNext extends Actor {
 		}
 
 		const file = join(path, `[...${slug}].tsx`);
-		const relativepath = this.getrelativepath('src', file);
+		const body = await this.body(file, name);
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
-import anylogger from 'anylogger';
-import Head from 'next/head';
-
-const logger = anylogger('${relativepath}');
-
-interface IProps {
-}
-
-const ${name}: NextPage<IProps> = ({ }) => {
-	return (
-		<>
-			<Head>
-				<title>mmstudio</title>
-			</Head>
-		</>
-	);
-};
-
+${body}
 // pre-render this page at build time
 export const getStaticProps: GetStaticProps<IProps> = async (context) => {
 	const ${slug} = context.params.${slug} as string[];
@@ -121,12 +104,6 @@ export const getStaticPaths: GetStaticPaths<{ ${slug}: string[]; }> = async () =
 		}]
 	};
 };
-
-export const config: PageConfig = {
-	amp: false
-};
-
-export default ${name};
 `;
 		await this.writefile(file, tpl);
 		return file;
@@ -145,26 +122,9 @@ export default ${name};
 		}
 
 		const file = join(path, `[${query}].tsx`);
-		const relativepath = this.getrelativepath('src', file);
+		const body = await this.body(file, name);
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
-import anylogger from 'anylogger';
-import Head from 'next/head';
-
-const logger = anylogger('${relativepath}');
-
-interface IProps {
-}
-
-const ${name}: NextPage<IProps> = ({ }) => {
-	return (
-		<>
-			<Head>
-				<title>mmstudio</title>
-			</Head>
-		</>
-	);
-};
-
+${body}
 // pre-render this page at build time
 export const getStaticProps: GetStaticProps<IProps> = async (context) => {
 	const ${query} = context.params.${query} as string;
@@ -184,12 +144,6 @@ export const getStaticPaths: GetStaticPaths<{ ${query}: string; }> = async () =>
 		}]
 	};
 };
-
-export const config: PageConfig = {
-	amp: false
-};
-
-export default ${name};
 `;
 		await this.writefile(file, tpl);
 		return file;
@@ -197,68 +151,76 @@ export default ${name};
 
 	private async createpageserverside(dir: string, name: string) {
 		const path = join(dir, `${name}.tsx`);
-		const relativepath = this.getrelativepath('src', path);
+		const body = await this.body(path, name);
 		const tpl = `import { NextPage, PageConfig } from 'next';
-import anylogger from 'anylogger';
-import Head from 'next/head';
-
-const logger = anylogger('${relativepath}');
-
-interface IProps {
-}
-
-const ${name}: NextPage<IProps> = ({ }) => {
-	return (
-		<>
-			<Head>
-				<title>mmstudio</title>
-			</Head>
-		</>
-	);
-};
-
+${body}
 // enables server-side rendering, this enable seo
 ${name}.getInitialProps = async (context) => {
 	return {
 	};
 };
-
-export const config: PageConfig = {
-	amp: false
-};
-
-export default ${name};
 `;
 		await this.writefile(path, tpl);
 		return path;
 	}
 	private async createpageclientside(dir: string, name: string) {
 		const path = join(dir, `${name}.tsx`);
-		const relativepath = this.getrelativepath('src', path);
+		const body = await this.body(path, name);
 		const tpl = `import { GetServerSideProps, NextPage, PageConfig } from 'next';
-import anylogger from 'anylogger';
+${body}
+// pre-render this page on each request
+export const getServerSideProps: GetServerSideProps<IProps> = async (context) => {
+	return {
+		props: {}
+	};
+};
+`;
+		await this.writefile(path, tpl);
+		return path;
+	}
+
+	private async body(path: string, name: string) {
+		const title = await window.showInputBox({
+			prompt: '页面标题',
+			value: 'mmstudio'
+		});
+		const input = await window.showInputBox({
+			prompt: '组件个数',
+			value: '1'
+		});
+		const num = Number(input) || 0;
+		const csno = new Array<string>(num).fill('').map((_it, idx) => {
+			return this.prefix('C', idx + 1, 3);
+		});
+		const csfun = csno.map((c) => {
+			return `
+// function ${c}(props: { prop: string;}) {
+function ${c}() {
+	return <>组件${c}</>;
+}`;
+		});
+		const cs = csno.map((c) => {
+			return `<${c} />`;
+		});
+		const relativepath = this.getrelativepath('src', path);
+		return `import anylogger from 'anylogger';
 import Head from 'next/head';
 
 const logger = anylogger('${relativepath}');
 
 interface IProps {
 }
+${csfun.join('\n')}
 
 const ${name}: NextPage<IProps> = ({ }) => {
 	return (
 		<>
 			<Head>
-				<title>mmstudio</title>
+				<title>${title || 'mmstudio'}</title>
 			</Head>
+			${cs.join('\n\t\t\t')}
 		</>
 	);
-};
-
-// pre-render this page on each request
-export const getServerSideProps: GetServerSideProps<IProps> = async (context) => {
-	return Promise.resolve({
-		props: {}
-	});
 };
 
 export const config: PageConfig = {
@@ -267,7 +229,5 @@ export const config: PageConfig = {
 
 export default ${name};
 `;
-		await this.writefile(path, tpl);
-		return path;
 	}
 }

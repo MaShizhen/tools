@@ -82,13 +82,22 @@ export default handler;
 		return this.writefile(path, tpl);
 	}
 
+	private async typesubdir() {
+		const sub = await window.showInputBox({
+			prompt: '请输入服务所在目录(相对src/pages/api)，可以为空',
+			value: ''
+		});
+		return sub || '';
+	}
+
 	private async getapipath() {
 		const rootPath = this.root();
 		const editor = window.activeTextEditor;
 		if (!editor) {
 			// 当前未打开任何文件
 			const pages = await get_pages(rootPath);
-			const api = join(pages, 'api');
+			const sub = await this.typesubdir();
+			const api = join(pages, 'api', sub);
 			return { api, page: null };
 		}
 		const curdir = dirname(editor.document.fileName);
@@ -96,26 +105,22 @@ export default handler;
 			// 当前打开文件在api中，这属于新增服务的情况
 			return { api: curdir, page: null };
 		}
+		const pages = await get_pages(rootPath);
 		if (!/.+[/\\]pages([/\\].+)?$/.test(curdir)) {
 			// 当前打开文件不在pages中，这种情况下也不能在当前文件位置新增服务
-			const pages = await get_pages(rootPath);
-			const api = join(pages, 'api');
+			const sub = await this.typesubdir();
+			const api = join(pages, 'api', sub);
 			return { api, page: null };
 		}
+		// 当前打开了page页面的情况
 		const curfile = editor.document.fileName;
 		const curname = basename(curfile);
-		const pages = await get_pages(rootPath);
 		const api = join(pages, 'api');
 		if (/^\[.+\]\.[tj]sx?$/.test(curname)) {
 			// absolutedir/src/pages/xxx/[yyy].tsx
 			// absolutedir/src/pages/xxx
-			// xxx
-			const relativepath = curdir.replace(/.*pages[/\\]/, '');
+			const relativepath = this.getrelativepath(pages, curdir);
 			// 当前打开了页面文件,含匹配路由的情况, page名称为上级目录名称,而不是当前文件名
-			if (!relativepath) {
-				// absolutedir/src/pages/[xxx].tsx
-				return { api: api, page: curfile };
-			}
 			// api/xxx
 			const apipath = join(api, relativepath);
 			await this.mkdir(apipath);
@@ -126,9 +131,9 @@ export default handler;
 		// absolutedir/src/pages/xxx/yyy.tsx
 		const ext = extname(curfile);
 		// absolutedir/src/pages/xxx/yyy
-		const pgpath = basename(curfile, ext);
+		const pgpath = join(curdir, basename(curfile, ext));
 		// xxx/yyy
-		const relativepath = pgpath.replace(/.*pages[/\\]/, '');
+		const relativepath = this.getrelativepath(pages, pgpath);
 		// api/xxx/yyy
 		const apipath = join(api, relativepath);
 		await this.mkdir(apipath);

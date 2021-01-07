@@ -1,4 +1,4 @@
-import { basename, dirname, extname, join, relative } from 'path';
+import { basename, dirname, extname, join } from 'path';
 import { Disposable, FileType, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
@@ -138,8 +138,10 @@ export default abstract class Base extends Tools {
 		if (atom.local) {
 			const atomfile = join(root_path, 'src', 'atoms', atom.no);
 			const cur = dirname(editor.document.uri.fsPath);
-			const imp_path = relative(cur, atomfile);
-			const name = atom.no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3');
+			const relativepath = this.getrelativepath(cur, atomfile);
+			const imp_path = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
+			// const name = atom.no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3');
+			const name = atom.no;
 			const imp = `import ${name} from '${imp_path}';`;
 
 			const use = `${name}($1)`;
