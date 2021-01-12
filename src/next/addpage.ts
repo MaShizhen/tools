@@ -1,5 +1,5 @@
 import { dirname, join } from 'path';
-import { window, workspace } from 'vscode';
+import { window } from 'vscode';
 import Actor from '../actor';
 import { get_pages } from './get-pages';
 
@@ -64,7 +64,7 @@ export default class AddPageNext extends Actor {
 		if (!path) {
 			return;
 		}
-		await workspace.saveAll();
+		await this.save();
 		this.set_status_bar_message('成功添加页面文件');
 		await this.show_doc(path);
 	}

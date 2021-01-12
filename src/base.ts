@@ -35,6 +35,7 @@ export default abstract class Base extends Tools {
 		await this.show_doc(picked.path);
 	}
 
+	public abstract addschedule(): Promise<void>;
 	public abstract addwidgetlocal(): Promise<void>;
 	public abstract addwidget(): Promise<void>;
 	public abstract addatom(): Promise<void>;
@@ -202,7 +203,7 @@ export default abstract class Base extends Tools {
 		}
 		const name = await this.generate(folder, 's', 3);
 		const p_path = await this.create_s(folder, name);
-		await workspace.saveAll();
+		await this.save();
 		await this.show_doc(p_path);
 	}
 	private async create_s(folder: string, no: string) {

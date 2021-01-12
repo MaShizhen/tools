@@ -15,6 +15,15 @@ type RepoInfo = {
 	branch?: string
 }
 export default abstract class Tools {
+	//#region Other
+	protected sleep(timeout: number) {
+		return new Promise<void>((res) => {
+			setTimeout(() => {
+				res();
+			}, timeout);
+		});
+	}
+	//#endregion
 	//#region Http get
 	protected get<T>(url: string) {
 		return new Promise<T>((resolve, reject) => {
@@ -189,6 +198,9 @@ export default abstract class Tools {
 	}
 	//#endregion
 	//#region vs
+	protected save() {
+		return workspace.saveAll(false);
+	}
 	protected showerror(message: string) {
 		void window.showErrorMessage(message);
 	}
@@ -291,18 +303,18 @@ export default abstract class Tools {
 		const content = await this.readfile(path);
 		const ext = extname(path);
 		const name = basename(path, ext);
-		// a001 c001
-		if (/^a|c\d{3,}$/.test(name)) {
+		// a001 c001 s001
+		if (/^a|c|s\d{3,}$/.test(name)) {
 			const regexparr = /(?<=\/\*\*\s*\n)(\s*\*\s*(.*)\s*\n)(\s*\*.*\n)*(?=\s*\*\/\s*\n\s*export\s*default\s*)/.exec(content);
 			if (!regexparr || !regexparr[2]) {
-				return name;
-			}
-			return regexparr[2];
-		}
-		// s001
-		if (/^s\d{3,}$/.test(name)) {
-			const regexparr = /(?<=\/\*\*\s*\n)(\s*\*\s*(.*)\s*\n)(\s*\*.*\n)*\s*\*\/\s*\n(?=(\s*const\s*handler\s*=)|(\s*handler\.))/.exec(content);
-			if (!regexparr || !regexparr[2]) {
+				// s001
+				if (/^s\d{3,}$/.test(name)) {
+					const regexparr = /(?<=\/\*\*\s*\n)(\s*\*\s*(.*)\s*\n)(\s*\*.*\n)*\s*\*\/\s*\n(?=(\s*const\s*handler\s*=)|(\s*handler\.))/.exec(content);
+					if (!regexparr || !regexparr[2]) {
+						return name;
+					}
+					return regexparr[2];
+				}
 				return name;
 			}
 			return regexparr[2];

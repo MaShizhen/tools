@@ -1,5 +1,4 @@
 import { join } from 'path';
-import { workspace } from 'vscode';
 import Actor from '../actor';
 
 interface IPageConfig {
@@ -41,7 +40,7 @@ export default class AddPageUniapp extends Actor {
 		const vue = `${page}.vue`;
 		await this.create_page(vue);
 		await this.writefile(pagesjson, JSON.stringify(pagesconfig, undefined, '\t'));
-		await workspace.saveAll();
+		await this.save();
 		this.set_status_bar_message('成功添加页面文件');
 		await this.show_doc(vue);
 	}

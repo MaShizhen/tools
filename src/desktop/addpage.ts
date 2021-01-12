@@ -80,7 +80,7 @@ export default class AddPageDesktop extends Actor {
 			// create b
 			await this.create_s(p_path);
 			await this.create_b(p_path);
-			await workspace.saveAll();
+			await this.save();
 			this.set_status_bar_message('成功添加页面文件');
 			await this.show_doc(join(p_path, 'b.ts'));
 		}

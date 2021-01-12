@@ -6,6 +6,9 @@ import AddAtomTaro from './taro/addatom';
 import AddPageTaro from './taro/addpage';
 
 export default class Taro extends Base {
+	public addschedule(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addwidgetlocal(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

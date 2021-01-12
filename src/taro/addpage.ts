@@ -1,5 +1,4 @@
 import { join } from 'path';
-import { workspace } from 'vscode';
 import Actor from '../actor';
 
 export default class AddPageTaro extends Actor {
@@ -14,7 +13,7 @@ export default class AddPageTaro extends Actor {
 		await this.createconfig(pagedir, name);
 		await this.createcss(pagedir, name);
 		await this.updateappconfig(root, name);
-		await workspace.saveAll();
+		await this.save();
 		this.set_status_bar_message('成功添加页面文件');
 		await this.show_doc(path);
 	}

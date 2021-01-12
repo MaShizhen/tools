@@ -16,7 +16,7 @@ export default class AddServiceNext extends Actor {
 			// update page file
 			await this.updatepage(page, servicefile);
 		}
-		await workspace.saveAll();
+		await this.save();
 		this.set_status_bar_message('成功添加服务文件');
 		await this.show_doc(servicefile);
 	}
