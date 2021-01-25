@@ -14,18 +14,19 @@ export default class AddServiceNext extends Actor {
 		await this.create_api(servicefile, name);
 		if (page) {
 			// update page file
-			await this.updatepage(page, servicefile);
+			await this.updatepage(name, page, servicefile);
 		}
 		await this.save();
 		this.set_status_bar_message('成功添加服务文件');
 		await this.show_doc(servicefile);
 	}
 
-	private async updatepage(pagefile: string, servicefile: string) {
+	private async updatepage(name: string, pagefile: string, servicefile: string) {
 		// api/xxx/yyy/s001
 		const pathwithoutext = servicefile.replace(/\..*/, '');
 		const no = pathwithoutext.replace(/.*s(\d+)/, '$1');
 		const relativepath = this.getrelativepath(join(pagefile, '..'), pathwithoutext);
+		const url = this.getrelativepath(join('src', 'pages'), pathwithoutext);
 		const imppath = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
 		const imp = `import { r${no} } from '${imppath}';`;
 		const doc = await workspace.openTextDocument(pagefile);
@@ -46,6 +47,8 @@ export default class AddServiceNext extends Actor {
 		if (!hasimport) {
 			const we = new WorkspaceEdit();
 			const uri = doc.uri;
+			const imppos1 = new Position(pos + 2, 0);
+			we.insert(uri, imppos1, `const ${name} = '/${url}';\n`);
 			const imppos = new Position(pos + 1, 0);
 			we.insert(uri, imppos, `${imp}\n`);
 			await workspace.applyEdit(we);

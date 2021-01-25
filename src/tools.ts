@@ -262,7 +262,7 @@ export default abstract class Tools {
 			const root = this.root();
 			to = join(root, to);
 		}
-		return relative(from, to);
+		return relative(from, to).replace(/\\/g, '/');
 	}
 	//#endregion
 
