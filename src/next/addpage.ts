@@ -212,6 +212,9 @@ interface IProps {
 }
 ${csfun.join('\n')}
 
+/**
+ * ${title || 'mmstudio'}
+ */
 const ${name}: NextPage<IProps> = ({ }) => {
 	return (
 		<>
