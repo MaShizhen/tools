@@ -63,7 +63,7 @@ import { NextApiRequest, NextApiResponse, PageConfig } from 'next';
 import anylogger from 'anylogger';
 import '@mmstudio/an000042';
 
-const logger = anylogger('${relativepath}');
+const logger = anylogger('${relativepath.replace('.ts', '')}');
 
 export type ${rname} = {
 	ok: true;

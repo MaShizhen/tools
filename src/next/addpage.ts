@@ -206,7 +206,7 @@ function ${c}() {
 		return `import anylogger from 'anylogger';
 import Head from 'next/head';
 
-const logger = anylogger('${relativepath}');
+const logger = anylogger('${relativepath.replace('.tsx', '')}');
 
 interface IProps {
 }
