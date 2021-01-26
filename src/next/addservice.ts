@@ -58,12 +58,13 @@ export default class AddServiceNext extends Actor {
 	private create_api(path: string, name: string) {
 		const relativepath = this.getrelativepath('src', path);
 		const rname = name.replace('s', 'r');
+		const vname = relativepath.replace('.ts', '');
 		const tpl = `import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse, PageConfig } from 'next';
 import anylogger from 'anylogger';
 import '@mmstudio/an000042';
 
-const logger = anylogger('${relativepath.replace('.ts', '')}');
+const logger = anylogger('${vname}');
 
 export type ${rname} = {
 	ok: true;
@@ -72,6 +73,9 @@ export type ${rname} = {
 	message: string;
 };
 
+/**
+ * ${vname}
+ */
 const handler = nextConnect<NextApiRequest, NextApiResponse<${rname}>>();
 
 handler.get((req, res) => {
