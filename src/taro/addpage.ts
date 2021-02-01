@@ -44,7 +44,7 @@ export default class AddPageTaro extends Actor {
 	}
 
 	private async createcss(dir: string, name: string) {
-		const file = join(dir, `${name}.scss`);
+		const file = join(dir, `${name}.css`);
 		const tpl = `
 `;
 		await this.writefile(file, tpl);
@@ -53,11 +53,11 @@ export default class AddPageTaro extends Actor {
 
 	private async createconfig(dir: string, name: string) {
 		const file = join(dir, `${name}.config.ts`);
-		const tpl = `import { PageConfig } from '@tarojs/taro';
+		const tpl = `import taro from '@tarojs/taro';
 
 export default {
 	navigationBarTitleText: 'mmstudio'
-} as PageConfig;
+} as taro.PageConfig;
 `;
 		await this.writefile(file, tpl);
 		return file;
@@ -67,9 +67,10 @@ export default {
 		const file = join(dir, `${name}.tsx`);
 		const tpl = `import React, { useState, useEffect } from 'react';
 import { View, Text } from '@tarojs/components';
-import { } from '@tarojs/taro';
-import { } from 'taro-ui';
-import './${name}.scss';
+import taro from '@tarojs/taro';
+import { } from 'react-native';
+
+import './${name}.css';
 
 export default function ${name}() {
 	return (

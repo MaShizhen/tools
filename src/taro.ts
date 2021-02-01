@@ -27,6 +27,8 @@ export default class Taro extends Base {
 	public async shellcreate(cwd: string, no: string, desc: string): Promise<void> {
 		await this.downloadandextractrepo(cwd, { name: 'taro' });
 		await this.replacefile(join(cwd, 'package.json'), [/p000000/, /\$desc/], [no, desc]);
+		const dt = new Date().toLocaleDateString();
+		await this.replacefile(join(cwd, 'config', 'index.js'), [/prjname/, /createdate/], [no, dt]);
 	}
 	public shellbuild(): void {
 		const command = 'yarn build';
