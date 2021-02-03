@@ -212,6 +212,7 @@ function ${c}() {
 		return `import anylogger from 'anylogger';
 import Head from 'next/head';
 import { Col, Row } from '@geist-ui/react';
+import { useEffect, useState } from 'react';
 
 const logger = anylogger('${relativepath.replace('.tsx', '')}');
 
