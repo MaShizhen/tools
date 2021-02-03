@@ -196,7 +196,13 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
 			return `
 // function ${c}(props: { prop: string;}) {
 function ${c}() {
-	return <>组件${c}</>;
+	return <>
+		<Row>
+			<Col>
+				组件${c}
+			</Col>
+		</Row>
+	</>;
 }`;
 		});
 		const cs = csno.map((c) => {
@@ -205,6 +211,7 @@ function ${c}() {
 		const relativepath = this.getrelativepath('src', path);
 		return `import anylogger from 'anylogger';
 import Head from 'next/head';
+import { Col, Row } from '@geist-ui/react';
 
 const logger = anylogger('${relativepath.replace('.tsx', '')}');
 
