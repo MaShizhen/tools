@@ -16,7 +16,7 @@ export default class AddScheduleNext extends Actor {
 						start: string;
 						end: string;
 						service: string;
-						data: unknown
+						data: unknown;
 					}>;
 				};
 				if (!conf.jobs) {

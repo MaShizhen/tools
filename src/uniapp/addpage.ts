@@ -6,8 +6,8 @@ interface IPageConfig {
 		path: string;
 		style: {
 			navigationBarTitleText: string;
-		}
-	}>
+		};
+	}>;
 }
 
 export default class AddPageUniapp extends Actor {
