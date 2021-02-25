@@ -20,9 +20,9 @@
 	"jsx style": {
 		"prefix": "jsx",
 		"body": [
-			"<style jsx>",
+			"<style jsx>{`",
 			"$1",
-			"</style>"
+			"`}</style>"
 		]
 	}
 }
