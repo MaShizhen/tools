@@ -16,5 +16,13 @@
 			"})();",
 			"},[]);"
 		]
+	},
+	"jsx style": {
+		"prefix": "jsx",
+		"body": [
+			"<style jsx>",
+			"$1",
+			"</style>"
+		]
 	}
 }
