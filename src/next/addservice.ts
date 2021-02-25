@@ -28,7 +28,7 @@ export default class AddServiceNext extends Actor {
 		const relativepath = this.getrelativepath(join(pagefile, '..'), pathwithoutext);
 		const url = this.getrelativepath(join('src', 'pages'), pathwithoutext);
 		const imppath = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
-		const imp = `import { r${no} } from '${imppath}';`;
+		const imp = `import { m${no}, q${no}, r${no} } from '${imppath}';`;
 		const doc = await workspace.openTextDocument(pagefile);
 		const max = doc.lineCount;
 		let hasimport = false;
@@ -58,6 +58,8 @@ export default class AddServiceNext extends Actor {
 	private create_api(path: string, name: string) {
 		const relativepath = this.getrelativepath('src', path);
 		const rname = name.replace('s', 'r');
+		const mname = name.replace('s', 'm');
+		const qname = name.replace('s', 'q');
 		const vname = relativepath.replace('.ts', '');
 		const tpl = `import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse, PageConfig } from 'next';
@@ -73,12 +75,23 @@ export type ${rname} = {
 	message: string;
 };
 
+export type ${mname} = {
+
+}
+
+export type ${qname} = {
+
+}
+
 /**
  * ${vname}
  */
 const handler = nextConnect<NextApiRequest, NextApiResponse<${rname}>>();
 
-handler.get((req, res) => {
+handler.post((req, res) => {
+	logger.debug('msg body:', req.body);
+	const { } = req.body as ${mname};
+	const { } = req.query as ${qname};
 	res.status(200).json({ ok: true });
 });
 
