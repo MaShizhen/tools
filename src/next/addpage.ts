@@ -85,6 +85,13 @@ export default class AddPageNext extends Actor {
 		const body = await this.body(file, name);
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
+// // enables server-side rendering, this enable seo
+// ${name}.getInitialProps = async (context) => {
+// 	const ${slug} = context.params.${slug} as string;
+// 	return {
+// 	};
+// };
+
 // pre-render this page at build time
 export const getStaticProps: GetStaticProps<IProps> = async (context) => {
 	const ${slug} = context.params.${slug} as string[];
@@ -125,6 +132,13 @@ export const getStaticPaths: GetStaticPaths<{ ${slug}: string[]; }> = async () =
 		const body = await this.body(file, name);
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
+// // enables server-side rendering, this enable seo
+// ${name}.getInitialProps = async (context) => {
+// 	const ${query} = context.params.${query} as string;
+// 	return {
+// 	};
+// };
+
 // pre-render this page at build time
 export const getStaticProps: GetStaticProps<IProps> = async (context) => {
 	const ${query} = context.params.${query} as string;
@@ -152,13 +166,21 @@ export const getStaticPaths: GetStaticPaths<{ ${query}: string; }> = async () =>
 	private async createpageserverside(dir: string, name: string) {
 		const path = join(dir, `${name}.tsx`);
 		const body = await this.body(path, name);
-		const tpl = `import { NextPage, PageConfig } from 'next';
+		const tpl = `import { GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
-// enables server-side rendering, this enable seo
-${name}.getInitialProps = async (context) => {
+// // enables server-side rendering, this enable seo
+// ${name}.getInitialProps = async (context) => {
+// 	return {
+// 	};
+// };
+// pre-render this page at build time
+export const getStaticProps: GetStaticProps<IProps> = async (context) => {
 	return {
+		props: {},
+		revalidate: 60 * 60 * 24 // 1 day
 	};
 };
+
 `;
 		await this.writefile(path, tpl);
 		return path;

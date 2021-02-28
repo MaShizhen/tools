@@ -24,6 +24,9 @@ Required: **因为升级vscode版本相对容易，而维护支持旧版本需�
 | us |
 | ust |
 | ue |
+| nextinit |
+| nextserver |
+| nextstatic |
 
 ## 3. 项目类型支持
 
@@ -33,9 +36,6 @@ Required: **因为升级vscode版本相对容易，而维护支持旧版本需�
 |`taro`|支持|
 |`uniapp`|尽可能支持|
 |`desktop`|虽然保留，但暂无精力维护|
-|`web/h5`|废弃，转`next`|
-|`mobile`|废弃，转`taro`|
-|`wx`|废弃，转`taro`|
 
 ## 4. 支持的操作
 

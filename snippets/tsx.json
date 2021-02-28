@@ -24,5 +24,53 @@
 			"$1",
 			"`}</style>"
 		]
+	},
+	"next initialprops": {
+		"prefix": "nextinit",
+		"body": [
+			"// enables server-side rendering, this enable seo",
+			"pg${1:001}.getInitialProps = async (context) => {",
+			"return {",
+			"};",
+			"};",
+			""
+		]
+	},
+	"next serverside": {
+		"prefix": "nextserver",
+		"body": [
+			"// pre-render this page on each request",
+			"export const getServerSideProps: GetServerSideProps<IProps> = async (context) => {",
+			"return {",
+			"props: {}",
+			"};",
+			"};",
+			""
+		]
+	},
+	"next static": {
+		"prefix": "nextstatic",
+		"body": [
+			"// pre-render this page at build time",
+			"export const getStaticProps: GetStaticProps<IProps> = async (context) => {",
+			"const ${1:id} = context.params.$1 as string;",
+			"return {",
+			"props: {},",
+			"revalidate: 60 * 60 * 24 // 1 day",
+			"};",
+			"};",
+			"",
+			"export const getStaticPaths: GetStaticPaths<{ $1: string; }> = async () => {",
+			"return {",
+			"fallback: true,",
+			"paths: [{",
+			"params: {",
+			"id: 'xxx'",
+			"}",
+			"}]",
+			"};",
+			"};",
+			""
+		]
 	}
 }
