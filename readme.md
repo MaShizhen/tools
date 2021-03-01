@@ -49,3 +49,4 @@ Required: **因为升级vscode版本相对容易，而维护支持旧版本需�
 开启开发模式|`alt+m d`
 打包|`alt+m b`
 查找|`alt+m f`
+转换html中style|`alt+j`

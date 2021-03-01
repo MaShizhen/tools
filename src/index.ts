@@ -18,6 +18,7 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.addatomlocal(),
 		mm.finddoc(),
 		mm.addwidget(),
-		mm.addwidgetlocal()
+		mm.addwidgetlocal(),
+		mm.html2jsx()
 	);
 }

@@ -104,6 +104,11 @@
 				"command": "mm.widget.addlocal",
 				"category": "mmstudio",
 				"title": "%mm.widget.addlocal%"
+			},
+			{
+				"command": "mm.html2jsx",
+				"category": "mmstudio",
+				"title": "%mm.html2jsx%"
 			}
 		],
 		"menus": {
@@ -167,6 +172,11 @@
 				{
 					"command": "mm.widget.addlocal",
 					"group": "mmstudio"
+				},
+				{
+					"command": "mm.html2jsx",
+					"when": "editorHasSelection",
+					"group": "mmstudio"
 				}
 			],
 			"editor/context": [
@@ -189,6 +199,11 @@
 				},
 				{
 					"command": "mm.tpl.widget",
+					"group": "mmstudio"
+				},
+				{
+					"command": "mm.html2jsx",
+					"when": "editorHasSelection && textInputFocus",
 					"group": "mmstudio"
 				}
 			],
@@ -283,6 +298,11 @@
 			{
 				"command": "mm.widget.addlocal",
 				"key": "alt+m w"
+			},
+			{
+				"command": "mm.html2jsx",
+				"when": "editorHasSelection && textInputFocus",
+				"key": "alt+j"
 			}
 		]
 	},
@@ -330,6 +350,7 @@
 	},
 	"dependencies": {
 		"got": "^11.8.1",
+		"node-html-parser": "^3.0.3",
 		"tar": "^6.1.0"
 	}
 }

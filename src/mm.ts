@@ -5,6 +5,7 @@ import Desktop from './desktop';
 import Next from './next';
 import UniApp from './uniapp';
 import Taro from './taro';
+import html2jsx from './util/html2jsx';
 
 enum PrjType {
 	next = 'next',
@@ -14,6 +15,20 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public html2jsx() {
+		return commands.registerTextEditorCommand('mm.html2jsx', async (editor) => {
+			const sel = editor.selection;
+			const doc = editor.document;
+			const html = doc.getText(sel);
+			if (!html) {
+				return Promise.resolve(true);
+			}
+			const jsx = html2jsx(html);
+			return editor.edit((eb) => {
+				eb.replace(sel, jsx);
+			});
+		});
+	}
 	public addwidgetlocal() {
 		return commands.registerCommand('mm.widget.addlocal', async () => {
 			const tool = this.getinstance();
