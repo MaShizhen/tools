@@ -3,6 +3,7 @@ import { Disposable, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
 import AddAtomTaro from './taro/addatom';
+import AddComponentTaro from './taro/addcomponent';
 import AddPageTaro from './taro/addpage';
 
 export default class Taro extends Base {
@@ -44,8 +45,8 @@ export default class Taro extends Base {
 	public addpage(): Promise<void> {
 		return new AddPageTaro().do();
 	}
-	public addcomponent(_editor: TextEditor): Promise<void> {
-		throw new Error('Method not implemented.');
+	public addcomponent(editor: TextEditor): Promise<void> {
+		return new AddComponentTaro().do(editor);
 	}
 	public addservice(): Promise<void> {
 		throw new Error('Method not implemented.');

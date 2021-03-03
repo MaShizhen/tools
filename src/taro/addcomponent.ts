@@ -1,7 +1,7 @@
 import { Position, TextEditor, window } from 'vscode';
 import Actor from '../actor';
 
-export default class AddComponentNext extends Actor {
+export default class AddComponentTaro extends Actor {
 	public async do(editor: TextEditor): Promise<void> {
 		const doc = editor.document;
 		if (!/\/pages\/.+\.tsx/.test(doc.fileName)) {
