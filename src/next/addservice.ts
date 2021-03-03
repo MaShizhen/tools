@@ -11,7 +11,7 @@ export default class AddServiceNext extends Actor {
 		const name = await this.generate(api, 's', 3);
 		// create service file
 		const servicefile = join(api, `${name}.ts`);
-		await this.create_api(servicefile, name);
+		await this.create_api(servicefile);
 		if (page) {
 			// update page file
 			await this.updatepage(name, page, servicefile);
@@ -24,11 +24,10 @@ export default class AddServiceNext extends Actor {
 	private async updatepage(name: string, pagefile: string, servicefile: string) {
 		// api/xxx/yyy/s001
 		const pathwithoutext = servicefile.replace(/\..*/, '');
-		const no = pathwithoutext.replace(/.*s(\d+)/, '$1');
 		const relativepath = this.getrelativepath(join(pagefile, '..'), pathwithoutext);
 		const url = this.getrelativepath(join('src', 'pages'), pathwithoutext);
 		const imppath = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
-		const imp = `import { m${no}, q${no}, r${no} } from '${imppath}';`;
+		const imp = new RegExp(`import\\s+{.*}\\s+from\\s+['|"]${imppath}['|"];?`);
 		const doc = await workspace.openTextDocument(pagefile);
 		const max = doc.lineCount;
 		let hasimport = false;
@@ -37,7 +36,7 @@ export default class AddServiceNext extends Actor {
 			const line = doc.lineAt(i);
 			const text = line.text;
 			if (/^import\s+.+/.test(text)) {
-				if (text === imp) {
+				if (imp.test(text)) {
 					hasimport = true;
 					break;
 				}
@@ -45,6 +44,15 @@ export default class AddServiceNext extends Actor {
 			}
 		}
 		if (!hasimport) {
+			const body = doc.getText();
+			const ss = body.match(/const\s+s\d+/g) || ['0'];
+			const max = ss.map((s) => {
+				return Number(s.replace(/[^\d]/g, ''));
+			}).sort((a, b) => {
+				return b - a;
+			})[0];
+			const no = max + 1;
+			const imp = `import { Message as M${no}, Query as Q${no}, Result as R${no} } from '${imppath}';`;
 			const we = new WorkspaceEdit();
 			const uri = doc.uri;
 			const imppos1 = new Position(pos + 2, 0);
@@ -55,11 +63,11 @@ export default class AddServiceNext extends Actor {
 		}
 	}
 
-	private create_api(path: string, name: string) {
+	private create_api(path: string) {
 		const relativepath = this.getrelativepath('src', path);
-		const rname = name.replace('s', 'r');
-		const mname = name.replace('s', 'm');
-		const qname = name.replace('s', 'q');
+		const rname = 'Result';
+		const mname = 'Message';
+		const qname = 'Query';
 		const vname = relativepath.replace('.ts', '');
 		const tpl = `import nextConnect from 'next-connect';
 import { NextApiRequest, NextApiResponse, PageConfig } from 'next';

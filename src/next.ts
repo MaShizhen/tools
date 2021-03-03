@@ -3,6 +3,7 @@ import { Disposable, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
 import AddAtomNext from './next/addatom';
+import AddComponentNext from './next/addcomponent';
 import AddPageNext from './next/addpage';
 import AddScheduleNext from './next/addschedule';
 import AddServiceNext from './next/addservice';
@@ -51,8 +52,8 @@ export default class Next extends Base {
 	public addpage(): Promise<void> {
 		return new AddPageNext().do();
 	}
-	public addcomponent(_editor: TextEditor): Promise<void> {
-		return this.addpage();
+	public addcomponent(editor: TextEditor): Promise<void> {
+		return new AddComponentNext().do(editor);
 	}
 	public addatomlocal(editor: TextEditor): Promise<void> {
 		return this.baseaddatomlocal(editor);
