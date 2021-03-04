@@ -350,7 +350,7 @@
 	},
 	"dependencies": {
 		"got": "^11.8.1",
-		"node-html-parser": "^3.0.3",
+		"node-html-parser": "^3.0.4",
 		"tar": "^6.1.0"
 	}
 }
