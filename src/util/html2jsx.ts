@@ -6,13 +6,14 @@ export default function html2jsx(html: string) {
 	}
 	const root = parse(html);
 	const cs = [] as string[];
-	trans(cs, root);
+	const ret = trans(cs, root);
+	const text = ret.text;
 	if (cs.length === 0) {
-		return html;
+		return text;
 	}
 	const styles = cs.join('\n');
 	const jsx = `<>
-${root.toString()}
+${ret.text}
 <style jsx>{\`
 ${styles}
 \`}</style>
@@ -25,6 +26,7 @@ function isel(node: Node): node is HTMLElement {
 }
 
 function trans(cs: string[], node: Node, no = 0) {
+	let text = '';
 	if (isel(node)) {
 		const cls = node.classNames || [];
 		node.removeAttribute('class');
@@ -38,11 +40,38 @@ function trans(cs: string[], node: Node, no = 0) {
 		if (cls.length > 0) {
 			node.setAttribute('className', cls.join(' '));
 		}
+		let innerHTML = '';
 		if (node.childNodes.length > 0) {
-			node.childNodes.forEach((node) => {
-				no = trans(cs, node, no);
-			});
+			innerHTML = node.childNodes.map((node) => {
+				const ret = trans(cs, node, no);
+				no = ret.no;
+				return ret.text;
+			}).join('');
 		}
+		if (node.tagName) {
+			const tag = node.tagName.toLowerCase();
+			const attrs = node.rawAttributes;
+			// Update rawString
+			const rawAttrs = Object.keys(attrs).map((name) => {
+				const val = JSON.stringify(attrs[name]);
+				if (val === undefined || val === 'null') {
+					return name;
+				}
+				return `${name}=${val}`;
+			}).join(' ');
+			const is_void = /^(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)$/i.test(tag);
+			const attrsstr = rawAttrs ? ` ${rawAttrs}` : '';
+			if (is_void) {
+				text = `<${tag}${attrsstr} />`;
+			} else {
+				text = `<${tag}${attrsstr}>${innerHTML}</${tag}>`;
+			}
+		} else {
+			text = innerHTML;
+		}
+	} else {
+		text = node.innerText;
 	}
-	return no;
+
+	return { no, text };
 }

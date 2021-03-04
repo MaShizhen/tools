@@ -24,6 +24,9 @@ export default class MM extends Tools {
 				return Promise.resolve(true);
 			}
 			const jsx = html2jsx(html);
+			if (jsx === html) {
+				return Promise.resolve(true);
+			}
 			return editor.edit((eb) => {
 				eb.replace(sel, jsx);
 			});
