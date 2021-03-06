@@ -82,7 +82,7 @@ export default class AddPageNext extends Actor {
 		}
 
 		const file = join(path, `[...${slug}].tsx`);
-		const body = await this.body(file);
+		const body = await this.body();
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
 // // enables server-side rendering, this enable seo
@@ -129,7 +129,7 @@ export const getStaticPaths: GetStaticPaths<{ ${slug}: string[]; }> = async () =
 		}
 
 		const file = join(path, `[${query}].tsx`);
-		const body = await this.body(file);
+		const body = await this.body();
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
 // // enables server-side rendering, this enable seo
@@ -165,7 +165,7 @@ export const getStaticPaths: GetStaticPaths<{ ${query}: string; }> = async () =>
 
 	private async createpageserverside(dir: string, name: string) {
 		const path = join(dir, `${name}.tsx`);
-		const body = await this.body(path);
+		const body = await this.body();
 		const tpl = `import { GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
 // // enables server-side rendering, this enable seo
@@ -187,7 +187,7 @@ export const getStaticProps: GetStaticProps<IProps> = async (context) => {
 	}
 	private async createpageclientside(dir: string, name: string) {
 		const path = join(dir, `${name}.tsx`);
-		const body = await this.body(path);
+		const body = await this.body();
 		const tpl = `import { GetServerSideProps, NextPage, PageConfig } from 'next';
 ${body}
 // pre-render this page on each request
@@ -201,7 +201,7 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
 		return path;
 	}
 
-	private async body(path: string) {
+	private async body() {
 		const title = await window.showInputBox({
 			prompt: '页面标题',
 			value: '01factory'
