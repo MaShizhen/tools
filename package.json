@@ -1,7 +1,7 @@
 {
 	"name": "mmstudio",
 	"version": "5.2.2",
-	"description": "Tools for mmstudio development",
+	"description": "Tools for development",
 	"publisher": "mm",
 	"icon": "images/mmstudio.jpeg",
 	"galleryBanner": {
@@ -306,17 +306,19 @@
 			}
 		]
 	},
-	"homepage": "https://mmstudio.gitee.io/",
+	"homepage": "https://01factory.github.io/",
 	"keywords": [
-		"蛮蛮",
-		"蛮蛮工作室",
-		"框架",
 		"framework",
 		"web",
-		"factory",
+		"01",
+		"01factory",
 		"tools",
 		"mm",
-		"mmstudio"
+		"mmstudio",
+		"next",
+		"next.js",
+		"taro",
+		"uniapp"
 	],
 	"repository": {
 		"type": "git",

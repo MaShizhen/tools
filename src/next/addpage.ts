@@ -204,11 +204,11 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
 	private async body(path: string) {
 		const title = await window.showInputBox({
 			prompt: '页面标题',
-			value: 'mmstudio'
+			value: '01factory'
 		});
 		const input = await window.showInputBox({
 			prompt: '组件个数',
-			value: '1'
+			value: '0'
 		});
 		const num = Number(input) || 0;
 		const csno = new Array<string>(num).fill('').map((_it, idx) => {
@@ -218,37 +218,29 @@ export const getServerSideProps: GetServerSideProps<IProps> = async (context) =>
 			return `
 function ${c}() {
 	return <>
-		<Row>
-			<Col>
-				组件${c}
-			</Col>
-		</Row>
+		组件${c}
 	</>;
 }`;
 		});
 		const cs = csno.map((c) => {
-			return `<${c} />`;
+			return `<${c}></${c}>`;
 		});
-		const relativepath = this.getrelativepath('src', path);
-		return `import anylogger from 'anylogger';
-import Head from 'next/head';
-import { Col, Row } from '@geist-ui/react';
+		// const relativepath = this.getrelativepath('src', path);
+		// const logger = anylogger('${relativepath.replace('.tsx', '')}');
+		return `import Head from 'next/head';
 import { useEffect, useState } from 'react';
-
-const logger = anylogger('${relativepath.replace('.tsx', '')}');
 
 interface IProps {
 }
-${csfun.join('\n')}
 
 /**
  * ${title || 'mmstudio'}
  */
-const page: NextPage<IProps> = ({ }) => {
+const page: NextPage<IProps> = () => {
 	return (
 		<>
 			<Head>
-				<title>${title || 'mmstudio'}</title>
+				<title>${title || '01factory'}</title>
 			</Head>
 			${cs.join('\n\t\t\t')}
 		</>
@@ -260,6 +252,8 @@ export const config: PageConfig = {
 };
 
 export default page;
+
+${csfun.join('\n')}
 `;
 	}
 }
