@@ -93,7 +93,7 @@ ${body}
 // };
 
 // pre-render this page at build time
-export const getStaticProps: GetStaticProps<IProps> = async (context) => {
+export const getStaticProps: GetStaticProps<IProps> = async () => {
 	const ${slug} = context.params.${slug} as string[];
 	return {
 		props: {},
@@ -174,7 +174,7 @@ ${body}
 // 	};
 // };
 // pre-render this page at build time
-export const getStaticProps: GetStaticProps<IProps> = async (context) => {
+export const getStaticProps: GetStaticProps<IProps> = async () => {
 	return {
 		props: {},
 		revalidate: 60 * 60 * 24 // 1 day
@@ -191,7 +191,7 @@ export const getStaticProps: GetStaticProps<IProps> = async (context) => {
 		const tpl = `import { GetServerSideProps, NextPage, PageConfig } from 'next';
 ${body}
 // pre-render this page on each request
-export const getServerSideProps: GetServerSideProps<IProps> = async (context) => {
+export const getServerSideProps: GetServerSideProps<IProps> = async () => {
 	return {
 		props: {}
 	};
