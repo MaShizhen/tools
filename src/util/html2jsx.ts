@@ -50,6 +50,12 @@ function trans(cs: string[], node: Node, no = 0) {
 		}
 		if (node.tagName) {
 			const tag = node.tagName.toLowerCase();
+			if (tag === 'a' && node.getAttribute('target') === '_blank' && !node.getAttribute('rel')) {
+				node.setAttribute('rel', 'noreferrer');
+			}
+			if (tag === 'img' && node.hasAttribute('alt') && !node.getAttribute('alt')) {
+				node.removeAttribute('alt');
+			}
 			const attrs = node.rawAttributes;
 			// Update rawString
 			const rawAttrs = Object.keys(attrs).map((name) => {
