@@ -29,7 +29,7 @@
 		"prefix": "nextinit",
 		"body": [
 			"// enables server-side rendering, this enable seo",
-			"pg${1:001}.getInitialProps = async (context) => {",
+			"page.getInitialProps = async (context) => {",
 			"return {",
 			"};",
 			"};",
