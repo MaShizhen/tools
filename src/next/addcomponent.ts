@@ -20,7 +20,7 @@ export default class AddComponentNext extends Actor {
 			}
 			return doc.getText(sel);
 		})();
-		const cname = this.prefix('C', no, 3);;
+		const cname = this.prefix('C', no, 3);
 		const tpl = `
 function ${cname}() {
 	return ${jsx};
