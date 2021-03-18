@@ -45,7 +45,14 @@ export default class AddPageNext extends Actor {
 		if (!picked) {
 			return;
 		}
-		const name = await this.generate(dir, 'pg', 3);
+		const name = await window.showInputBox({
+			prompt: 'type pagename',
+			placeHolder: 'page name',
+			value: await this.generate(dir, 'pg', 3)
+		});
+		if (!name) {
+			return;
+		}
 		// create page file
 		const path = await (async () => {
 			switch (picked.type) {

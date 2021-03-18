@@ -1,4 +1,5 @@
 import { join } from 'path';
+import { window } from 'vscode';
 import Actor from '../actor';
 
 interface IPageConfig {
@@ -24,7 +25,14 @@ export default class AddPageUniapp extends Actor {
 		if (!await this.exists(pages)) {
 			await this.mkdir(pages);
 		}
-		const name = await this.generate(pages, 'pg', 3);
+		const name = await window.showInputBox({
+			prompt: 'type pagename',
+			placeHolder: 'page name',
+			value: await this.generate(pages, 'pg', 3)
+		});
+		if (!name) {
+			return;
+		}
 		const p_path = join(pages, name);
 		pagesconfig.pages.push({
 			path: `pages/${name}/${name}`,

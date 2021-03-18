@@ -1,11 +1,19 @@
 import { join } from 'path';
+import { window } from 'vscode';
 import Actor from '../actor';
 
 export default class AddPageTaro extends Actor {
 	public async do(): Promise<void> {
 		const root = this.root();
 		const dir = join(root, 'src', 'pages');
-		const name = await this.generate(dir, 'pg', 3);
+		const name = await window.showInputBox({
+			prompt: 'type pagename',
+			placeHolder: 'page name',
+			value: await this.generate(dir, 'pg', 3)
+		});
+		if (!name) {
+			return;
+		}
 		// create page file
 		const pagedir = join(dir, name);
 		await this.mkdir(pagedir);
