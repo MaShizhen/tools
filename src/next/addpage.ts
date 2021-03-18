@@ -93,7 +93,7 @@ export default class AddPageNext extends Actor {
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
 // // enables server-side rendering, this enable seo
-// ${name}.getInitialProps = async (context) => {
+// page.getInitialProps = async (context) => {
 // 	const ${slug} = context.params.${slug} as string;
 // 	return {
 // 	};
@@ -140,7 +140,7 @@ export const getStaticPaths: GetStaticPaths<{ ${slug}: string[]; }> = async () =
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
 // // enables server-side rendering, this enable seo
-// ${name}.getInitialProps = async (context) => {
+// page.getInitialProps = async (context) => {
 // 	const ${query} = context.params.${query} as string;
 // 	return {
 // 	};
@@ -176,7 +176,7 @@ export const getStaticPaths: GetStaticPaths<{ ${query}: string; }> = async () =>
 		const tpl = `import { GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
 // // enables server-side rendering, this enable seo
-// ${name}.getInitialProps = async (context) => {
+// page.getInitialProps = async (context) => {
 // 	return {
 // 	};
 // };

@@ -15,6 +15,12 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public prototype() {
+		return commands.registerCommand('mm.prototype', () => {
+			const tool = this.getinstance();
+			return tool.prototype();
+		});
+	}
 	public html2jsx() {
 		return commands.registerTextEditorCommand('mm.html2jsx', async (editor) => {
 			const sel = editor.selection;

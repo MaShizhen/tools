@@ -7,6 +7,9 @@ import AddPageDesktop from './desktop/addpage';
 import { IAtom, IAtomCatagory } from './interfaces';
 
 export default class Desktop extends Base {
+	protected getpagename(_path: string): string | null {
+		throw new Error('Method not implemented.');
+	}
 	public addschedule(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

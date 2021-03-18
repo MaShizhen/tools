@@ -1,9 +1,54 @@
 import { basename, dirname, extname, join, sep } from 'path';
-import { Disposable, QuickPickItem, TextEditor, Uri, window, workspace } from 'vscode';
+import { Disposable, QuickPickItem, TextEditor, Uri, ViewColumn, window, workspace } from 'vscode';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
 
 export default abstract class Base extends Tools {
+	public async prototype() {
+		const editor = window.activeTextEditor;
+		if (!editor) {
+			await window.showErrorMessage('You must run this command when you opend a page file');
+			return;
+		}
+		const doc = editor.document;
+		const uri = doc.uri;
+		if (uri.scheme !== 'file') {
+			return;
+		}
+		const path = uri.fsPath;
+		const pagename = this.getpagename(path);
+		console.debug('lalalal', pagename);
+		if (!pagename) {
+			await window.showErrorMessage('Could not get page name');
+			return;
+		}
+		// const rt = this.root(editor);
+		// const pkgstr = await this.readfile(join(rt, 'package.json'));
+		// const pkg = JSON.parse(pkgstr) as { name: string; productid: string; };
+		const pane = window.createWebviewPanel('01', '原型', ViewColumn.Beside);
+		const url = 'https://01factory.vercel.app/';
+		// const url = `http://127.0.0.1:3000/pg002/${pkg.productid}/${pagename}`;
+		pane.webview.html = `<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<style type="text/css">
+html,body,iframe{
+height:100%;
+}
+</style>
+</head>
+
+<body>
+	<iframe onload="this.height=this.contentWindow.document.body.scrollHeight" src="${url}" width="100%"></iframe>
+</body>
+
+</html>
+`;
+		// get url or pictures on web by spaceid and 
+	}
+	protected abstract getpagename(path: string): string | null;
+
 	public async finddoc() {
 		const root = this.root();
 		// if (!root) {

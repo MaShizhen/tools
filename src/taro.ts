@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { basename, extname, join } from 'path';
 import { Disposable, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
@@ -7,6 +7,13 @@ import AddComponentTaro from './taro/addcomponent';
 import AddPageTaro from './taro/addpage';
 
 export default class Taro extends Base {
+	protected getpagename(path: string): string | null {
+		if (!/pages/.test(path)) {
+			return null;
+		}
+		const ext = extname(path);
+		return basename(path, ext);
+	}
 	public addschedule(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

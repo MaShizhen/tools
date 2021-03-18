@@ -19,6 +19,7 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.finddoc(),
 		mm.addwidget(),
 		mm.addwidgetlocal(),
-		mm.html2jsx()
+		mm.html2jsx(),
+		mm.prototype()
 	);
 }

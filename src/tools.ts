@@ -10,9 +10,9 @@ import tar from 'tar';
 import { NO_MODIFY } from './util/blocks';
 
 type RepoInfo = {
-	username?: string
-	name: string
-	branch?: string
+	username?: string;
+	name: string;
+	branch?: string;
 }
 export default abstract class Tools {
 	//#region Other
@@ -25,6 +25,36 @@ export default abstract class Tools {
 	}
 	//#endregion
 	//#region Http get
+	protected gethtml(url: string) {
+		return new Promise<string>((resolve, reject) => {
+			base(url, (res) => {
+				const { statusCode } = res;
+
+				let error;
+				if (statusCode !== 200) {
+					error = new Error(`Request Failed.\nStatus Code: ${statusCode!}`);
+				}
+				if (error) {
+					console.error(error.message);
+					reject(error);
+					// Consume response data to free up memory
+					res.resume();
+					return;
+				}
+
+				res.setEncoding('utf8');
+				let rawData = '';
+				res.on('data', (chunk) => { rawData += chunk; });
+				res.on('error', (err) => {
+					reject(err.message);
+					console.error(err.message);
+				});
+				res.on('end', () => {
+					resolve(rawData);
+				});
+			});
+		});
+	}
 	protected get<T>(url: string) {
 		return new Promise<T>((resolve, reject) => {
 			const d = window.setStatusBarMessage('正在从网络获取列表');
@@ -118,7 +148,7 @@ export default abstract class Tools {
 		window.setStatusBarMessage(msg_installed);
 
 		const filename = Uri.file(join(dir, 'package.json'));
-		const pkg = JSON.parse(Buffer.from(await workspace.fs.readFile(filename)).toString('utf8')) as { peerDependencies: { [name: string]: string; } };
+		const pkg = JSON.parse(Buffer.from(await workspace.fs.readFile(filename)).toString('utf8')) as { peerDependencies: { [name: string]: string; }; };
 		const dep = pkg.peerDependencies;
 		if (dep) {
 			await Promise.all(Object.keys(dep).map(async (name) => {

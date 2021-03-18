@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { basename, dirname, extname, join } from 'path';
 import { Disposable, TextEditor } from 'vscode';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
@@ -9,6 +9,27 @@ import AddScheduleNext from './next/addschedule';
 import AddServiceNext from './next/addservice';
 
 export default class Next extends Base {
+	protected getpagename(path: string): string | null {
+		if (!/pages/.test(path)) {
+			return null;
+		}
+		const ext = extname(path);
+		const pagename = basename(path, ext);
+		if (/pages\/api/.test(path)) {
+			// 服务,直接获取文件夹名称
+			const dir = dirname(path);
+			if (/pages\/api\/.*/.test(dir)) {
+				return basename(dir);
+			}
+			return null;
+		}
+		if (!/^\[.+\]$/.test(pagename)) {
+			return pagename;
+		}
+		// 获取目录名
+		const dir = dirname(path);
+		return basename(dir);
+	}
 	public addschedule(): Promise<void> {
 		return new AddScheduleNext().do();
 	}

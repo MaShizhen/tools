@@ -31,6 +31,11 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "mm.prototype",
+				"category": "mmstudio",
+				"title": "%mm.prototype%"
+			},
+			{
 				"command": "mm.page.add",
 				"category": "mmstudio",
 				"title": "%mm.page.add%"
@@ -114,6 +119,10 @@
 		"menus": {
 			"commandPalette": [
 				{
+					"command": "mm.prototype",
+					"group": "mmstudio"
+				},
+				{
 					"command": "mm.page.add",
 					"group": "mmstudio"
 				},
@@ -181,6 +190,10 @@
 			],
 			"editor/context": [
 				{
+					"command": "mm.prototype",
+					"group": "mmstudio"
+				},
+				{
 					"command": "mm.service.add",
 					"when": "editorIsOpen",
 					"group": "mmstudio"
@@ -239,6 +252,10 @@
 			}
 		],
 		"keybindings": [
+			{
+				"command": "mm.prototype",
+				"key": "alt+i"
+			},
 			{
 				"command": "mm.page.add",
 				"key": "alt+p"

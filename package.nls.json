@@ -1,4 +1,5 @@
 {
+	"mm.prototype": "Show prototype",
 	"mm.html2jsx": "Convert html to jsx",
 	"mm.proj.type": "Type of your project.",
 	"mm.page.add": "Add new page",
