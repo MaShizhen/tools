@@ -22,7 +22,14 @@ const config = {
 	},
 	resolve: {
 		// support reading TypeScript and JavaScript files, 📖 -> https://github.com/TypeStrong/ts-loader
-		extensions: ['.ts', '.js']
+		extensions: ['.ts', '.js'],
+		alias: {
+			cardinal: false,
+			oracledb: false,
+			'pg-query-stream': false,
+			sqlite3: false,
+			'pg-native': false
+		}
 	},
 	module: {
 		exprContextCritical: false,
