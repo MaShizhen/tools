@@ -15,6 +15,12 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public generatetable() {
+		return commands.registerCommand('mm.generatetable', () => {
+			const tool = this.getinstance();
+			return tool.generatetable();
+		});
+	}
 	public prototype() {
 		return commands.registerCommand('mm.prototype', () => {
 			const tool = this.getinstance();

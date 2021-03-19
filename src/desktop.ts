@@ -7,6 +7,9 @@ import AddPageDesktop from './desktop/addpage';
 import { IAtom, IAtomCatagory } from './interfaces';
 
 export default class Desktop extends Base {
+	public generatetable(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	protected getpagename(_path: string): string | null {
 		throw new Error('Method not implemented.');
 	}

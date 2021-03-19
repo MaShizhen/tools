@@ -20,6 +20,7 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.addwidget(),
 		mm.addwidgetlocal(),
 		mm.html2jsx(),
-		mm.prototype()
+		mm.prototype(),
+		mm.generatetable()
 	);
 }

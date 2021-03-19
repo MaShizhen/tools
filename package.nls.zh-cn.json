@@ -1,4 +1,5 @@
 {
+	"mm.generatetable": "生成根据表结构生成接口",
 	"mm.prototype": "查看原型",
 	"mm.html2jsx": "将html片段转换为jsx",
 	"mm.proj.type": "项目类型",

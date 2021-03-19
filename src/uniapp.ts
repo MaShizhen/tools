@@ -6,6 +6,9 @@ import AddAtomUniapp from './uniapp/addatom';
 import AddPageUniapp from './uniapp/addpage';
 
 export default class UniApp extends Base {
+	public generatetable(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	protected getpagename(_path: string): string | null {
 		throw new Error('Method not implemented.');
 	}

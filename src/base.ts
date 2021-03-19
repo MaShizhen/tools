@@ -1,9 +1,12 @@
 import { basename, dirname, extname, join, sep } from 'path';
-import { Disposable, QuickPickItem, TextEditor, Uri, ViewColumn, window, workspace } from 'vscode';
+import { Disposable, env, QuickPickItem, TextEditor, Uri, ViewColumn, window, workspace } from 'vscode';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
 
 export default abstract class Base extends Tools {
+	public abstract generatetable(): Promise<void>;
+
+	// 原型
 	public async prototype() {
 		const editor = window.activeTextEditor;
 		if (!editor) {
@@ -27,6 +30,7 @@ export default abstract class Base extends Tools {
 		// const pkg = JSON.parse(pkgstr) as { name: string; productid: string; };
 		const pane = window.createWebviewPanel('01', '原型', ViewColumn.Beside);
 		const url = 'https://01factory.vercel.app/';
+		await env.openExternal(Uri.parse(url));
 		// const url = `http://127.0.0.1:3000/pg002/${pkg.productid}/${pagename}`;
 		pane.webview.html = `<!DOCTYPE html>
 <html lang="en">
