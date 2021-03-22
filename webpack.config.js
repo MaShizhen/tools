@@ -28,7 +28,8 @@ const config = {
 			oracledb: false,
 			// 	'pg-query-stream': false,
 			sqlite3: false,
-			'pg-native': false
+			'pg-native': false,
+			mysql: false
 		}
 	},
 	module: {

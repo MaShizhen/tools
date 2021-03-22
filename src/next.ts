@@ -43,6 +43,9 @@ export default class Next extends Base {
 			return;
 		}
 		await this.mkdir(join('src', 'pages', 'api', 'tables'));
+		if (config.client === 'mysql') {
+			config.client = 'mysql2';
+		}
 		const db = knex(config);
 		switch (config?.client) {
 			case 'mysql':
