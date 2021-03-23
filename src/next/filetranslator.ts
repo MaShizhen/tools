@@ -1,7 +1,6 @@
-import { basename, dirname, extname, join } from 'path';
+import { basename, join } from 'path';
 import { get as gets } from 'https';
-import { get, IncomingMessage } from 'http';
-import { Readable } from 'stream';
+import { get } from 'http';
 import { Client, ClientOptions } from 'minio';
 import knex, { Knex } from 'knex';
 import { env, Uri, window } from 'vscode';
@@ -10,7 +9,6 @@ import { lookup } from 'mime-types';
 import Actor from '../actor';
 
 const NAME_SPACE = 'mmstudio';
-const maxFilesSize = Infinity;
 
 export default class FileTranslator extends Actor {
 	public async do(): Promise<void> {
