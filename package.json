@@ -405,6 +405,7 @@
 	},
 	"dependencies": {
 		"@mmstudio/an000008": "^1.0.202004170754",
+		"cardinal": "^2.1.1",
 		"got": "^11.8.1",
 		"knex": "^0.95.2",
 		"mime-types": "^2.1.29",
@@ -413,6 +414,7 @@
 		"mysql2": "^2.2.5",
 		"node-html-parser": "^3.0.4",
 		"pg": "^8.5.1",
+		"pg-query-stream": "^4.0.0",
 		"tar": "^6.1.0"
 	}
 }

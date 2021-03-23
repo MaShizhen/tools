@@ -26,7 +26,7 @@ const config = {
 		alias: {
 			// 	cardinal: false,
 			oracledb: false,
-			// 	'pg-query-stream': false,
+			// 'pg-query-stream': false,
 			sqlite3: false,
 			'pg-native': false,
 			mysql: false
