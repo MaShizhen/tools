@@ -8,7 +8,13 @@ export default class AddServiceNext extends Actor {
 		// get api path
 		const { api, page } = await this.getapipath();
 
-		const name = await this.generate(api, 's', 3);
+		const name = await window.showInputBox({
+			prompt: 'Please type file uri',
+			value: await this.generate(api, 's', 3)
+		});
+		if (!name) {
+			return;
+		}
 		// create service file
 		const servicefile = join(api, `${name}.ts`);
 		await this.create_api(servicefile);
