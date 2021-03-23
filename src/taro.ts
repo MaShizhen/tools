@@ -7,6 +7,9 @@ import AddComponentTaro from './taro/addcomponent';
 import AddPageTaro from './taro/addpage';
 
 export default class Taro extends Base {
+	public transfiles(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public generatetable(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

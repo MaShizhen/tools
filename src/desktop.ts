@@ -7,6 +7,9 @@ import AddPageDesktop from './desktop/addpage';
 import { IAtom, IAtomCatagory } from './interfaces';
 
 export default class Desktop extends Base {
+	public transfiles(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public generatetable(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

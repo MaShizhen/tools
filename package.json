@@ -31,6 +31,11 @@
 	"contributes": {
 		"commands": [
 			{
+				"command": "mm.transfiles",
+				"category": "mmstudio",
+				"title": "%mm.transfiles%"
+			},
+			{
 				"command": "mm.generatetable",
 				"category": "mmstudio",
 				"title": "%mm.generatetable%"
@@ -124,6 +129,14 @@
 		"menus": {
 			"commandPalette": [
 				{
+					"command": "mm.transfiles",
+					"group": "mmstudio"
+				},
+				{
+					"command": "mm.generatetable",
+					"group": "mmstudio"
+				},
+				{
 					"command": "mm.prototype",
 					"group": "mmstudio"
 				},
@@ -195,6 +208,14 @@
 			],
 			"editor/context": [
 				{
+					"command": "mm.transfiles",
+					"group": "mmstudio"
+				},
+				{
+					"command": "mm.generatetable",
+					"group": "mmstudio"
+				},
+				{
 					"command": "mm.prototype",
 					"group": "mmstudio"
 				},
@@ -257,6 +278,10 @@
 			}
 		],
 		"keybindings": [
+			{
+				"command": "mm.transfiles",
+				"key": "alt+m alt+f"
+			},
 			{
 				"command": "mm.generatetable",
 				"key": "alt+m t"
@@ -357,6 +382,8 @@
 	},
 	"license": "MIT",
 	"devDependencies": {
+		"@types/mime-types": "^2.1.0",
+		"@types/minio": "^7.0.7",
 		"@types/node": "14.14.28",
 		"@types/node-fetch": "2.5.8",
 		"@types/tar": "^4.0.4",
@@ -377,8 +404,11 @@
 		"webpack-cli": "4.5.0"
 	},
 	"dependencies": {
+		"@mmstudio/an000008": "^1.0.202004170754",
 		"got": "^11.8.1",
 		"knex": "^0.95.2",
+		"mime-types": "^2.1.29",
+		"minio": "^7.0.18",
 		"mssql": "^6.3.1",
 		"mysql2": "^2.2.5",
 		"node-html-parser": "^3.0.4",

@@ -15,6 +15,12 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public transfiles() {
+		return commands.registerCommand('mm.transfiles', () => {
+			const tool = this.getinstance();
+			return tool.transfiles();
+		});
+	}
 	public generatetable() {
 		return commands.registerCommand('mm.generatetable', () => {
 			const tool = this.getinstance();

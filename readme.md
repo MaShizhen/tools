@@ -53,3 +53,4 @@ Required: **因为升级vscode版本相对容易，而维护支持旧版本需�
 转换html中style|`alt+j`
 显示当前页面原型|`alt+i`
 生成数据表定义接口|`alt+m t`
+文件迁移|`alt+m alt+f`

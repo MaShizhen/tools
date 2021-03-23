@@ -10,8 +10,12 @@ import AddScheduleNext from './next/addschedule';
 import AddServiceNext from './next/addservice';
 import MysqlTableGenerator from './next/tbgenerator/mysql';
 import PostgresqlTableGenerator from './next/tbgenerator/pg';
+import FileTranslator from './next/filetranslator';
 
 export default class Next extends Base {
+	public async transfiles(): Promise<void> {
+		return new FileTranslator().do();
+	}
 	public async generatetable(): Promise<void> {
 		// type clientype = 'pg' | 'mysql' | 'mysql2' | 'mssql';
 		const mm = await this.readfile(join(this.root(), 'mm.json'));

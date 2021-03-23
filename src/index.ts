@@ -21,6 +21,7 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.addwidgetlocal(),
 		mm.html2jsx(),
 		mm.prototype(),
-		mm.generatetable()
+		mm.generatetable(),
+		mm.transfiles(),
 	);
 }

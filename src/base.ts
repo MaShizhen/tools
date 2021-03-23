@@ -4,6 +4,7 @@ import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
 
 export default abstract class Base extends Tools {
+	public abstract transfiles(): Promise<void>;
 	public abstract generatetable(): Promise<void>;
 
 	// 原型
