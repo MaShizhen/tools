@@ -28,7 +28,7 @@ function isel(node: Node): node is HTMLElement {
 function trans(cs: string[], node: Node, no = 0) {
 	let text = '';
 	if (isel(node)) {
-		const cls = node.classNames || [];
+		const cls = node.classList.value || [];
 		node.removeAttribute('class');
 		const style = node.getAttribute('style');
 		if (style) {
