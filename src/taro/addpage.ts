@@ -34,7 +34,7 @@ export default class AddPageTaro extends Actor {
 			this.showerror('Coult not get pages in src/app.config.ts');
 			return;
 		}
-		const [, pagestext] = regarr;
+		const pagestext = regarr[1];
 		const pages = pagestext.split(',').map((it) => {
 			return it.trim();
 		});
