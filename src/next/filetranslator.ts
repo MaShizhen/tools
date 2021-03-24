@@ -63,7 +63,7 @@ export default class FileTranslator extends Actor {
 		const uri = await window.showInputBox({
 			prompt: 'Please type file uri',
 			value: await env.clipboard.readText(),
-			ignoreFocusOut: false
+			ignoreFocusOut: true
 		});
 		if (!uri) {
 			return null;
@@ -76,14 +76,14 @@ export default class FileTranslator extends Actor {
 		const id = await window.showInputBox({
 			prompt: 'File id',
 			value: await env.clipboard.readText(),
-			ignoreFocusOut: false
+			ignoreFocusOut: true
 		});
 		if (!id) {
 			return null;
 		}
 		const productid = await window.showInputBox({
 			prompt: 'productid',
-			ignoreFocusOut: false
+			ignoreFocusOut: true
 		});
 		if (!productid) {
 			return null;
@@ -95,21 +95,21 @@ export default class FileTranslator extends Actor {
 	private async multiple(client: Client, dbconfig: Knex.Config) {
 		const productid = await window.showInputBox({
 			prompt: 'productid',
-			ignoreFocusOut: false
+			ignoreFocusOut: true
 		});
 		if (!productid) {
 			return;
 		}
 		const table = await window.showInputBox({
 			prompt: 'Table name',
-			ignoreFocusOut: false
+			ignoreFocusOut: true
 		});
 		if (!table) {
 			return;
 		}
 		const field = await window.showInputBox({
 			prompt: 'Field name',
-			ignoreFocusOut: false
+			ignoreFocusOut: true
 		});
 		if (!field) {
 			return;
