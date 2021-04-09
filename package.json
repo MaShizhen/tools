@@ -15,7 +15,8 @@
 		"compile": "webpack --mode production",
 		"build": "yarn clean && yarn lint && yarn compile",
 		"up": "git pull git@github.com:mm-core/base.git cjs",
-		"vscode:prepublish": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && yarn build"
+		"vscode:prepublish": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && yarn build",
+		"release": "np"
 	},
 	"engines": {
 		"vscode": "^1.53.0"
@@ -369,7 +370,9 @@
 		"next",
 		"next.js",
 		"taro",
-		"uniapp"
+		"uniapp",
+		"零壹",
+		"微工厂"
 	],
 	"repository": {
 		"type": "git",
@@ -381,6 +384,10 @@
 		"url": "https://mmstudio.gitee.io/"
 	},
 	"license": "MIT",
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org"
+	},
 	"devDependencies": {
 		"@types/mime-types": "^2.1.0",
 		"@types/minio": "^7.0.7",
