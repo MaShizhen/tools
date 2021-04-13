@@ -16,7 +16,7 @@
 		"build": "yarn clean && yarn lint && yarn compile",
 		"up": "git pull git@github.com:mm-core/base.git cjs",
 		"vscode:prepublish": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && yarn build",
-		"release": "np"
+		"release": "np && vsce publish"
 	},
 	"engines": {
 		"vscode": "^1.53.0"
@@ -259,6 +259,10 @@
 			{
 				"language": "typescriptreact",
 				"path": "./snippets/tsx.json"
+			},
+			{
+				"language": "typescript",
+				"path": "./snippets/ts.json"
 			}
 		],
 		"configuration": [
@@ -386,7 +390,8 @@
 	"license": "MIT",
 	"publishConfig": {
 		"access": "public",
-		"registry": "https://registry.npmjs.org"
+		"registry": "https://registry.npmjs.org",
+		"publish": false
 	},
 	"devDependencies": {
 		"@types/mime-types": "^2.1.0",
@@ -404,8 +409,10 @@
 		"eslint-config-ts-lambdas": "1.2.3",
 		"eslint-plugin-import": "2.22.1",
 		"eslint-plugin-react": "7.22.0",
+		"np": "^7.4.0",
 		"ts-loader": "8.0.17",
 		"typescript": "next",
+		"vsce": "^1.87.1",
 		"vscode-test": "1.5.1",
 		"webpack": "5.22.0",
 		"webpack-cli": "4.5.0"
