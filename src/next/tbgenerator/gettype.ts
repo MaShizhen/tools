@@ -1,7 +1,7 @@
 export default function gettype(type: string) {
 	switch (type) {
 		case 'bigint':
-			return 'bigint';
+			return 'number;	// bigint';
 		case 'int':
 		case 'decimal':
 		case 'smallint':
