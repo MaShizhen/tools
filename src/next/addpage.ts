@@ -27,7 +27,7 @@ export default class AddPageNext extends Actor {
 			description: 'pgxxx.tsx',
 			type: 1
 		}, {
-			label: '2. Page',
+			label: '2. client',
 			detail: 'Client side render page',
 			description: 'pgxxx.tsx',
 			type: 2
