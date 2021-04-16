@@ -18,7 +18,9 @@ export default class AddComponentNext extends Actor {
 	组件${no}
 </>`;
 			}
-			return doc.getText(sel);
+			return `<>
+	${doc.getText(sel)}
+</>`;
 		})();
 		const cname = this.prefix('C', no, 3);
 		const tpl = `
