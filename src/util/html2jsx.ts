@@ -32,7 +32,7 @@ function trans(cs: string[], node: Node, no = 0) {
 		node.removeAttribute('class');
 		const style = node.getAttribute('style');
 		if (style) {
-			const s = `s${(++no).toString().padStart(3, '0')}`;
+			const s = `cls${(++no).toString().padStart(3, '0')}`;
 			cls.push(s);
 			cs.push(`.${s} { ${style} }`);
 		}
