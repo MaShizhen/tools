@@ -230,7 +230,7 @@ function ${c}() {
 }`;
 		});
 		const cs = csno.map((c) => {
-			return `<${c}></${c}>`;
+			return `<${c} />`;
 		});
 		// const relativepath = this.getrelativepath('src', path);
 		// const logger = anylogger('${relativepath.replace('.tsx', '')}');

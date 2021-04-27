@@ -30,7 +30,7 @@ function ${cname}() {
 `;
 		await editor.edit((eb) => {
 			eb.insert(new Position(doc.lineCount - 1, 0), tpl);
-			eb.replace(sel, `<${cname}></${cname}>`);
+			eb.replace(sel, `<${cname} />`);
 		});
 		this.set_status_bar_message('成功添加组件');
 		// await this.show_doc(path);
