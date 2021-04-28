@@ -193,7 +193,7 @@ height:100%;
 			await this.insetSnippet(editor, use, imp);
 			return;
 		}
-		await this.shellinstall(editor, atom.no, atom.version);
+		await this.shellinstall(editor, atom.no);
 
 		const name = atom.no.replace(/(@.+\/)?([a-z]+)0+(\d+)/, '$2$3');
 		const imp = `import ${name} from '${atom.no}';`;

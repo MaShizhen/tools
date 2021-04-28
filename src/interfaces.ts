@@ -1,7 +1,7 @@
 export interface IAtom {
 	name: string;
 	no: string;
-	version: string;
+	// version: string;
 	local?: true;
 }
 
@@ -38,7 +38,7 @@ export interface Package {
 	};
 	main: string;
 	keywords: string[];
-	author: User,
+	author: User;
 	maintainers: User[];
 	license: string;
 	dependencies: Dependence;

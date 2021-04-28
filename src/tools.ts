@@ -125,13 +125,11 @@ export default abstract class Tools {
 	//#endregion
 
 	//#region Shell
-	protected async shellinstall(editor: TextEditor, atom: string, version: string) {
+	protected async shellinstall(editor: TextEditor, atom: string) {
 		if (!atom) {
 			return;
 		}
-		if (!version || version === '*') {
-			version = 'latest';
-		}
+		const version = 'latest';
 		const cwd = this.root(editor);
 		const dir = join(cwd, 'node_modules', atom);
 		if (await this.exists(dir)) {
@@ -152,8 +150,7 @@ export default abstract class Tools {
 		const dep = pkg.peerDependencies;
 		if (dep) {
 			await Promise.all(Object.keys(dep).map(async (name) => {
-				const ver = dep[name];
-				await this.shellinstall(editor, name, ver);
+				await this.shellinstall(editor, name);
 			}));
 		}
 	}
