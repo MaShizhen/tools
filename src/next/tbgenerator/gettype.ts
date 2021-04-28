@@ -9,6 +9,7 @@ export default function gettype(type: string) {
 		case 'float':
 		case 'tinyint':
 		case 'double':
+		case 'real':
 			return 'number';
 		case 'varchar':
 		case 'longtext':
