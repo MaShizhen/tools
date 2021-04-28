@@ -3,6 +3,7 @@ export default function gettype(type: string) {
 		case 'bigint':
 			return 'number;	// bigint';
 		case 'int':
+		case 'integer':
 		case 'decimal':
 		case 'smallint':
 		case 'float':
