@@ -125,6 +125,11 @@
 				"command": "mm.html2jsx",
 				"category": "mmstudio",
 				"title": "%mm.html2jsx%"
+			},
+			{
+				"command": "mm.linebreak",
+				"category": "mmstudio",
+				"title": "%mm.linebreak%"
 			}
 		],
 		"menus": {
@@ -359,6 +364,10 @@
 				"command": "mm.html2jsx",
 				"when": "editorHasSelection && textInputFocus",
 				"key": "alt+j"
+			},
+			{
+				"command": "mm.linebreak",
+				"key": "alt+n"
 			}
 		]
 	},

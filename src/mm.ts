@@ -6,6 +6,7 @@ import Next from './next';
 import UniApp from './uniapp';
 import Taro from './taro';
 import html2jsx from './util/html2jsx';
+import linebreak from './mm/linebreak';
 
 enum PrjType {
 	next = 'next',
@@ -15,6 +16,12 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public linebreak() {
+		return commands.registerTextEditorCommand('mm.linebreak', (editor) => {
+			return linebreak(editor);
+		});
+	}
+
 	public transfiles() {
 		return commands.registerCommand('mm.transfiles', () => {
 			const tool = this.getinstance();

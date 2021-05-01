@@ -1,4 +1,5 @@
 {
+	"mm.linebreak": "Replace linebreak",
 	"mm.transfiles": "Translate files to local",
 	"mm.generatetable": "Generate talbe as interface",
 	"mm.prototype": "Show prototype",

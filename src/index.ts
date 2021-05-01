@@ -23,5 +23,6 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.prototype(),
 		mm.generatetable(),
 		mm.transfiles(),
+		mm.linebreak(),
 	);
 }
