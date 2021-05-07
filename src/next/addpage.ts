@@ -241,7 +241,7 @@ interface IProps {
 }
 
 /**
- * ${title || 'mmstudio'}
+ * ${title || '01factory'}
  */
 const page: NextPage<IProps> = () => {
 	return (
