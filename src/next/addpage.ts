@@ -60,10 +60,10 @@ export default class AddPageNext extends Actor {
 						return /^index\.page\.tsx$/.test(file);
 					}
 					if (picked.type === 2) {
-						return /^\[[^.]*\]\.tsx$/.test(file);
+						return /^\[[^.]*\]\.page\.tsx$/.test(file);
 					}
 					if (picked.type === 3) {
-						return /^\[\.\.\.[^.]*\]\.tsx$/.test(file);
+						return /^\[\.\.\.[^.]*\]\.page\.tsx$/.test(file);
 					}
 					return false;
 				});
@@ -130,7 +130,7 @@ export default class AddPageNext extends Actor {
 			return null;
 		}
 
-		const file = join(dir, `[...${slug}].tsx`);
+		const file = join(dir, `[...${slug}].page.tsx`);
 		const body = await this.body();
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
@@ -175,7 +175,7 @@ export const getStaticPaths: GetStaticPaths<{ ${slug}: string[]; }> = async () =
 			return null;
 		}
 
-		const file = join(dir, `[${query}].tsx`);
+		const file = join(dir, `[${query}].page.tsx`);
 		const body = await this.body();
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
