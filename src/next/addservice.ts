@@ -36,10 +36,10 @@ export default class AddServiceNext extends Actor {
 
 	private async updatepage(name: string, pagefile: string, servicefile: string) {
 		// api/xxx/yyy/s001
-		const ext = '.api.ts';
+		const ext = '.ts';
 		const pathwithoutext = servicefile.replace(ext, '');
 		const relativepath = this.getrelativepath(join(pagefile, '..'), pathwithoutext);
-		const url = this.getrelativepath(join('src', 'pages'), pathwithoutext);
+		const url = this.getrelativepath(join('src', 'pages'), pathwithoutext).replace(/\.api$/, '');
 		const imppath = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
 		const imp = new RegExp(`import\\s+{.*}\\s+from\\s+['|"]${imppath}['|"];?`);
 		const doc = await workspace.openTextDocument(pagefile);

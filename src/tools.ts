@@ -366,7 +366,7 @@ export default abstract class Tools {
 	}
 	protected async generate(path: string, prefix: string, len: number) {
 		const files = await this.readdir(path);
-		const reg = new RegExp(`^${prefix}\\d*(\\.\\w+)?$`);
+		const reg = new RegExp(`^${prefix}\\d*(\\.\\w+)*$`);
 		const l = prefix.length;
 		const as = files.filter((f) => {
 			return reg.test(f);
