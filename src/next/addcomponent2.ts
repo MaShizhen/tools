@@ -19,10 +19,9 @@ export default class AddComponentNext2 extends Actor {
 			return;
 		}
 		const file = f.toLowerCase();
-		const cname = f.toUpperCase();
 		const fullpath = join(dir, `${file}.tsx`);
 		const tpl = `
-export default function ${cname}() {
+export default function ${file}() {
 	return <>
 	</>;
 }

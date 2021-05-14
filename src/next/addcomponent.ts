@@ -47,7 +47,7 @@ export default class AddComponentNext extends Actor {
 			return `<${cname} />`;
 		})();
 		const tpl = `
-export default function ${cname}() {
+export default function ${file}() {
 	return <>
 		${content}
 	</>;
