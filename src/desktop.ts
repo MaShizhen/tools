@@ -1,12 +1,14 @@
 import { dirname, join } from 'path';
 import { CompletionItem, CompletionItemKind, Disposable, languages, Position, QuickPickItem, SnippetString, TextDocument, TextEditor } from 'vscode';
 import Base from './base';
-import AddAtomDesktopPage from './desktop/addatom/page';
 import AddComponentDesktop from './desktop/addcomponent';
 import AddPageDesktop from './desktop/addpage';
 import { IAtom, IAtomCatagory } from './interfaces';
 
 export default class Desktop extends Base {
+	public addcomponent2(_path?: string): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public transfiles(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
@@ -158,14 +160,11 @@ export default class Desktop extends Base {
 			'"'
 		);
 	}
-	public addservice(): Promise<void> {
-		return this.baseaddservice();
+	public addservice(_p?: string): Promise<void> {
+		throw new Error('Method not implemented.');
 	}
 	public addpage(): Promise<void> {
 		return new AddPageDesktop().do();
-	}
-	public addatomlocal(editor: TextEditor): Promise<void> {
-		return new AddAtomDesktopPage(editor).do();
 	}
 	public addcomponent(editor: TextEditor): Promise<void> {
 		return new AddComponentDesktop(editor).do();

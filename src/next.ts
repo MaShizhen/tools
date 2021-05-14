@@ -1,10 +1,11 @@
 import { basename, dirname, extname, join } from 'path';
-import { Disposable, TextEditor, Uri, window } from 'vscode';
+import { Disposable, TextEditor, Uri } from 'vscode';
 import knex, { Knex } from 'knex';
 import Base from './base';
 import { IAtomCatagory } from './interfaces';
 import AddAtomNext from './next/addatom';
 import AddComponentNext from './next/addcomponent';
+import AddComponentNext2 from './next/addcomponent2';
 import AddPageNext from './next/addpage';
 import AddScheduleNext from './next/addschedule';
 import AddServiceNext from './next/addservice';
@@ -13,6 +14,9 @@ import PostgresqlTableGenerator from './next/tbgenerator/pg';
 import FileTranslator from './next/filetranslator';
 
 export default class Next extends Base {
+	public addcomponent2(path?: string): Promise<void> {
+		return new AddComponentNext2().do(path);
+	}
 	public async transfiles(): Promise<void> {
 		return new FileTranslator().do();
 	}
@@ -22,7 +26,7 @@ export default class Next extends Base {
 		const mmconfig = JSON.parse(mm) as { dbconfig: Knex.Config; };
 		const config = mmconfig.dbconfig;
 		if (!config) {
-			await window.showErrorMessage('请检查配置文件mm.json');
+			this.showerror('请检查配置文件mm.json');
 			return;
 		}
 		const dbname = (() => {
@@ -122,16 +126,13 @@ export default class Next extends Base {
 	public completion(): Disposable {
 		return Disposable.from();
 	}
-	public addservice(): Promise<void> {
-		return new AddServiceNext().do();
+	public addservice(path?: string): Promise<void> {
+		return new AddServiceNext().do(path);
 	}
-	public addpage(): Promise<void> {
-		return new AddPageNext().do();
+	public addpage(path?: string): Promise<void> {
+		return new AddPageNext().do(path);
 	}
 	public addcomponent(editor: TextEditor): Promise<void> {
 		return new AddComponentNext().do(editor);
-	}
-	public addatomlocal(editor: TextEditor): Promise<void> {
-		return this.baseaddatomlocal(editor);
 	}
 }

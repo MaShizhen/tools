@@ -6,6 +6,9 @@ import AddAtomUniapp from './uniapp/addatom';
 import AddPageUniapp from './uniapp/addpage';
 
 export default class UniApp extends Base {
+	public addcomponent2(_path?: string): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public transfiles(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
@@ -52,16 +55,13 @@ export default class UniApp extends Base {
 	public completion(): Disposable {
 		return Disposable.from();
 	}
-	public addservice(): Promise<void> {
-		return this.baseaddservice();
+	public addservice(_p?: string): Promise<void> {
+		throw new Error('Method not implemented.');
 	}
 	public addpage(): Promise<void> {
 		return new AddPageUniapp().do();
 	}
 	public addcomponent(_editor: TextEditor): Promise<void> {
 		return this.addpage();
-	}
-	public addatomlocal(editor: TextEditor): Promise<void> {
-		return this.baseaddatomlocal(editor);
 	}
 }

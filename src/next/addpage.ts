@@ -1,84 +1,126 @@
-import { dirname, join } from 'path';
+import { basename, join } from 'path';
 import { window } from 'vscode';
 import Actor from '../actor';
-import { get_pages } from './get-pages';
 
 export default class AddPageNext extends Actor {
-	public async do(): Promise<void> {
-		const rootPath = this.root();
-		const pages = await get_pages(rootPath);
-		const dir = (() => {
-			const editor = window.activeTextEditor;
-			if (!editor) {
-				return pages;
-			}
-			const dir = dirname(editor.document.fileName);
-			if (!/pages/.test(dir)) {
-				return pages;
-			}
-			if (/pg\d{3,}/.test(dir)) {
-				return join(dir, '..');
-			}
-			return dir;
-		})();
+	public async do(d?: string): Promise<void> {
+		const defaultdir = await this.getdirorbypath(d);
+		if (!defaultdir) {
+			return;
+		}
+		if (!/pages/.test(defaultdir)) {
+			this.showerror('该目录不允许新增页面');
+			return;
+		}
+		if (/pages[/\\]api[/\\]?/.test(defaultdir)) {
+			this.showerror('该目录不允许新增页面');
+			return;
+		}
 		const picked = await this.pick([{
-			label: '1. ssr',
-			detail: 'Server side render page',
-			description: 'pgxxx.tsx',
+			label: '1. Nomal',
+			detail: 'Nomal page',
+			description: 'pgxxx',
 			type: 1
 		}, {
-			label: '2. client',
-			detail: 'Client side render page',
-			description: 'pgxxx.tsx',
-			type: 2
-		}, {
-			label: '3. ssr query Page',
+			label: '2. query Page',
 			detail: 'Query page like pgxxx/yyy',
 			description: 'pgxxx/[id]',
-			type: 3
+			type: 2
 		}, {
-			label: '4. ssr slug query page',
+			label: '3. slug query page',
 			detail: 'Slug page like pgxxx/yyy, pgxxx/yyy/zzz,...',
 			description: 'pgxxx/[...slug]',
-			type: 4
+			type: 3
 		}]);
 		if (!picked) {
 			return;
 		}
-		const name = await window.showInputBox({
-			prompt: 'type pagename',
-			placeHolder: 'page name',
-			value: await this.generate(dir, 'pg', 3)
-		});
+		const {
+			dir,
+			name
+		} = await (async () => {
+			if (/pages$/.test(defaultdir)) {
+				const name = await window.showInputBox({
+					prompt: 'type pagename',
+					placeHolder: 'page name',
+					value: await this.generate(defaultdir, 'pg', 3)
+				});
+				return {
+					dir: defaultdir,
+					name
+				};
+			}
+			const files = await this.readdir(defaultdir);
+			const isinpagedir = files.some((file) => {
+				return /^(index\.page|\[[^.]*\]|\[\.\.\.[^.]*\])\.tsx$/.test(file);
+			});
+			if (isinpagedir) {
+				const exist = files.some((file) => {
+					if (picked.type === 1) {
+						return /^index\.page\.tsx$/.test(file);
+					}
+					if (picked.type === 2) {
+						return /^\[[^.]*\]\.tsx$/.test(file);
+					}
+					if (picked.type === 3) {
+						return /^\[\.\.\.[^.]*\]\.tsx$/.test(file);
+					}
+					return false;
+				});
+				const dir = this.getdir(defaultdir);
+				if (!exist) {
+					const name = basename(defaultdir);
+					return {
+						dir,
+						name
+					};
+				}
+				const name = await window.showInputBox({
+					prompt: 'type pagename',
+					placeHolder: 'page name',
+					value: await this.generate(dir, 'pg', 3)
+				});
+				return {
+					dir,
+					name
+				};
+			}
+			const name = await window.showInputBox({
+				prompt: 'type pagename',
+				placeHolder: 'page name',
+				value: await this.generate(defaultdir, 'pg', 3)
+			});
+			return {
+				dir: defaultdir,
+				name
+			};
+		})();
 		if (!name) {
 			return;
 		}
+		const path = join(dir, name);
 		// create page file
-		const path = await (async () => {
+		const filepath = await (async () => {
 			switch (picked.type) {
 				case 1:
-					return this.createpageserverside(dir, name);
+					return this.createnomalpage(path);
 				case 2:
-					return this.createpageclientside(dir, name);
+					return this.createpagestaticquery(path);
 				case 3:
-					return this.createpagestaticquery(dir, name);
-				case 4:
-					return this.createpagessrslug(dir, name);
+					return this.createpagessrslug(path);
 				default:
 					return null;
 			}
 		})();
-		if (!path) {
+		if (!filepath) {
 			return;
 		}
 		await this.save();
 		this.set_status_bar_message('成功添加页面文件');
-		await this.show_doc(path);
+		await this.show_doc(filepath);
 	}
 
-	private async createpagessrslug(dir: string, name: string) {
-		const path = join(dir, name);
-		await this.mkdir(path);
+	private async createpagessrslug(dir: string) {
 		const slug = await window.showInputBox({
 			prompt: 'Please type query name',
 			placeHolder: 'Type query name like `slug`',
@@ -88,7 +130,7 @@ export default class AddPageNext extends Actor {
 			return null;
 		}
 
-		const file = join(path, `[...${slug}].tsx`);
+		const file = join(dir, `[...${slug}].tsx`);
 		const body = await this.body();
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
@@ -100,7 +142,7 @@ ${body}
 // };
 
 // pre-render this page at build time
-export const getStaticProps: GetStaticProps<IProps> = async () => {
+export const getStaticProps: GetStaticProps<IProps> = async (context) => {
 	const ${slug} = context.params.${slug} as string[];
 	return {
 		props: {},
@@ -123,9 +165,7 @@ export const getStaticPaths: GetStaticPaths<{ ${slug}: string[]; }> = async () =
 		return file;
 	}
 
-	private async createpagestaticquery(dir: string, name: string) {
-		const path = join(dir, name);
-		await this.mkdir(path);
+	private async createpagestaticquery(dir: string) {
 		const query = await window.showInputBox({
 			prompt: 'Please type query name',
 			placeHolder: 'Type query name like `id`',
@@ -135,7 +175,7 @@ export const getStaticPaths: GetStaticPaths<{ ${slug}: string[]; }> = async () =
 			return null;
 		}
 
-		const file = join(path, `[${query}].tsx`);
+		const file = join(dir, `[${query}].tsx`);
 		const body = await this.body();
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
@@ -170,67 +210,20 @@ export const getStaticPaths: GetStaticPaths<{ ${query}: string; }> = async () =>
 		return file;
 	}
 
-	private async createpageserverside(dir: string, name: string) {
-		const path = join(dir, `${name}.tsx`);
+	private async createnomalpage(dir: string) {
+		const filepath = join(dir, 'index.page.tsx');
 		const body = await this.body();
-		const tpl = `import { GetStaticProps, NextPage, PageConfig } from 'next';
+		const tpl = `import { NextPage, PageConfig } from 'next';
 ${body}
-// // enables server-side rendering, this enable seo
-// page.getInitialProps = async (context) => {
-// 	return {
-// 	};
-// };
-// pre-render this page at build time
-export const getStaticProps: GetStaticProps<IProps> = async () => {
-	return {
-		props: {},
-		revalidate: 60 * 60 * 24 // 1 day
-	};
-};
-
 `;
-		await this.writefile(path, tpl);
-		return path;
-	}
-	private async createpageclientside(dir: string, name: string) {
-		const path = join(dir, `${name}.tsx`);
-		const body = await this.body();
-		const tpl = `import { GetServerSideProps, NextPage, PageConfig } from 'next';
-${body}
-// pre-render this page on each request
-export const getServerSideProps: GetServerSideProps<IProps> = async () => {
-	return {
-		props: {}
-	};
-};
-`;
-		await this.writefile(path, tpl);
-		return path;
+		await this.writefile(filepath, tpl);
+		return filepath;
 	}
 
 	private async body() {
 		const title = await window.showInputBox({
 			prompt: '页面标题',
 			value: '01factory'
-		});
-		const input = await window.showInputBox({
-			prompt: '组件个数',
-			value: '0'
-		});
-		const num = Number(input) || 0;
-		const csno = new Array<string>(num).fill('').map((_it, idx) => {
-			return this.prefix('C', idx + 1, 3);
-		});
-		const csfun = csno.map((c) => {
-			return `
-function ${c}() {
-	return <>
-		组件${c}
-	</>;
-}`;
-		});
-		const cs = csno.map((c) => {
-			return `<${c} />`;
 		});
 		// const relativepath = this.getrelativepath('src', path);
 		// const logger = anylogger('${relativepath.replace('.tsx', '')}');
@@ -252,7 +245,6 @@ const page: NextPage<IProps> = () => {
 				<link rel="icon" type="image/x-icon" sizes="32x32" href="/favicon-32x32.ico" ></link>
 				<link rel="icon" type="image/x-icon" sizes="16x16" href="/favicon-16x16.ico"></link>
 			</Head>
-			${cs.join('\n\t\t\t')}
 		</>
 	);
 };
@@ -262,8 +254,6 @@ export const config: PageConfig = {
 };
 
 export default page;
-
-${csfun.join('\n')}
 `;
 	}
 }

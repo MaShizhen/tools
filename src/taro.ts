@@ -7,6 +7,9 @@ import AddComponentTaro from './taro/addcomponent';
 import AddPageTaro from './taro/addpage';
 
 export default class Taro extends Base {
+	public addcomponent2(_path?: string): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public transfiles(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
@@ -61,10 +64,7 @@ export default class Taro extends Base {
 	public addcomponent(editor: TextEditor): Promise<void> {
 		return new AddComponentTaro().do(editor);
 	}
-	public addservice(): Promise<void> {
+	public addservice(_p?: string): Promise<void> {
 		throw new Error('Method not implemented.');
-	}
-	public addatomlocal(editor: TextEditor): Promise<void> {
-		return this.baseaddatomlocal(editor);
 	}
 }

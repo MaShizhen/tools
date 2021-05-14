@@ -57,6 +57,11 @@
 				"title": "%mm.component.add%"
 			},
 			{
+				"command": "mm.component.add2",
+				"category": "mmstudio",
+				"title": "%mm.component.add%"
+			},
+			{
 				"command": "mm.service.add",
 				"category": "mmstudio",
 				"title": "%mm.service.add%"
@@ -108,6 +113,11 @@
 			},
 			{
 				"command": "mm.atom.addlocal",
+				"category": "mmstudio",
+				"title": "%mm.atom.addlocal%"
+			},
+			{
+				"command": "mm.atom.addlocal2",
 				"category": "mmstudio",
 				"title": "%mm.atom.addlocal%"
 			},
@@ -255,8 +265,19 @@
 			"explorer/context": [
 				{
 					"command": "mm.service.add",
-					"group": "mmstudio",
-					"key": "alt+s"
+					"group": "mmstudio"
+				},
+				{
+					"command": "mm.page.add",
+					"group": "mmstudio"
+				},
+				{
+					"command": "mm.component.add2",
+					"group": "mmstudio"
+				},
+				{
+					"command": "mm.atom.addlocal2",
+					"group": "mmstudio"
 				}
 			]
 		},

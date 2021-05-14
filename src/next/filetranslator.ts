@@ -15,7 +15,7 @@ export default class FileTranslator extends Actor {
 		const mm = await this.readfile(join(this.root(), 'mm.json'));
 		const mmconfig = JSON.parse(mm) as { dbconfig: Knex.Config; minio: ClientOptions; };
 		if (!mmconfig.dbconfig || !mmconfig.minio) {
-			await window.showErrorMessage('请检查配置文件mm.json');
+			this.showerror('请检查配置文件mm.json');
 			return;
 		}
 		const picked = await this.pick([{

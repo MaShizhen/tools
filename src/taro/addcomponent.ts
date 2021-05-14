@@ -1,11 +1,11 @@
-import { Position, TextEditor, window } from 'vscode';
+import { Position, TextEditor } from 'vscode';
 import Actor from '../actor';
 
 export default class AddComponentTaro extends Actor {
 	public async do(editor: TextEditor): Promise<void> {
 		const doc = editor.document;
 		if (!/\/pages\/.+\.tsx/.test(doc.fileName)) {
-			await window.showErrorMessage('不能在当前页面插入组件');
+			this.showerror('不能在当前页面插入组件');
 			return;
 		}
 		const body = doc.getText();

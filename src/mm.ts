@@ -196,23 +196,30 @@ export default class MM extends Tools {
 		return tool.completion();
 	}
 	public addservice() {
-		return commands.registerCommand('mm.service.add', async () => {
+		return commands.registerCommand('mm.service.add', async (uri?: Uri) => {
 			const tool = this.getinstance();
-			await tool.addservice();
+			await tool.addservice(uri && uri.fsPath);
 			return this.refreshexplorer();
 		});
 	}
 	public addpage() {
-		return commands.registerCommand('mm.page.add', async () => {
+		return commands.registerCommand('mm.page.add', async (uri?: Uri) => {
 			const tool = this.getinstance();
-			await tool.addpage();
+			await tool.addpage(uri && uri.fsPath);
 			return this.refreshexplorer();
 		});
 	}
 	public addatomlocal() {
-		return commands.registerTextEditorCommand('mm.atom.addlocal', async (editor) => {
+		return commands.registerTextEditorCommand('mm.atom.addlocal', async () => {
 			const tool = this.getinstance();
-			await tool.addatomlocal(editor);
+			await tool.addatomlocal();
+			return this.refreshexplorer();
+		});
+	}
+	public addatomlocal2() {
+		return commands.registerCommand('mm.atom.addlocal2', async (uri?: Uri) => {
+			const tool = this.getinstance();
+			await tool.addatomlocal(uri && uri.fsPath);
 			return this.refreshexplorer();
 		});
 	}
@@ -226,6 +233,13 @@ export default class MM extends Tools {
 		return commands.registerTextEditorCommand('mm.component.add', async (editor) => {
 			const tool = this.getinstance();
 			await tool.addcomponent(editor);
+			return this.refreshexplorer();
+		});
+	}
+	public addcomponent2() {
+		return commands.registerCommand('mm.component.add2', async (uri?: Uri) => {
+			const tool = this.getinstance();
+			await tool.addcomponent2(uri && uri.fsPath);
 			return this.refreshexplorer();
 		});
 	}

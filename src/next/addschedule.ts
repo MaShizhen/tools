@@ -35,7 +35,7 @@ export default class AddScheduleNext extends Actor {
 			return;
 		}
 
-		const src = this.getdir();
+		const src = this.getsourcedir();
 		await this.mkdir(src);
 		const name = await this.generate(src, 's', 3);
 		// create service file
@@ -75,7 +75,7 @@ export default function ${name}(data: Record<string, unknown>) {
 </ol>`;
 	}
 
-	private getdir() {
+	private getsourcedir() {
 		const rootPath = this.root();
 		const editor = window.activeTextEditor;
 		const schedule = join(rootPath, 'src', 'schedule');

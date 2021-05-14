@@ -16,6 +16,11 @@ type RepoInfo = {
 }
 export default abstract class Tools {
 	//#region Other
+	protected str2camelcase(str: string) {
+		return str.toLowerCase().replace(/-(\w)/g, (_, $1) => {
+			return ($1 as string).toUpperCase();
+		});
+	}
 	protected sleep(timeout: number) {
 		return new Promise<void>((res) => {
 			setTimeout(() => {
@@ -447,6 +452,47 @@ export default abstract class Tools {
 		} catch {
 			return Promise.resolve();	// already exits
 		}
+	}
+	protected async isfile(pathlike: string) {
+		try {
+			const stat = await fs.stat(pathlike);
+			return stat.isFile();
+		} catch (e) {
+			return false;
+		}
+	}
+
+	protected getdir(path: string) {
+		return dirname(path);
+	}
+
+	protected async getfilepath(pathlike: string) {
+		if (await this.isfile(pathlike)) {
+			return dirname(pathlike);
+		}
+		return pathlike;
+	}
+
+	/**
+	 * 获取文件路径,如果传入为目录,直接返回,如果传入为文件名,返回文件所在目录,如果未传,返回当前打开编辑器文件的路径
+	 */
+	protected async getdirorbypath(pathlike?: string) {
+		if (pathlike) {
+			return this.getfilepath(pathlike);
+		}
+		const editor = window.activeTextEditor;
+		if (editor) {
+			return dirname(editor.document.fileName);
+		}
+		const s = await window.showOpenDialog({
+			canSelectMany: false,
+			canSelectFiles: false,
+			canSelectFolders: true
+		});
+		if (s && s.length > 0) {
+			return s[0].fsPath;
+		}
+		return null;
 	}
 	//#endregion
 }

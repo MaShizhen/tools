@@ -11,7 +11,7 @@ export default abstract class Base extends Tools {
 	public async prototype() {
 		const editor = window.activeTextEditor;
 		if (!editor) {
-			await window.showErrorMessage('You must run this command when you opend a page file');
+			this.showerror('You must run this command when you opend a page file');
 			return;
 		}
 		const doc = editor.document;
@@ -21,9 +21,8 @@ export default abstract class Base extends Tools {
 		}
 		const path = uri.fsPath;
 		const pagename = this.getpagename(path);
-		console.debug('lalalal', pagename);
 		if (!pagename) {
-			await window.showErrorMessage('Could not get page name');
+			this.showerror('Could not get page name');
 			return;
 		}
 		// const rt = this.root(editor);
@@ -218,10 +217,10 @@ height:100%;
 
 	public abstract completion(): Disposable;
 
-	public abstract addpage(): Promise<void>;
+	public abstract addpage(path: string): Promise<void>;
 	public abstract addcomponent(editor: TextEditor): Promise<void>;
-	public abstract addservice(): Promise<void>;
-	public abstract addatomlocal(editor: TextEditor): Promise<void>;
+	public abstract addcomponent2(path?: string): Promise<void>;
+	public abstract addservice(path?: string): Promise<void>;
 
 	protected async replacefile(path: string, src: Array<{ [Symbol.replace](src: string, rep: string): string; }>, rep: string[]) {
 		const uri = Uri.file(path);
@@ -234,70 +233,16 @@ height:100%;
 		}
 	}
 
-	protected async baseaddservice() {
-		const path = (() => {
-			const editor = window.activeTextEditor;
-			if (!editor) {
-				const wfs = workspace.workspaceFolders;
-				if (!wfs || wfs.length === 0) {
-					throw new Error('Please make sure you have a project opend');
-				}
-				return join(wfs[0].uri.fsPath, 'src');
-			}
-			return editor.document.fileName;
-		})();
-		let folder = dirname(path);
-		if (!folder.includes('src')) {
-			folder = join(folder, 'src');
-			await this.mkdir(folder);
+	public async addatomlocal(path?: string) {
+		const folder = await this.getdirorbypath(path);
+		if (!folder) {
+			return;
 		}
-		const name = await this.generate(folder, 's', 3);
-		const p_path = await this.create_s(folder, name);
-		await this.save();
-		await this.show_doc(p_path);
-	}
-	private async create_s(folder: string, no: string) {
-		const path = join(folder, `${no}.ts`);
-		const dir = path.replace(/.*src[/|\\]/, '');
-		const tpl = `import an1 from '@mmstudio/an000001';
-import an4 from '@mmstudio/an000004';
-
-interface Message {
-	// cookies: {
-	// 	uk: string;
-	// 	[key: string]: string
-	// };
-	// urls: {
-	// 	base: string;
-	// 	origin: string;
-	// 	url: string;
-	// };
-	// query: {};
-	// params: {};
-	// headers: {};
-	// captcha: string;
-}
-
-export default async function ${no}(msg: Message, actionid: string): Promise<an4> {
-	an1(\`Service begin path:${dir},actionid:$\{actionid}\`);
-
-	an1(\`Service end path:${dir},actionid:$\{actionid}\`);
-	return {
-		data: '"mm"'
-	} as an4;
-}
-`;
-		await this.writefile(path, tpl);
-		return path;
-	}
-	protected async baseaddatomlocal(editor: TextEditor) {
-		const uri = editor.document.uri;
-		const folder = dirname(uri.fsPath);
 		const a = await this.generate(folder, 'a', 3);
 		const p1 = join(folder, a);
 		const p_path = `${p1}.ts`;
 		const atoms = join('src', 'atoms');
-		const name = this.getrelativepath(atoms, p1).replace(sep, '_');
+		const name = this.getrelativepath(atoms, p1).replace(/\./g, '').replaceAll(sep, '_').replace(/^_/, '');
 		const tpl = `
 export default function ${name}() {
 	// todo
