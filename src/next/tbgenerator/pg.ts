@@ -71,7 +71,7 @@ interface ITb${tbname} {
 ${fields.join('\n')}
 }
 `;
-			const path = join(this.root(), 'src', 'pages', 'api', 'tables', `${tbname}.d.ts`);
+			const path = join(this.root(), 'src', 'tables', `${tbname}.d.ts`);
 			await this.writefile(path, content);
 			return path;
 		}));
