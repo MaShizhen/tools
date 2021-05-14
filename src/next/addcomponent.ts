@@ -20,7 +20,7 @@ export default class AddComponentNext extends Actor {
 			return;
 		}
 		const file = f.toLowerCase();
-		const cname = f.toUpperCase();
+		const cname = this.str2name(f);
 		const fullpath = join(dir, `${file}.tsx`);
 		const content = await (async () => {
 			if (/\.tsx/.test(doc.fileName)) {
@@ -44,10 +44,10 @@ export default class AddComponentNext extends Actor {
 				});
 				return content;
 			}
-			return `<${cname} />`;
+			return '';
 		})();
 		const tpl = `
-export default function ${file}() {
+export default function ${cname}() {
 	return <>
 		${content}
 	</>;

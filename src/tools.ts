@@ -16,6 +16,13 @@ type RepoInfo = {
 }
 export default abstract class Tools {
 	//#region Other
+	/**
+	 * 转换为第一个字母大写,后面为驼峰式
+	 */
+	protected str2name(str: string) {
+		const [f, ...rest] = str;
+		return f.toUpperCase() + this.str2camelcase(rest.join(''));
+	}
 	protected str2camelcase(str: string) {
 		return str.toLowerCase().replace(/-(\w)/g, (_, $1) => {
 			return ($1 as string).toUpperCase();
