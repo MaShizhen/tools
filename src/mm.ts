@@ -287,11 +287,11 @@ export default class MM extends Tools {
 			return PrjType.uniapp;
 		}
 		const pages = join(root_path, 'pages');
-		if (this.existssync(join(pages, '_app.tsx'))) {
+		if (this.existssync(join(pages, '_app.page.tsx'))) {
 			return PrjType.next;
 		}
 		const srcpages = join(root_path, 'src', 'pages');
-		if (this.existssync(join(srcpages, '_app.tsx'))) {
+		if (this.existssync(join(srcpages, '_app.page.tsx'))) {
 			return PrjType.next;
 		}
 		if (this.existssync(join(src, 'app.config.ts'))) {
