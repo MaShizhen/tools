@@ -75,8 +75,8 @@ export default {
 		const file = join(dir, `${name}.tsx`);
 		const tpl = `import React, { useState, useEffect } from 'react';
 import { View, Text } from '@tarojs/components';
-import taro from '@tarojs/taro';
-import { } from 'react-native';
+import * as Taro from '@tarojs/taro';
+// import { } from 'react-native';
 
 import './${name}.css';
 
