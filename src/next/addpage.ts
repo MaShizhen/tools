@@ -134,12 +134,6 @@ export default class AddPageNext extends Actor {
 		const body = await this.body();
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
-// // enables server-side rendering, this enable seo
-// page.getInitialProps = async (context) => {
-// 	const ${slug} = context.params.${slug} as string;
-// 	return {
-// 	};
-// };
 
 // pre-render this page at build time
 export const getStaticProps: GetStaticProps<IProps> = async (context) => {
@@ -179,12 +173,6 @@ export const getStaticPaths: GetStaticPaths<{ ${slug}: string[]; }> = async () =
 		const body = await this.body();
 		const tpl = `import { GetStaticPaths, GetStaticProps, NextPage, PageConfig } from 'next';
 ${body}
-// // enables server-side rendering, this enable seo
-// page.getInitialProps = async (context) => {
-// 	const ${query} = context.params.${query} as string;
-// 	return {
-// 	};
-// };
 
 // pre-render this page at build time
 export const getStaticProps: GetStaticProps<IProps> = async (context) => {
@@ -236,7 +224,7 @@ interface IProps {
 /**
  * ${title || '01factory'}
  */
-const page: NextPage<IProps> = () => {
+const Page: NextPage<IProps> = () => {
 	return (
 		<>
 			<Head>
@@ -253,7 +241,7 @@ export const config: PageConfig = {
 	amp: false
 };
 
-export default page;
+export default Page;
 `;
 	}
 }

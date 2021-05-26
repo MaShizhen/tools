@@ -80,11 +80,11 @@ import * as Taro from '@tarojs/taro';
 
 import './${name}.css';
 
-export default function ${name}() {
+export default function ${this.str2camelcase(name)}() {
 	return (
 		<>
 			<View>
-				<Text>mmstudio!</Text>
+				<Text>01factory</Text>
 			</View>
 		</>
 	);
