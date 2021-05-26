@@ -80,7 +80,7 @@ import * as Taro from '@tarojs/taro';
 
 import './${name}.css';
 
-export default function ${this.str2camelcase(name)}() {
+export default function ${this.str2name(name)}() {
 	return (
 		<>
 			<View>
