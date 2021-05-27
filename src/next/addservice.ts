@@ -148,7 +148,6 @@ export default handler;
 		const curfile = editor.document.fileName;
 		const curname = basename(curfile);
 		const api = join(pages, 'api');
-		debugger;
 		if (/^(\[.+\]|index)\.page\.[tj]sx?$/.test(curname)) {
 			// absolutedir/src/pages/xxx/[yyy].tsx or absolutedir/src/pages/xxx/index.page.tsx
 			// absolutedir/src/pages/xxx
