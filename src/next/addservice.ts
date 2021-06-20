@@ -1,5 +1,5 @@
 import { basename, extname, join } from 'path';
-import { Position, window, workspace, WorkspaceEdit } from 'vscode';
+import { FileType, Position, Uri, window, workspace, WorkspaceEdit } from 'vscode';
 import { get_pages } from './get-pages';
 import Actor from '../actor';
 
@@ -25,23 +25,64 @@ export default class AddServiceNext extends Actor {
 		// create service file
 		const servicefile = join(api, `${name}.api.ts`);
 		await this.create_api(servicefile);
+		await this.updateapi();
 		if (page) {
 			// update page file
-			await this.updatepage(name, page, servicefile);
+			await this.updatepage(page, servicefile);
 		}
 		await this.save();
 		this.set_status_bar_message('成功添加服务文件');
 		await this.show_doc(servicefile);
 	}
 
-	private async updatepage(name: string, pagefile: string, servicefile: string) {
+	/**
+	 * update src/atom/api.ts
+	 */
+	private async updateapi() {
+		interface T {
+			[k: string]: string | T;
+		}
+		const api = {} as T;
+		const fs = workspace.fs;
+
+		const root = this.root();
+		const getrelativepath = this.getrelativepath;
+		const pages = join(root, 'src', 'pages');
+		async function read(dir: string, api: T) {
+			const sub = await fs.readDirectory(Uri.file(dir));
+			const ps = sub.map(async ([subdir, type]) => {
+				if (FileType.Directory === type) {
+					const fullpath = join(dir, subdir);
+					if (!api[subdir]) {
+						api[subdir] = {};
+					}
+					await read(fullpath, api[subdir] as T);
+				} else if (FileType.File === type) {
+					if (subdir.endsWith('.api.ts')) {
+						const service = subdir.replace(/\.api\.ts$/, '');
+						const fullpath = join(dir, service);
+						const url = `/${getrelativepath(pages, fullpath)}`;
+						api[service] = url;
+					}
+				}
+			});
+			await Promise.all(ps);
+		}
+		await read(join(root, 'src', 'pages', 'api'), api);
+		const apiuri = Uri.file(join(root, 'src', 'atoms', 'api.ts'));
+		const we = new WorkspaceEdit();
+		we.createFile(apiuri, {
+			overwrite: true,
+			ignoreIfExists: false
+		});
+		we.insert(apiuri, new Position(0, 0), `export default ${JSON.stringify(api, null, '\t')};
+`);
+		await workspace.applyEdit(we);
+	}
+
+	private async updatepage(pagefile: string, servicefile: string) {
 		// api/xxx/yyy/s001
-		const ext = '.ts';
-		const pathwithoutext = servicefile.replace(ext, '');
-		const relativepath = this.getrelativepath(join(pagefile, '..'), pathwithoutext);
-		const url = this.getrelativepath(join('src', 'pages'), pathwithoutext).replace(/\.api$/, '');
-		const imppath = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
-		const imp = new RegExp(`import\\s+{.*}\\s+from\\s+['|"]${imppath}['|"];?`);
+		const imp = new RegExp('import\\s+api\\s+from\\s+[\'|"].*[\'|"];?');
 		const doc = await workspace.openTextDocument(pagefile);
 		const max = doc.lineCount;
 		let hasimport = false;
@@ -57,9 +98,24 @@ export default class AddServiceNext extends Actor {
 				pos = i;
 			}
 		}
+		const we = new WorkspaceEdit();
 		if (!hasimport) {
+			const root = this.root();
+			const api = join(root, 'src', 'atoms', 'api');
+			const relativepath = this.getrelativepath(join(pagefile, '..'), api);
+			const imppath = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
+			const imp = `import api from '${imppath}';`;
+			const uri = doc.uri;
+			const imppos = new Position(pos + 1, 0);
+			we.insert(uri, imppos, `${imp}\n`);
+		}
+		{
+			const ext = '.ts';
+			const pathwithoutext = servicefile.replace(ext, '');
+			const relativepath = this.getrelativepath(join(pagefile, '..'), pathwithoutext);
+			const imppath = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
 			const body = doc.getText();
-			const ss = body.match(/const\s+s\d+/g) || ['0'];
+			const ss = body.match(/[MQR]\d+/g) || ['0'];
 			const max = ss.map((s) => {
 				return Number(s.replace(/[^\d]/g, ''));
 			}).sort((a, b) => {
@@ -67,14 +123,11 @@ export default class AddServiceNext extends Actor {
 			})[0];
 			const no = max + 1;
 			const imp = `import { Message as M${no}, Query as Q${no}, Result as R${no} } from '${imppath}';`;
-			const we = new WorkspaceEdit();
 			const uri = doc.uri;
-			const imppos1 = new Position(pos + 2, 0);
-			we.insert(uri, imppos1, `const ${name} = '/${url}';\n`);
 			const imppos = new Position(pos + 1, 0);
 			we.insert(uri, imppos, `${imp}\n`);
-			await workspace.applyEdit(we);
 		}
+		await workspace.applyEdit(we);
 	}
 
 	private create_api(path: string) {
