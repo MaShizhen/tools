@@ -53,16 +53,23 @@ export default class AddServiceNext extends Actor {
 			const ps = sub.map(async ([subdir, type]) => {
 				if (FileType.Directory === type) {
 					const fullpath = join(dir, subdir);
-					if (!api[subdir]) {
-						api[subdir] = {};
+					const obj = api[subdir] || {};
+					await read(fullpath, obj as T);
+					if (Object.keys(obj).length > 0) {
+						api[subdir] = obj;
 					}
-					await read(fullpath, api[subdir] as T);
 				} else if (FileType.File === type) {
 					if (subdir.endsWith('.api.ts')) {
 						const service = subdir.replace(/\.api\.ts$/, '');
-						const fullpath = join(dir, service);
-						const url = `/${getrelativepath(pages, fullpath)}`;
-						api[service] = url;
+						if (/^(\[.+\]|index)$/.test(service)) {
+							const fullpath = dir;
+							const url = `/${getrelativepath(pages, fullpath)}`;
+							api[service] = url;
+						} else {
+							const fullpath = join(dir, service);
+							const url = `/${getrelativepath(pages, fullpath)}`;
+							api[service] = url;
+						}
 					}
 				}
 			});
