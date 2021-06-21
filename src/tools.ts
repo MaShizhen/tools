@@ -243,7 +243,7 @@ export default abstract class Tools {
 	protected showerror(message: string) {
 		void window.showErrorMessage(message);
 	}
-	protected pick<T extends QuickPickItem>(items: T[] | Thenable<T[]>, placeHolder = '') {
+	protected pick<T extends QuickPickItem>(items: T[] | Promise<T[]>, placeHolder = '') {
 		return window.showQuickPick(items, {
 			placeHolder,
 			matchOnDescription: true,

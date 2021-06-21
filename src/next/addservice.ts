@@ -15,15 +15,17 @@ export default class AddServiceNext extends Actor {
 			return;
 		}
 
-		const name = await window.showInputBox({
+
+		const sfilepath = await window.showInputBox({
 			prompt: 'Please type file uri',
-			value: await this.generate(api, 's', 3)
+			value: api
 		});
-		if (!name) {
+		if (!sfilepath) {
 			return;
 		}
+
 		// create service file
-		const servicefile = join(api, `${name}.api.ts`);
+		const servicefile = `${sfilepath}.api.ts`;
 		await this.create_api(servicefile);
 		await this.updateapi();
 		if (page) {
@@ -138,6 +140,9 @@ export default class AddServiceNext extends Actor {
 		await workspace.applyEdit(we);
 	}
 
+	/**
+	 * create service file
+	 */
 	private create_api(path: string) {
 		const relativepath = this.getrelativepath('src', path);
 		const rname = 'Result';
@@ -216,9 +221,10 @@ export default handler;
 			// 当前打开了页面文件,含匹配路由的情况, page名称为上级目录名称,而不是当前文件名
 			// api/xxx
 			const apipath = join(api, relativepath);
-			await this.mkdir(apipath);
+			const sfile = await this.generate(apipath, 's', 3);	// s001
+
 			// absolutedir/src/pages/pgxxx/[xxx].tsx
-			return { api: apipath, page: curfile };
+			return { api: join(apipath, sfile), page: curfile };
 		}
 		// 当前打开了页面文件,不含匹配路由的情况
 		// absolutedir/src/pages/xxx/yyy.tsx
@@ -229,7 +235,6 @@ export default handler;
 		const relativepath = pgpath.replace(/.*[/\\](pages|src)[/\\]/, '');
 		// api/xxx/yyy
 		const apipath = join(api, relativepath);
-		await this.mkdir(apipath);
 		// absolutedir/src/pages/pgxxx/[xxx].tsx
 		return { api: apipath, page: curfile };
 	}
