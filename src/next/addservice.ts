@@ -66,7 +66,7 @@ export default class AddServiceNext extends Actor {
 						if (/^(\[.+\]|index)$/.test(service)) {
 							const fullpath = dir;
 							const url = `/${getrelativepath(pages, fullpath)}`;
-							api[service] = url;
+							api[service.replace(/[[\]]/g, '')] = url;
 						} else {
 							const fullpath = join(dir, service);
 							const url = `/${getrelativepath(pages, fullpath)}`;
