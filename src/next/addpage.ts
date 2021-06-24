@@ -35,20 +35,10 @@ export default class AddPageNext extends Actor {
 		if (!picked) {
 			return;
 		}
-		const {
-			dir,
-			name
-		} = await (async () => {
+		const tmp = await (async () => {
 			if (/pages$/.test(defaultdir)) {
-				const name = await window.showInputBox({
-					prompt: 'type pagename',
-					placeHolder: 'page name',
-					value: await this.generate(defaultdir, 'pg', 3)
-				});
-				return {
-					dir: defaultdir,
-					name
-				};
+				const name = await this.generate(defaultdir, 'pg', 3);
+				return join(defaultdir, name);
 			}
 			const files = await this.readdir(defaultdir);
 			const isinpagedir = files.some((file) => {
@@ -70,35 +60,25 @@ export default class AddPageNext extends Actor {
 				const dir = this.getdir(defaultdir);
 				if (!exist) {
 					const name = basename(defaultdir);
-					return {
-						dir,
-						name
-					};
+					return join(dir, name);
 				}
-				const name = await window.showInputBox({
-					prompt: 'type pagename',
-					placeHolder: 'page name',
-					value: await this.generate(dir, 'pg', 3)
-				});
-				return {
-					dir,
-					name
-				};
+				const name = await this.generate(dir, 'pg', 3);
+				return join(dir, name);
 			}
-			const name = await window.showInputBox({
-				prompt: 'type pagename',
-				placeHolder: 'page name',
-				value: await this.generate(defaultdir, 'pg', 3)
-			});
-			return {
-				dir: defaultdir,
-				name
-			};
+			const name = await this.generate(defaultdir, 'pg', 3);
+			return join(defaultdir, name);
 		})();
-		if (!name) {
+		if (!tmp) {
 			return;
 		}
-		const path = join(dir, name);
+		const path = await window.showInputBox({
+			prompt: 'type page path',
+			placeHolder: 'page path',
+			value: tmp
+		});
+		if (!path) {
+			return;
+		}
 		// create page file
 		const filepath = await (async () => {
 			switch (picked.type) {
