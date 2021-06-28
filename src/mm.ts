@@ -121,23 +121,9 @@ export default class MM extends Tools {
 			if (!desc) {
 				return;
 			}
-			const num = await window.showInputBox({
-				placeHolder: '请输入项目编号',
-				ignoreFocusOut: true,
-				validateInput(val) {
-					if (!/^\d{1,6}$/.test(val)) {
-						return '项目编号必须为一个小于六位数的数字';
-					}
-					return null;
-				}
-			});
-			if (!num) {
-				return;
-			}
 			const def = dirname(this.workpath());
-			const no = this.prefix('p', parseInt(num, 10), 6);
 			const uri = await window.showSaveDialog({
-				defaultUri: Uri.file(join(def, no))
+				defaultUri: Uri.file(def)
 			});
 			if (!uri) {
 				return;
@@ -146,8 +132,11 @@ export default class MM extends Tools {
 				this.showerror('路径非空');
 				return;
 			}
+			const cwd = uri.fsPath;
+			const index = cwd.lastIndexOf('/');
+			const no = cwd.substring(index + 1, cwd.length);
 			const remote = await window.showInputBox({
-				value: `git@github.com:mm-works/${no}.git`,
+				value: `git@gitee.com:dfactory01/${no}.git`,
 				placeHolder: `git@github.com:mm-works/${no}.git`,
 				ignoreFocusOut: true,
 				validateInput(val) {
@@ -157,9 +146,11 @@ export default class MM extends Tools {
 					return null;
 				}
 			});
+			if (!remote) {
+				return;
+			}
 			await workspace.fs.createDirectory(uri);
 			const tool = this.getinstancebytype(type);
-			const cwd = uri.fsPath;
 			await tool.shellcreate(cwd, no, desc);
 			await this.shellexec('git init', cwd);
 			await this.shellexec('git add .', cwd);
