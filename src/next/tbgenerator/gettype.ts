@@ -11,11 +11,16 @@ export default function gettype(type: string) {
 		case 'double':
 		case 'real':
 			return 'number';
+		case 'char':
 		case 'varchar':
 		case 'longtext':
 		case 'text':
+		case 'time':
+		case 'tinytext':
 			return 'string';
+		case 'date':
 		case 'datetime':
+		case 'timestamp':
 			return 'Date';
 		case 'blob':
 		case 'enum':

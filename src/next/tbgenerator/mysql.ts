@@ -5,22 +5,36 @@ import gettype from './gettype';
 
 interface Table {
 	table_schema: string;
+	TABLE_SCHEMA: string;
 	table_name: string;
+	TABLE_NAME: string;
 	ordinal_position: number;
+	ORDINAL_POSITION: number;
 	table_comment: string;
+	TABLE_COMMENT: string;
 }
 
 interface Column {
 	column_name: string;
+	COLUMN_NAME: string;
 	column_default: string;
+	COLUMN_DEFAULT: string;
 	is_nullable: string;
+	IS_NULLABLE: string;
 	data_type: string;
+	DATA_TYPE: string;
 	column_type: string;
+	COLUMN_TYPE: string;
 	column_key: string;
+	COLUMN_KEY: string;
 	column_comment: string;
+	COLUMN_COMMENT: string;
 	table_schema: string;
+	TABLE_SCHEMA: string;
 	table_name: string;
+	TABLE_NAME: string;
 	ordinal_position: number;
+	ORDINAL_POSITION: number;
 }
 
 export default class MysqlTableGenerator extends Actor {
@@ -32,14 +46,14 @@ export default class MysqlTableGenerator extends Actor {
 		const tb1 = db<Table>('information_schema.tables');
 		const tbs = await tb1.select('table_name', 'table_comment').where({
 			table_schema: this.dbname
-		});
+		}) as Table[];
 		const picked = await this.pick([{
 			label: 'all-all-all',
 			detail: 'generate all tables'
 		}, ...tbs.map((tb) => {
 			return {
-				label: tb.table_name,
-				detail: tb.table_comment
+				label: tb.table_name || tb.TABLE_NAME,
+				detail: tb.table_comment || tb.TABLE_COMMENT
 			};
 		})]);
 		if (!picked) {
@@ -55,23 +69,25 @@ export default class MysqlTableGenerator extends Actor {
 			}
 			return [{
 				table_name: picked.label,
-				table_comment: picked.detail
+				TABLE_NAME: picked.label,
+				table_comment: picked.detail,
+				TABLE_COMMENT: picked.detail
 			}];
 		})();
 		const [path] = await Promise.all(all.map(async (it) => {
-			const tbname = it.table_name;
-			const tbdesc = it.table_comment;
+			const tbname = it.table_name || it.TABLE_NAME;
+			const tbdesc = it.table_comment || it.TABLE_COMMENT;
 			const tb2 = db<Column>('information_schema.columns');
 			const data = await tb2.select('column_name', /*'is_nullable',*/ 'data_type', 'column_comment').where({
 				table_schema: this.dbname,
 				table_name: tbname
-			}).orderBy('ordinal_position', 'asc');
+			}).orderBy('ordinal_position', 'asc') as Column[];
 			const fields = data.map((c) => {
-				const type = gettype(c.data_type);
+				const type = gettype(c.data_type || c.DATA_TYPE);
 				return `	/**
-	 * ${c.column_comment}
+	 * ${c.column_comment || c.COLUMN_COMMENT}
 	 */
-	${c.column_name}: ${type};`;
+	${c.column_name || c.COLUMN_NAME}: ${type};`;
 			});
 			const content = `/**
  * ${tbdesc}
