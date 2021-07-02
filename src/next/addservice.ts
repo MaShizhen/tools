@@ -26,7 +26,11 @@ export default class AddServiceNext extends Actor {
 
 		// create service file
 		const servicefile = `${sfilepath}.api.ts`;
-		await this.create_api(servicefile);
+		if (/[/\\]api[/\\]wx[/\\]/.test(sfilepath)) {
+			await this.create_cros_api(servicefile);
+		} else {
+			await this.create_api(servicefile);
+		}
 		await this.updateapi();
 		if (page) {
 			// update page file
@@ -141,6 +145,55 @@ export default class AddServiceNext extends Actor {
 	}
 
 	/**
+	 * create cros service file
+	 */
+	private create_cros_api(path: string) {
+		const relativepath = this.getrelativepath('src', path);
+		const rname = 'Result';
+		const mname = 'Message';
+		const vname = relativepath.replace('.ts', '');
+		const tpl = `import { PageConfig } from 'next';
+import anylogger from 'anylogger';
+import '@mmstudio/an000042';
+import cros from '../../../atoms/cros';
+
+const logger = anylogger('${vname}');
+
+export type ${rname} = {
+	ok: true;
+} | {
+	ok: false;
+	message: string;
+};
+
+export type ${mname} = {
+
+}
+
+/**
+ * ${vname}
+ */
+const handler = cros<Result>();
+
+handler.post((req, res) => {
+	try {
+		logger.debug('msg body:', req.body);
+		const { } = req.body as ${mname};
+		res.status(200).json({ ok: true });
+	} catch (error) {
+		logger.trace(error);
+		res.status(200).json({ ok: false, message: (error as Error).message });
+	}
+});
+
+export const config = {} as PageConfig;
+
+export default handler;
+`;
+		return this.writefile(path, tpl);
+	}
+
+	/**
 	 * create service file
 	 */
 	private create_api(path: string) {
@@ -177,10 +230,15 @@ export type ${qname} = {
 const handler = nextConnect<NextApiRequest, NextApiResponse<${rname}>>();
 
 handler.post((req, res) => {
-	logger.debug('msg body:', req.body);
-	const { } = req.body as ${mname};
-	const { } = req.query as ${qname};
-	res.status(200).json({ ok: true });
+	try {
+		logger.debug('msg body:', req.body);
+		const { } = req.body as ${mname};
+		const { } = req.query as ${qname};
+		res.status(200).json({ ok: true });
+	} catch (error) {
+		logger.trace(error);
+		res.status(200).json({ ok: false, message: (error as Error).message });
+	}
 });
 
 export const config = {} as PageConfig;

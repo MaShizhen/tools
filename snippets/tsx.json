@@ -149,5 +149,43 @@
 			"export default handler;",
 			""
 		]
+	},
+	"next cros service": {
+		"prefix": "nextcrosservice",
+		"body": [
+			"import { PageConfig } from 'next';",
+			"import anylogger from 'anylogger';",
+			"import '@mmstudio/an000042';",
+			"import cros from '../../../atoms/cros';",
+			"",
+			"const logger = anylogger('pages/api/$1');",
+			"",
+			"export type Result = {",
+			"ok: true;",
+			"} | {",
+			"ok: false;",
+			"message: string;",
+			"};",
+			"",
+			"export type Message = {",
+			"",
+			"}",
+			"",
+			"/**",
+			" * $2",
+			" */",
+			"const handler = cros<Result>();",
+			"",
+			"handler.post((req, res) => {",
+			"logger.debug('msg body:', req.body);",
+			"const { } = req.body as Message;",
+			"res.status(200).json({ ok: true });",
+			"});",
+			"",
+			"export const config = {} as PageConfig;",
+			"",
+			"export default handler;",
+			""
+		]
 	}
 }
