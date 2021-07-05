@@ -207,6 +207,7 @@ export default handler;
 import { NextApiRequest, NextApiResponse, PageConfig } from 'next';
 import anylogger from 'anylogger';
 import '@mmstudio/an000042';
+import an49 from '@mmstudio/an000049';
 
 const logger = anylogger('${vname}');
 
@@ -235,6 +236,7 @@ handler.post((req, res) => {
 		logger.debug('msg body:', req.body);
 		const { } = req.body as ${mname};
 		const { } = req.query as ${qname};
+		const db = an49();
 		res.status(200).json({ ok: true });
 	} catch (error) {
 		logger.trace(error);
