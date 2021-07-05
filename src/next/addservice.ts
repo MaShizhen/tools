@@ -155,7 +155,8 @@ export default class AddServiceNext extends Actor {
 		const tpl = `import { PageConfig } from 'next';
 import anylogger from 'anylogger';
 import '@mmstudio/an000042';
-import cros from '../../../atoms/cros';
+import an48 from '@mmstudio/an000048';
+import an49 from '@mmstudio/an000049';
 
 const logger = anylogger('${vname}');
 
@@ -173,7 +174,7 @@ export type ${mname} = {
 /**
  * ${vname}
  */
-const handler = cros<Result>();
+const handler = an48<Result>();
 
 handler.post((req, res) => {
 	try {
