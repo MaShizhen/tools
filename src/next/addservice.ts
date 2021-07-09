@@ -26,11 +26,7 @@ export default class AddServiceNext extends Actor {
 
 		// create service file
 		const servicefile = `${sfilepath}.api.ts`;
-		if (/[/\\]api[/\\]wx[/\\]/.test(sfilepath)) {
-			await this.create_cros_api(servicefile);
-		} else {
-			await this.create_api(servicefile);
-		}
+		await this.create_api(servicefile);
 		await this.updateapi();
 		if (page) {
 			// update page file
@@ -145,9 +141,9 @@ export default class AddServiceNext extends Actor {
 	}
 
 	/**
-	 * create cros service file
+	 * create service file
 	 */
-	private create_cros_api(path: string) {
+	private create_api(path: string) {
 		const relativepath = this.getrelativepath('src', path);
 		const rname = 'Result';
 		const mname = 'Message';
@@ -176,7 +172,7 @@ export type ${mname} = {
  */
 const handler = an48<Result>();
 
-handler.post((req, res) => {
+handler.post(async(req, res) => {
 	try {
 		res.on('error', (error) => {
 			logger.error(error);
@@ -184,67 +180,6 @@ handler.post((req, res) => {
 		});
 		logger.debug('msg body:', req.body);
 		const { } = req.body as ${mname};
-		res.status(200).json({ ok: true });
-	} catch (error) {
-		logger.trace(error);
-		res.status(200).json({ ok: false, message: (error as Error).message });
-	}
-});
-
-export const config = {} as PageConfig;
-
-export default handler;
-`;
-		return this.writefile(path, tpl);
-	}
-
-	/**
-	 * create service file
-	 */
-	private create_api(path: string) {
-		const relativepath = this.getrelativepath('src', path);
-		const rname = 'Result';
-		const mname = 'Message';
-		const qname = 'Query';
-		const vname = relativepath.replace('.ts', '');
-		const tpl = `import nextConnect from 'next-connect';
-import { NextApiRequest, NextApiResponse, PageConfig } from 'next';
-import anylogger from 'anylogger';
-import '@mmstudio/an000042';
-import an49 from '@mmstudio/an000049';
-
-const logger = anylogger('${vname}');
-
-export type ${rname} = {
-	ok: true;
-} | {
-	ok: false;
-	message: string;
-};
-
-export type ${mname} = {
-
-}
-
-export type ${qname} = {
-
-}
-
-/**
- * ${vname}
- */
-const handler = nextConnect<NextApiRequest, NextApiResponse<${rname}>>();
-
-handler.post((req, res) => {
-	try {
-		res.on('error', (error) => {
-			logger.error(error);
-			res.end();
-		});
-		logger.debug('msg body:', req.body);
-		const { } = req.body as ${mname};
-		const { } = req.query as ${qname};
-		const db = an49();
 		res.status(200).json({ ok: true });
 	} catch (error) {
 		logger.trace(error);
