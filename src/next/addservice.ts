@@ -178,6 +178,10 @@ const handler = an48<Result>();
 
 handler.post((req, res) => {
 	try {
+		res.on('error', (error) => {
+			logger.error(error);
+			res.end();
+		});
 		logger.debug('msg body:', req.body);
 		const { } = req.body as ${mname};
 		res.status(200).json({ ok: true });
@@ -233,6 +237,10 @@ const handler = nextConnect<NextApiRequest, NextApiResponse<${rname}>>();
 
 handler.post((req, res) => {
 	try {
+		res.on('error', (error) => {
+			logger.error(error);
+			res.end();
+		});
 		logger.debug('msg body:', req.body);
 		const { } = req.body as ${mname};
 		const { } = req.query as ${qname};
