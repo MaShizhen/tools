@@ -1,4 +1,4 @@
-import { join } from 'path';
+import { basename, join } from 'path';
 import { Position, TextEditor, window } from 'vscode';
 import Actor from '../actor';
 
@@ -12,16 +12,16 @@ export default class AddComponentNext extends Actor {
 		const doc = editor.document;
 		const name = await this.generate(dir, 'c', 3);
 		const f = await window.showInputBox({
-			prompt: 'type name',
-			placeHolder: 'component name',
-			value: name
+			prompt: 'type path',
+			placeHolder: 'component path',
+			value: join(dir, name)
 		});
 		if (!f) {
 			return;
 		}
-		const file = f.toLowerCase();
-		const cname = this.str2name(f);
-		const fullpath = join(dir, `${file}.tsx`);
+		const filepath = f.toLowerCase();
+		const fullpath = `${filepath}.tsx`;
+		const cname = this.str2name(basename(filepath));
 		const content = await (async () => {
 			if (/\.tsx/.test(doc.fileName)) {
 				const sel = editor.selection;
