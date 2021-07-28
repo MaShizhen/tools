@@ -10,7 +10,7 @@ export default class AddServiceNext extends Actor {
 		if (!api) {
 			return;
 		}
-		if (!/[/\\]pages[/\\]api[/\\]/.test(api)) {
+		if (!/[/\\]pages[/\\]api[/\\]?/.test(api)) {
 			this.showerror('当前目录不可以创建服务');
 			return;
 		}
