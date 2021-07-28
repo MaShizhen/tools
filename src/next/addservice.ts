@@ -174,10 +174,6 @@ const handler = an48<Result>();
 
 handler.post(async(req, res) => {
 	try {
-		res.on('error', (error) => {
-			logger.error(error);
-			res.end();
-		});
 		logger.debug('msg body:', req.body);
 		const { } = req.body as ${mname};
 		res.status(200).json({ ok: true });
