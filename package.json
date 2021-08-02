@@ -16,7 +16,7 @@
 		"build": "yarn clean && yarn lint && yarn compile",
 		"up": "git pull git@github.com:mm-core/base.git cjs",
 		"vscode:prepublish": "export NODE_TLS_REJECT_UNAUTHORIZED=0 && yarn build",
-		"release": "np --no-publish && vsce publish"
+		"release": "np --no-publish && vsce publish --noyarn"
 	},
 	"engines": {
 		"vscode": "^1.57.0"
