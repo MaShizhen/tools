@@ -7,14 +7,10 @@ export default class AddServiceNext extends Actor {
 	public async do(p?: string): Promise<void> {
 		// get api path
 		const { api, page } = await this.getapipath(p);
-		if (!api) {
-			return;
-		}
 		if (!/[/\\]pages[/\\]api[/\\]?/.test(api)) {
 			this.showerror('当前目录不可以创建服务');
 			return;
 		}
-
 
 		const sfilepath = await window.showInputBox({
 			prompt: 'Please type file uri',
@@ -191,9 +187,10 @@ export default handler;
 	}
 
 	private async getapipath(path?: string) {
+		const apiroot = join(this.root(), 'src', 'pages', 'api');
 		const curdir = await this.getdirorbypath(path);
 		if (!curdir) {
-			return { api: null, page: null };
+			return { api: apiroot, page: null };
 		}
 		const editor = window.activeTextEditor;
 		if (!editor) {
@@ -208,7 +205,7 @@ export default handler;
 		const pages = await get_pages(rootPath);
 		if (!/.+[/\\]src([/\\].+)?$/.test(curdir)) {
 			// 当前打开文件不在src中，这种情况下也不能在当前文件位置新增服务
-			return { api: null, page: null };
+			return { api: apiroot, page: null };
 		}
 		// 当前打开了page页面的情况
 		const curfile = editor.document.fileName;
