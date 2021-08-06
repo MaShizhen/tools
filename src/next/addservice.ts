@@ -12,9 +12,12 @@ export default class AddServiceNext extends Actor {
 			return;
 		}
 
+		const no = await this.generate(api, 's', 3);
+		const def = join(api, no);
+
 		const sfilepath = await window.showInputBox({
 			prompt: 'Please type file uri',
-			value: api
+			value: def
 		});
 		if (!sfilepath) {
 			return;
@@ -172,6 +175,8 @@ handler.post(async(req, res) => {
 	try {
 		logger.debug('msg body:', req.body);
 		const { } = req.body as ${mname};
+
+		const db = an49();
 		res.status(200).json({ ok: true });
 	} catch (error) {
 		logger.trace(error);
@@ -188,10 +193,7 @@ export default handler;
 
 	private async getapipath(path?: string) {
 		const apiroot = join(this.root(), 'src', 'pages', 'api');
-		const curdir = await this.getdirorbypath(path);
-		if (!curdir) {
-			return { api: apiroot, page: null };
-		}
+		const curdir = await this.getcurpath(path, apiroot);
 		const editor = window.activeTextEditor;
 		if (!editor) {
 			// 当前未打开任何文件

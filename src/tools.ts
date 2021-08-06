@@ -481,6 +481,20 @@ export default abstract class Tools {
 	}
 
 	/**
+	 * 获取路径
+	 */
+	protected async getcurpath(pathlike: string | undefined | null, defaultvalue: string) {
+		if (pathlike) {
+			return this.getfilepath(pathlike);
+		}
+		const editor = window.activeTextEditor;
+		if (editor) {
+			return dirname(editor.document.fileName);
+		}
+		return defaultvalue;
+	}
+
+	/**
 	 * 获取文件路径,如果传入为目录,直接返回,如果传入为文件名,返回文件所在目录,如果未传,返回当前打开编辑器文件的路径
 	 */
 	protected async getdirorbypath(pathlike?: string) {

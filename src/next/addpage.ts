@@ -4,18 +4,20 @@ import Actor from '../actor';
 
 export default class AddPageNext extends Actor {
 	public async do(d?: string): Promise<void> {
-		const defaultdir = await this.getdirorbypath(d);
-		if (!defaultdir) {
-			return;
-		}
-		if (!/pages/.test(defaultdir)) {
-			this.showerror('该目录不允许新增页面');
-			return;
-		}
-		if (/pages[/\\]api[/\\]?/.test(defaultdir)) {
-			this.showerror('该目录不允许新增页面');
-			return;
-		}
+		const defaultdir = await (async () => {
+			const page = join(this.root(), 'src', 'pages');
+			const dir = await this.getcurpath(d, page);
+			if (!dir) {
+				return page;
+			}
+			if (!/pages/.test(dir)) {
+				return page;
+			}
+			if (/pages[/\\]api[/\\]?/.test(dir)) {
+				return page;
+			}
+			return dir;
+		})();
 		const picked = await this.pick([{
 			label: '1. Nomal',
 			detail: 'Nomal page',
@@ -209,9 +211,6 @@ const Page: NextPage<IProps> = () => {
 		<>
 			<Head>
 				<title>${title || '01factory'}</title>
-				<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon"></link>
-				<link rel="icon" type="image/x-icon" sizes="32x32" href="/favicon-32x32.ico" ></link>
-				<link rel="icon" type="image/x-icon" sizes="16x16" href="/favicon-16x16.ico"></link>
 			</Head>
 		</>
 	);

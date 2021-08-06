@@ -4,11 +4,7 @@ import Actor from '../actor';
 
 export default class AddComponentNext extends Actor {
 	public async do(editor: TextEditor): Promise<void> {
-		const dir = await this.getdirorbypath();
-		if (!dir) {
-			this.showerror('不能在当前页面插入组件');
-			return;
-		}
+		const dir = await this.getcurpath(editor.document.fileName, join(this.root(), 'src', 'components'));
 		const doc = editor.document;
 		const name = await this.generate(dir, 'c', 3);
 		const f = await window.showInputBox({

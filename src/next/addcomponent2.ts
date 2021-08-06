@@ -4,7 +4,7 @@ import Actor from '../actor';
 
 export default class AddComponentNext2 extends Actor {
 	public async do(d?: string): Promise<void> {
-		const dir = await this.getdirorbypath(d);
+		const dir = await this.getcurpath(d, join(this.root(), 'src', 'components'));
 		if (!dir) {
 			this.showerror('不能在当前页面插入组件');
 			return;
