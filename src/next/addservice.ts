@@ -220,10 +220,9 @@ export default handler;
 			// 当前打开了页面文件,含匹配路由的情况, page名称为上级目录名称,而不是当前文件名
 			// api/xxx
 			const apipath = join(api, relativepath);
-			const sfile = await this.generate(apipath, 's', 3);	// s001
 
 			// absolutedir/src/pages/pgxxx/[xxx].tsx
-			return { api: join(apipath, sfile), page: curfile };
+			return { api: apipath, page: curfile };
 		}
 		// 当前打开了页面文件,不含匹配路由的情况
 		// absolutedir/src/pages/xxx/yyy.tsx

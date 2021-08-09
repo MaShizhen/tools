@@ -372,7 +372,13 @@ export default abstract class Tools {
 		return pre + num.toString().padStart(len, '0');
 	}
 	protected async generate(path: string, prefix: string, len: number) {
-		const files = await this.readdir(path);
+		const files = await (async () => {
+			try {
+				return await this.readdir(path);
+			} catch {
+				return [];
+			}
+		})();
 		const reg = new RegExp(`^${prefix}\\d*(\\.\\w+)*$`);
 		const l = prefix.length;
 		const as = files.filter((f) => {
