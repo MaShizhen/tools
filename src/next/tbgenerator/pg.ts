@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { Knex } from 'knex';
-import Actor from '../../actor';
+import Actor from './db';
 import gettype from './gettype';
 
 interface Table {
@@ -28,34 +28,18 @@ export default class PostgresqlTableGenerator extends Actor {
 	public async do(): Promise<void> {
 		const db = this.db;
 		const tbs = await db.raw<{ rows: Table[]; }>('select relname as table_name,cast(obj_description(relfilenode,\'pg_class\') as varchar) as table_comment from pg_class c where relkind = \'r\' and relname not like \'pg_%\' and relname not like \'sql_%\' order by relname');
-		const picked = await this.pick([{
-			label: 'all-all-all',
-			detail: 'generate all tables'
-		}, ...tbs.rows.map((tb) => {
+		const all = await this.picktable(tbs.rows.map((tb) => {
 			return {
-				label: tb.table_name,
-				detail: tb.table_comment
+				name: tb.table_name,
+				alias: tb.table_comment
 			};
-		})]);
-		if (!picked) {
+		}));
+		if (all.length === 0) {
 			return;
 		}
-		const tbname = picked.label;
-		if (!tbname) {
-			return;
-		}
-		const all = (() => {
-			if (tbname === 'all-all-all') {
-				return tbs.rows;
-			}
-			return [{
-				table_name: picked.label,
-				table_comment: picked.detail
-			}];
-		})();
-		const [path] = await Promise.all(all.map(async (it) => {
-			const tbname = it.table_name;
-			const tbdesc = it.table_comment;
+		const a = await Promise.all(all.map(async (it) => {
+			const tbname = it.name;
+			const tbdesc = it.alias;
 			const data = await db.raw<{ rows: Column[]; }>('select a.attnum,(select description from pg_catalog.pg_description where objoid=a.attrelid and objsubid=a.attnum) as column_comment ,a.attname as column_name,pg_catalog.format_type(a.atttypid,a.atttypmod) as data_type from pg_catalog.pg_attribute a where 1=1 and a.attrelid=(select oid from pg_class where relname=?) and a.attnum>0 and not a.attisdropped order by a.attnum;', tbname);
 			const fields = data.rows.map((c) => {
 				const type = gettype(c.data_type);
@@ -73,8 +57,14 @@ ${fields.join('\n')}
 `;
 			const path = join(this.root(), 'src', 'tables', `${tbname}.d.ts`);
 			await this.writefile(path, content);
-			return path;
+			return {
+				path,
+				tbname
+			};
 		}));
-		await this.show_doc(path);
+		await this.savedb(a.map((it) => {
+			return it.tbname;
+		}));
+		await this.show_doc(a[0].path);
 	}
 }

@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { Knex } from 'knex';
-import Actor from '../../actor';
+import Actor from './db';
 import gettype from './gettype';
 
 interface Table {
@@ -47,36 +47,18 @@ export default class MysqlTableGenerator extends Actor {
 		const tbs = await tb1.select('table_name', 'table_comment').where({
 			table_schema: this.dbname
 		}) as Table[];
-		const picked = await this.pick([{
-			label: 'all-all-all',
-			detail: 'generate all tables'
-		}, ...tbs.map((tb) => {
+		const all = await this.picktable(tbs.map((tb) => {
 			return {
-				label: tb.table_name || tb.TABLE_NAME,
-				detail: tb.table_comment || tb.TABLE_COMMENT
+				name: tb.table_name || tb.TABLE_NAME,
+				alias: tb.table_comment || tb.TABLE_COMMENT
 			};
-		})]);
-		if (!picked) {
+		}));
+		if (all.length === 0) {
 			return;
 		}
-		const tbname = picked.label;
-		if (!tbname) {
-			return;
-		}
-		const all = (() => {
-			if (tbname === 'all-all-all') {
-				return tbs;
-			}
-			return [{
-				table_name: picked.label,
-				TABLE_NAME: picked.label,
-				table_comment: picked.detail,
-				TABLE_COMMENT: picked.detail
-			}];
-		})();
-		const [path] = await Promise.all(all.map(async (it) => {
-			const tbname = it.table_name || it.TABLE_NAME;
-			const tbdesc = it.table_comment || it.TABLE_COMMENT;
+		const a = await Promise.all(all.map(async (it) => {
+			const tbname = it.name;
+			const tbdesc = it.alias;
 			const tb2 = db<Column>('information_schema.columns');
 			const data = await tb2.select('column_name', /*'is_nullable',*/ 'data_type', 'column_comment').where({
 				table_schema: this.dbname,
@@ -98,8 +80,14 @@ ${fields.join('\n')}
 `;
 			const path = join(this.root(), 'src', 'tables', `${tbname}.d.ts`);
 			await this.writefile(path, content);
-			return path;
+			return {
+				path,
+				tbname
+			};
 		}));
-		await this.show_doc(path);
+		await this.savedb(a.map((it) => {
+			return it.tbname;
+		}));
+		await this.show_doc(a[0].path);
 	}
 }
