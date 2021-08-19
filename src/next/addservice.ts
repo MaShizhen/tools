@@ -131,7 +131,8 @@ export default class AddServiceNext extends Actor {
 				return b - a;
 			})[0];
 			const no = max + 1;
-			const imp = `import { Message as M${no}, Query as Q${no}, Result as R${no} } from '${imppath}';`;
+			const imp = `import { Message as M${no}, Result as R${no} } from '${imppath}';`;
+			// const imp = `import { Message as M${no}, Query as Q${no}, Result as R${no} } from '${imppath}';`;
 			const uri = doc.uri;
 			const imppos = new Position(pos + 1, 0);
 			we.insert(uri, imppos, `${imp}\n`);
@@ -151,7 +152,6 @@ export default class AddServiceNext extends Actor {
 import anylogger from 'anylogger';
 import '@mmstudio/an000042';
 import an48 from '@mmstudio/an000048';
-import an49 from '@mmstudio/an000049';
 
 const logger = anylogger('${vname}');
 
@@ -176,7 +176,6 @@ handler.post(async(req, res) => {
 		logger.debug('msg body:', req.body);
 		const { } = req.body as ${mname};
 
-		const db = an49();
 		res.status(200).json({ ok: true });
 	} catch (error) {
 		logger.trace(error);
