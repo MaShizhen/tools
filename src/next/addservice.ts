@@ -77,7 +77,7 @@ export default class AddServiceNext extends Actor {
 			ignoreIfExists: false
 		});
 		await workspace.applyEdit(we);
-		we.insert(apiuri, new Position(0, 0), `export default ${JSON.stringify(api, null, '\t')};
+		we.insert(apiuri, new Position(0, 0), `export default ${JSON.stringify(api, null, '\t').replaceAll('"', '\'')};
 `);
 		await workspace.applyEdit(we);
 	}
