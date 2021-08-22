@@ -188,9 +188,14 @@ export default class MM extends Tools {
 	}
 	public addservice() {
 		return commands.registerCommand('mm.service.add', async (uri?: Uri) => {
+			try {
 			const tool = this.getinstance();
 			await tool.addservice(uri && uri.fsPath);
-			return this.refreshexplorer();
+			await this.refreshexplorer();
+			} catch (error) {
+				console.error(error);
+				window.showErrorMessage((error as Error).message);
+			}
 		});
 	}
 	public addpage() {
