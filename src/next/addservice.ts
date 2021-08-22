@@ -40,43 +40,36 @@ export default class AddServiceNext extends Actor {
 	 * update src/atom/api.ts
 	 */
 	private async updateapi() {
-		interface T {
-			[k: string]: string | T;
-		}
-		const api = {} as T;
+		const api = {} as Record<string,string>;
 		const fs = workspace.fs;
 
 		const root = this.root();
 		const getrelativepath = this.getrelativepath;
 		const pages = join(root, 'src', 'pages');
-		async function read(dir: string, api: T) {
+		async function read(dir: string) {
 			const sub = await fs.readDirectory(Uri.file(dir));
 			const ps = sub.map(async ([subdir, type]) => {
 				if (FileType.Directory === type) {
 					const fullpath = join(dir, subdir);
-					const obj = api[subdir] || {};
-					await read(fullpath, obj as T);
-					if (Object.keys(obj).length > 0) {
-						api[subdir] = obj;
-					}
+					await read(fullpath);
 				} else if (FileType.File === type) {
 					if (subdir.endsWith('.api.ts')) {
 						const service = subdir.replace(/\.api\.ts$/, '');
 						if (/^(\[.+\]|index)$/.test(service)) {
 							const fullpath = dir;
 							const url = `/${getrelativepath(pages, fullpath)}`;
-							api[service.replace(/[[\]]/g, '')] = url;
+							api[url] = url;
 						} else {
 							const fullpath = join(dir, service);
 							const url = `/${getrelativepath(pages, fullpath)}`;
-							api[service] = url;
+							api[url] = url;
 						}
 					}
 				}
 			});
 			await Promise.all(ps);
 		}
-		await read(join(root, 'src', 'pages', 'api'), api);
+		await read(join(root, 'src', 'pages', 'api'));
 		const apiuri = Uri.file(join(root, 'src', 'atoms', 'api.ts'));
 		const we = new WorkspaceEdit();
 		we.createFile(apiuri, {
