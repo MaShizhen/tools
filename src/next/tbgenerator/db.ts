@@ -29,7 +29,7 @@ export default abstract class Db extends Actor {
 		}
 		return [{
 			name: picked.label,
-			alias: picked.label,
+			alias: picked.detail
 		}];
 	}
 	protected async savedb(names: string[]) {
