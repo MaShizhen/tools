@@ -9,6 +9,7 @@ export default function gettype(type: string) {
 		case 'float':
 		case 'tinyint':
 		case 'double':
+		case 'double precision':
 		case 'real':
 			return 'number';
 		case 'char':
