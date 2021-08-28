@@ -13,9 +13,6 @@ export default class Taro extends Base {
 	public transfiles(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	public generatetable(): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
 	protected getpagename(path: string): string | null {
 		if (!/pages/.test(path)) {
 			return null;

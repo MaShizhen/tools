@@ -12,9 +12,6 @@ export default class Desktop extends Base {
 	public transfiles(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	public generatetable(): Promise<void> {
-		throw new Error('Method not implemented.');
-	}
 	protected getpagename(_path: string): string | null {
 		throw new Error('Method not implemented.');
 	}

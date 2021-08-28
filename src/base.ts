@@ -1,11 +1,61 @@
 import { basename, dirname, extname, join, sep } from 'path';
 import { Disposable, env, QuickPickItem, TextEditor, Uri, ViewColumn, window, workspace } from 'vscode';
+import knex, { Knex } from 'knex';
 import Tools from './tools';
 import { IAtom, IAtomCatagory } from './interfaces';
+import MysqlTableGenerator from './next/tbgenerator/mysql';
+import PostgresqlTableGenerator from './next/tbgenerator/pg';
 
 export default abstract class Base extends Tools {
 	public abstract transfiles(): Promise<void>;
-	public abstract generatetable(): Promise<void>;
+	public async generatetable(): Promise<void> {
+		// type clientype = 'pg' | 'mysql' | 'mysql2' | 'mssql';
+		const mm = await this.readfile(join(this.root(), 'mm.json'));
+		const mmconfig = JSON.parse(mm) as { dbconfig: Knex.Config; };
+		const config = mmconfig.dbconfig;
+		if (!config) {
+			this.showerror('请检查配置文件mm.json');
+			return;
+		}
+		const dbname = (() => {
+			const conn = config.connection;
+			if (!conn) {
+				throw new Error('Could not get connection');
+			}
+			if (typeof conn === 'string') {
+				const c = Uri.parse(conn);
+				return c.path.replace('/', '');
+			}
+			return (conn as Knex.MariaSqlConnectionConfig).db
+				|| (conn as Knex.ConnectionConfig | Knex.MySqlConnectionConfig | Knex.MySql2ConnectionConfig | Knex.MsSqlConnectionConfig | Knex.OracleDbConnectionConfig | Knex.PgConnectionConfig | Knex.RedshiftConnectionConfig | Knex.SocketConnectionConfig).database;
+		})();
+		// const dbname = await window.showInputBox({
+		// 	placeHolder: 'Type database name',
+		// 	prompt: '请输入数据库名称',
+		// 	ignoreFocusOut: true,
+		// 	value: Next.dbname
+		// });
+		if (!dbname) {
+			return;
+		}
+		await this.mkdir(join('src', 'pages', 'api', 'tables'));
+		if (config.client === 'mysql') {
+			config.client = 'mysql2';
+		}
+		const db = knex(config);
+		switch (config?.client) {
+			case 'mysql':
+			case 'mysql2':
+				await new MysqlTableGenerator(db, dbname).do();
+				break;
+			case 'pg':
+				await new PostgresqlTableGenerator(db).do();
+				break;
+			case 'mssql':
+			case 'oracle':
+				throw new Error('Coming soon.');
+		}
+	}
 
 	// 原型
 	public async prototype() {
