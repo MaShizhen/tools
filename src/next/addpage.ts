@@ -1,5 +1,5 @@
 import { basename, join } from 'path';
-import { window } from 'vscode';
+import { commands, window } from 'vscode';
 import Actor from '../actor';
 
 export default class AddPageNext extends Actor {
@@ -100,6 +100,7 @@ export default class AddPageNext extends Actor {
 		await this.save();
 		this.set_status_bar_message('成功添加页面文件');
 		await this.show_doc(filepath);
+		await commands.executeCommand('mm.regeneratepages');
 	}
 
 	private async createpagessrslug(dir: string) {

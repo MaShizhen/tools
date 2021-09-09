@@ -1,4 +1,6 @@
 {
+	"mm.regeneratepages": "Regenerate Pages",
+	"mm.regenerateapis": "Regenerate APIs",
 	"mm.linebreak": "Replace linebreak",
 	"mm.transfiles": "Translate files to local",
 	"mm.generatetable": "Generate talbe as interface",

@@ -6,6 +6,12 @@ import AddPageDesktop from './desktop/addpage';
 import { IAtom, IAtomCatagory } from './interfaces';
 
 export default class Desktop extends Base {
+	public regeneratepages(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public regenerateapis(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addcomponent2(_path?: string): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

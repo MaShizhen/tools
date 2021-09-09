@@ -9,8 +9,16 @@ import AddPageNext from './next/addpage';
 import AddScheduleNext from './next/addschedule';
 import AddServiceNext from './next/addservice';
 import FileTranslator from './next/filetranslator';
+import RegenerateAPIs from './next/regenerateapis';
+import RegenerateNextPages from './next/regeneratepages';
 
 export default class Next extends Base {
+	public regeneratepages(): Promise<void> {
+		return new RegenerateNextPages().do();
+	}
+	public regenerateapis(): Promise<void> {
+		return new RegenerateAPIs().do();
+	}
 	public addcomponent2(path?: string): Promise<void> {
 		return new AddComponentNext2().do(path);
 	}

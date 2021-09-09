@@ -6,6 +6,12 @@ import AddAtomUniapp from './uniapp/addatom';
 import AddPageUniapp from './uniapp/addpage';
 
 export default class UniApp extends Base {
+	public regeneratepages(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
+	public regenerateapis(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addcomponent2(_path?: string): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

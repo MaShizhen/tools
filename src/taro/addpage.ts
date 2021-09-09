@@ -1,5 +1,5 @@
 import { join } from 'path';
-import { window } from 'vscode';
+import { commands, window } from 'vscode';
 import Actor from '../actor';
 
 export default class AddPageTaro extends Actor {
@@ -24,6 +24,7 @@ export default class AddPageTaro extends Actor {
 		await this.save();
 		this.set_status_bar_message('成功添加页面文件');
 		await this.show_doc(path);
+		await commands.executeCommand('mm.regeneratepages');
 	}
 
 	private async updateappconfig(root: string, name: string) {

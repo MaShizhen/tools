@@ -26,5 +26,7 @@ export function activate({ subscriptions }: ExtensionContext) {
 		mm.generatetable(),
 		mm.transfiles(),
 		mm.linebreak(),
+		mm.regenerateapis(),
+		mm.regeneratepages()
 	);
 }

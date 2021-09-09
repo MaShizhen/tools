@@ -5,8 +5,15 @@ import { IAtomCatagory } from './interfaces';
 import AddAtomTaro from './taro/addatom';
 import AddComponentTaro from './taro/addcomponent';
 import AddPageTaro from './taro/addpage';
+import RegenerateTaroPages from './taro/regeneratepages';
 
 export default class Taro extends Base {
+	public regeneratepages(): Promise<void> {
+		return new RegenerateTaroPages().do();
+	}
+	public regenerateapis(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public addcomponent2(_path?: string): Promise<void> {
 		throw new Error('Method not implemented.');
 	}

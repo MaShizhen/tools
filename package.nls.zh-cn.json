@@ -1,4 +1,7 @@
 {
+	"mm.regeneratepages": "重新生成 pages",
+	"mm.regenerateapis": "重新生成 api 接口",
+	"mm.linebreak": "替换jsx换行",
 	"mm.transfiles": "文件迁移",
 	"mm.generatetable": "生成根据表结构生成接口",
 	"mm.prototype": "查看原型",

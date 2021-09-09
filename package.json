@@ -140,6 +140,16 @@
 				"command": "mm.linebreak",
 				"category": "mmstudio",
 				"title": "%mm.linebreak%"
+			},
+			{
+				"command": "mm.regenerateapis",
+				"category": "mmstudio",
+				"title": "%mm.regenerateapis%"
+			},
+			{
+				"command": "mm.regeneratepages",
+				"category": "mmstudio",
+				"title": "%mm.regeneratepages%"
 			}
 		],
 		"menus": {
@@ -389,6 +399,14 @@
 			{
 				"command": "mm.linebreak",
 				"key": "alt+n"
+			},
+			{
+				"command": "mm.regenerateapis",
+				"key": "alt+m+a"
+			},
+			{
+				"command": "mm.regeneratepages",
+				"key": "alt+m+p"
 			}
 		]
 	},
