@@ -74,7 +74,7 @@ export default class AddPageNext extends Actor {
 			return;
 		}
 		const path = await window.showInputBox({
-			prompt: 'type page path',
+			prompt: 'type page path(without postfix)',
 			placeHolder: 'page path',
 			value: tmp
 		});

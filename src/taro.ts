@@ -4,6 +4,7 @@ import Base from './base';
 import { IAtomCatagory } from './interfaces';
 import AddAtomTaro from './taro/addatom';
 import AddComponentTaro from './taro/addcomponent';
+import AddComponentTaro2 from './taro/addcomponent2';
 import AddPageTaro from './taro/addpage';
 import RegenerateTaroPages from './taro/regeneratepages';
 
@@ -14,8 +15,8 @@ export default class Taro extends Base {
 	public regenerateapis(): Promise<void> {
 		throw new Error('Method not implemented.');
 	}
-	public addcomponent2(_path?: string): Promise<void> {
-		throw new Error('Method not implemented.');
+	public addcomponent2(path?: string): Promise<void> {
+		return new AddComponentTaro2().do(path);
 	}
 	public transfiles(): Promise<void> {
 		throw new Error('Method not implemented.');
@@ -62,8 +63,8 @@ export default class Taro extends Base {
 	public completion(): Disposable {
 		return Disposable.from();
 	}
-	public addpage(): Promise<void> {
-		return new AddPageTaro().do();
+	public addpage(path?: string): Promise<void> {
+		return new AddPageTaro().do(path);
 	}
 	public addcomponent(editor: TextEditor): Promise<void> {
 		return new AddComponentTaro().do(editor);

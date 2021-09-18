@@ -125,6 +125,7 @@ handler.post(async(req, res) => {
 
 		res.status(200).json({ ok: true });
 	} catch (error) {
+		logger.error(error);
 		logger.trace(error);
 		res.status(200).json({ ok: false, message: (error as Error).message });
 	}
