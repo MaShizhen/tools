@@ -20,17 +20,25 @@ export default class AddComponentTaro2 extends Actor {
 		}
 		const filepath = f.toLowerCase();
 		const fullpath = `${filepath}.tsx`;
-		const cname = this.str2name(basename(filepath));
+		const filename = basename(filepath);
+		await this.createcss(`${filepath}.css`);
+		const cname = this.str2name(filename);
 		const tpl = `import React from 'react';
-import { View, Text } from '@tarojs/components';
+import { View } from '@tarojs/components';
+import './${filename}.css';
+
 export default function ${cname}() {
-	return <View>
-		<Text></Text>
-	</View>;
+	return <View></View>;
 }
 `;
 		await this.writefile(fullpath, tpl);
 		this.set_status_bar_message('成功添加组件');
 		await this.show_doc(fullpath);
+	}
+	
+	private async createcss(file: string) {
+		const tpl = `
+`;
+		await this.writefile(file, tpl);
 	}
 }
