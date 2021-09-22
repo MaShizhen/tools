@@ -23,7 +23,7 @@ export default class AddComponentTaro extends Actor {
 		const content = await (async () => {
 			if (/\.tsx/.test(doc.fileName)) {
 				const sel = editor.selection;
-				const content = sel.isEmpty ? '' : doc.getText(sel);
+				const content = sel.isEmpty ? '<Text></Text>' : doc.getText(sel);
 				const max = doc.lineCount;
 				let pos = -1;
 				for (let i = 0; i < max; i++) {
@@ -45,7 +45,7 @@ export default class AddComponentTaro extends Actor {
 			return '';
 		})();
 		const tpl = `import React from 'react';
-import { View } from '@tarojs/components';
+import { Text, View } from '@tarojs/components';
 import './${filename}.css';
 
 export default function ${cname}() {
