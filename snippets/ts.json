@@ -43,5 +43,13 @@
 			"export default handler;",
 			""
 		]
+	},
+	"Callback": {
+		"prefix": "cb",
+		"body": [
+			"($1) => {",
+			"$2",
+			"}"
+		]
 	}
 }

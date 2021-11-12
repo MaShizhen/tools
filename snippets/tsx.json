@@ -103,5 +103,17 @@
 			"export default page;",
 			""
 		]
+	},
+	"Callback": {
+		"prefix": "cb",
+		"body": [
+			"($1) => {",
+			"$2",
+			"}"
+		]
+	},
+	"className": {
+		"prefix": "cls",
+		"body": "className='$1'"
 	}
 }
