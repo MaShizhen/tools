@@ -115,5 +115,9 @@
 	"className": {
 		"prefix": "cls",
 		"body": "className='$1'"
+	},
+	"Component Attribute": {
+		"prefix": "attr",
+		"body": "$1 = {$2}"
 	}
 }
