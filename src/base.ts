@@ -7,6 +7,7 @@ import MysqlTableGenerator from './next/tbgenerator/mysql';
 import PostgresqlTableGenerator from './next/tbgenerator/pg';
 
 export default abstract class Base extends Tools {
+	public abstract regenerateresourses(): Promise<void>;
 	public abstract regeneratepages(): Promise<void>;
 	public abstract regenerateapis(): Promise<void>;
 	public abstract transfiles(): Promise<void>;

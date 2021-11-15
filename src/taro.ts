@@ -9,6 +9,9 @@ import AddPageTaro from './taro/addpage';
 import RegenerateTaroPages from './taro/regeneratepages';
 
 export default class Taro extends Base {
+	public regenerateresourses(): Promise<void> {
+		throw new Error('Method not implemented.');
+	}
 	public regeneratepages(): Promise<void> {
 		return new RegenerateTaroPages().do();
 	}

@@ -1,4 +1,5 @@
 {
+	"mm.regenerateresourses": "重新生成res",
 	"mm.regeneratepages": "重新生成 pages",
 	"mm.regenerateapis": "重新生成 api 接口",
 	"mm.linebreak": "替换jsx换行",

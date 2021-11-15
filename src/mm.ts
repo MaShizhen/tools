@@ -16,6 +16,13 @@ enum PrjType {
 }
 
 export default class MM extends Tools {
+	public regenerateresourses() {
+		return commands.registerCommand('mm.regenerateresourses', () => {
+			const tool = this.getinstance();
+			return tool.regenerateresourses();
+		});
+	}
+
 	public regeneratepages() {
 		return commands.registerCommand('mm.regeneratepages', () => {
 			const tool = this.getinstance();

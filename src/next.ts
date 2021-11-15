@@ -11,8 +11,12 @@ import AddServiceNext from './next/addservice';
 import FileTranslator from './next/filetranslator';
 import RegenerateAPIs from './next/regenerateapis';
 import RegenerateNextPages from './next/regeneratepages';
+import RegenerateNextResources from './next/regenerateresources';
 
 export default class Next extends Base {
+	public regenerateresourses(): Promise<void> {
+		return new RegenerateNextResources().do();
+	}
 	public regeneratepages(): Promise<void> {
 		return new RegenerateNextPages().do();
 	}

@@ -1,4 +1,5 @@
 {
+	"mm.regenerateresourses": "Regenerate Resources",
 	"mm.regeneratepages": "Regenerate Pages",
 	"mm.regenerateapis": "Regenerate APIs",
 	"mm.linebreak": "Replace linebreak",

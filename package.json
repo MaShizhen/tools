@@ -150,6 +150,11 @@
 				"command": "mm.regeneratepages",
 				"category": "mmstudio",
 				"title": "%mm.regeneratepages%"
+			},
+			{
+				"command": "mm.regenerateresourses",
+				"category": "mmstudio",
+				"title": "%mm.regenerateresourses%"
 			}
 		],
 		"menus": {
