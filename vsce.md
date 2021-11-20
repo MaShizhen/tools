@@ -1,5 +1,5 @@
 https://dev.azure.com/mmstudio/
 
-to5ga3goowfzxttatwwwkoz74pv5cqj4n3vimnj34z44cqf6gs6q
+venh5w44ozm5vb32b6px6yzjkxerx6d2ngzkx6rkvrux5pq2ijvq
 
 vsce login mm
