@@ -82,7 +82,7 @@ export default class AddPageNext extends Actor {
 			return;
 		}
 		// create page file
-		const filepath = await (async () => {
+		const filepath = await (async (path) => {
 			switch (picked.type) {
 				case 1:
 					return this.createnomalpage(path);
@@ -93,7 +93,7 @@ export default class AddPageNext extends Actor {
 				default:
 					return null;
 			}
-		})();
+		})(path.toLowerCase());
 		if (!filepath) {
 			return;
 		}
