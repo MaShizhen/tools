@@ -65,11 +65,12 @@ export default class MysqlTableGenerator extends Actor {
 				table_name: tbname
 			}).orderBy('ordinal_position', 'asc') as Column[];
 			const fields = data.map((c) => {
-				const type = gettype(c.data_type || c.DATA_TYPE);
+				const fieldtype = c.data_type || c.DATA_TYPE;
+				const type = gettype(fieldtype);
 				return `	/**
 	 * ${c.column_comment || c.COLUMN_COMMENT}
 	 */
-	${c.column_name || c.COLUMN_NAME}: ${type};`;
+	${c.column_name || c.COLUMN_NAME}: ${type};	// ${fieldtype}`;
 			});
 			const content = `/**
  * ${tbdesc}

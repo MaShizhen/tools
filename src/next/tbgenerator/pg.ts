@@ -46,7 +46,7 @@ export default class PostgresqlTableGenerator extends Actor {
 				return `	/**
 	 * ${c.column_comment}
 	 */
-	${c.column_name}: ${type};`;
+	${c.column_name}: ${type};	// ${c.data_type}`;
 			});
 			const content = `/**
  * ${tbdesc}
