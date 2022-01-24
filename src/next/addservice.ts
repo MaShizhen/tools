@@ -36,7 +36,7 @@ export default class AddServiceNext extends Actor {
 		this.set_status_bar_message('成功添加服务文件');
 		await this.show_doc(page || servicefile);
 	}
-	
+
 	private async updatepage(pagefile: string, servicefile: string) {
 		// api/xxx/yyy/s001
 		const doc = await workspace.openTextDocument(pagefile);
@@ -52,21 +52,30 @@ export default class AddServiceNext extends Actor {
 		const pathwithoutext = servicefile;
 		const relativepath = this.getrelativepath(join(pagefile, '..'), pathwithoutext);
 		const imppath = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
-		const name = this.getimportname(this.str2camelcase(basename(pathwithoutext)), doc.getText());
+		const body = doc.getText();
+		const name = this.getimportname(this.str2camelcase(basename(pathwithoutext)), body);
 		const editor = window.activeTextEditor;
 		if (editor) {
 			const sel = editor.selection;
 			await editor.insertSnippet(new SnippetString(`const $\{2:data} = await ${name}({$1});`), sel);
 		}
-		
-		const imp = `import ${name} from '${imppath}';`;
+
+		const ss = body.match(/[MQRD]\d+/g) || ['0'];
+		const max = ss.map((s) => {
+			return Number(s.replace(/[^\d]/g, ''));
+		}).sort((a, b) => {
+			return b - a;
+		})[0];
+		const no = max + 1;
+
+		const imp = `import ${name}, { Message as M${no}, Result as R${no}, Data as D${no} } from '${imppath}';`;
 		const uri = doc.uri;
 		const imppos = new Position(pos + 1, 0);
 		we.insert(uri, imppos, `${imp}\n`);
 		await workspace.applyEdit(we);
 	}
-	
-	private getimportname(name: string, body:string) : string {
+
+	private getimportname(name: string, body: string): string {
 		const name1 = `function ${name}`;
 		if (body.includes(name1)) {
 			return this.getimportname(`${name}_1`, body);
@@ -80,11 +89,13 @@ export default class AddServiceNext extends Actor {
 
 	private create_api_caller(path: string) {
 		const filename = basename(path, '.ts');
-		const relativepath = this.getrelativepath(join( path, '../'), 'src/atoms/api');
-		const api = this.getrelativepath('src/pages',path);
+		const relativepath = this.getrelativepath(join(path, '../'), 'src/atoms/api');
+		const api = this.getrelativepath('src/pages', path);
 		const tpl = `import smartfetch from '@mmstudio/an000058';
 import api from '${relativepath}';
 import { Message, Result } from './${filename}.api';
+
+export type { Data, Message, Result } from './${filename}.api';
 
 export default async function ${this.str2camelcase(filename)}(msg: Message) {
 	const ret = await smartfetch<Result, Message>(api['/${api}'], 'post', msg);
@@ -112,10 +123,12 @@ import an48 from '@mmstudio/an000048';
 
 const logger = anylogger('${vname}');
 
+export type Data = {
+};
+
 export type ${rname} = {
 	ok: true;
-	data:{
-	};
+	data: Data;
 } | {
 	ok: false;
 	message: string;
