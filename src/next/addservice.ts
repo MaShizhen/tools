@@ -1,5 +1,5 @@
 import { basename, extname, join } from 'path';
-import { commands, Position, window, workspace, WorkspaceEdit } from 'vscode';
+import { commands, Position, SnippetString, window, workspace, WorkspaceEdit } from 'vscode';
 import Actor from '../actor';
 import { get_pages } from './get-pages';
 
@@ -52,7 +52,12 @@ export default class AddServiceNext extends Actor {
 		const pathwithoutext = servicefile;
 		const relativepath = this.getrelativepath(join(pagefile, '..'), pathwithoutext);
 		const imppath = relativepath.startsWith('.') ? relativepath : `./${relativepath}`;
-		const name = this.getimportname( this.str2camelcase(basename(pathwithoutext)), doc.getText());
+		const name = this.getimportname(this.str2camelcase(basename(pathwithoutext)), doc.getText());
+		const editor = window.activeTextEditor;
+		if (editor) {
+			const sel = editor.selection;
+			await editor.insertSnippet(new SnippetString(`const $\{2:data} = await ${name}({$1});`), sel);
+		}
 		
 		const imp = `import ${name} from '${imppath}';`;
 		const uri = doc.uri;
